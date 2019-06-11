@@ -1,0 +1,16 @@
+{
+    "user_id": "phulsechinmay123400",
+    "user_name": "phulsechinmay",
+    "first_name": "Chinmay",
+    "last_name": "Phulse",
+    "email": "phulsechinmay@gmail.com",
+    "project_id": "tamu_datathon",
+    "attempts": {
+        "data_wrangling_challenge_1": [
+            ObjectId("5cfc5bb4907fdd97788f4255"),
+            ObjectId("5cfc5bbd907fdd97788f4256")
+        ]
+    }
+}
+
+// Object IDs come from the test_attempts.json file

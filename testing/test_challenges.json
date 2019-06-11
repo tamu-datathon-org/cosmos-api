@@ -1,0 +1,12 @@
+{
+    "project_id": "tamu_datathon",
+    "challenge_id": "data_wrangling_challenge_1",
+    "title": "Clean data and deal with missing values",
+    "group_id": "data_wrangling",
+    "link": "https://drive.google.com/a/tamu.edu/file/d/16i6DAc9j6hGbl9vfJrAx0LNXguL2sEEm/view?usp=sharing",
+    "points": 5,
+    "answer": {
+        "metric": "accuracy",
+        "values": ["164", "122", 35.442167530553256, "65", "94", "115", "150", "256"]
+    }
+}

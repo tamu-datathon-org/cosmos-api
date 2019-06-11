@@ -3,7 +3,7 @@ from typing import Dict
 import pymongo
 
 from .db_client import DBClient
-from .db_errors import *
+from src.helpers.error_helper import *
 
 MONGO_USERS_COLLECTION_ID = "users"
 
@@ -24,6 +24,7 @@ class UserClient(object):
             "email": user_email,
             "attemps": {}
         }
+
         try:
             self.client.insert_one(new_user)
         except:

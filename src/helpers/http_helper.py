@@ -1,0 +1,16 @@
+# HTTP Status Codes
+class HTTPCodes:
+    # 200 Codes
+    SUCCESS = 200
+    RESOURCE_CREATED = 201
+    NO_CONTENT = 204
+
+    # 400 Codes
+    BAD_REQUEST = 400
+    UNAUTHORIZED = 401
+    NOT_FOUND = 404
+    METHOD_NOT_ALLOWED = 405
+    NOT_ALLOWED = 406
+
+    # 500 Codes
+    INTERNAL_SERVER_ERROR = 500
