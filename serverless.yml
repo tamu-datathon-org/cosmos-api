@@ -50,7 +50,7 @@ provider:
           # Restrict our IAM role permissions to
           # the specific table for the stage
       Resource:
-          - "Fn::GetAtt": [ NotesTable, Arn ]
+          - "Fn::GetAtt": [ AttemptsTable, Arn ]
 
 functions:
     # Defines an HTTP API endpoint that calls the main function in createAttempt.js
