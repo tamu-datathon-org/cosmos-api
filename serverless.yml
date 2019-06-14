@@ -20,6 +20,10 @@ custom:
     webpack:
         webpackConfig: ./webpack.config.js
         includeModules: true
+    # Mongo DB URI for mongoose to connect to
+    mongoDbUri: "mongodb://gcp-app-engine-datathon-2019:ahZu73V2AnvkW918K9AB@tamu-datathon-2019-shard-00-00-gf05r.gcp.mongodb.net:27017,tamu-datathon-2019-shard-00-01-gf05r.gcp.mongodb.net:27017,tamu-datathon-2019-shard-00-02-gf05r.gcp.mongodb.net:27017/datathon-2019?ssl=true&replicaSet=tamu-datathon-2019-shard-0&authSource=admin&retryWrites=true&w=majority"
+    
+        #"mongodb://gcp-app-engine-datathon-2019:9brgyL#iM7A3@tamu-datathon-2019-gf05r.gcp.mongodb.net/test?retryWrites=true&w=majority"
 
 provider:
     name: aws
@@ -30,7 +34,8 @@ provider:
     # These environment variables are made available to our functions
     # under process.env.
     environment:
-    tableName: ${self:custom.tableName}
+        tableName: ${self:custom.tableName}
+        mongoDbUri: ${self:custom.mongoDbUri}
 
     iamRoleStatements:
     - Effect: Allow
@@ -104,6 +109,17 @@ functions:
             - http:
                   path: attempts/{id}
                   method: delete
+                  cors: true
+                  authorizer: aws_iam
+    getUser:
+        # Defines an HTTP API endpoint that calls the main function in getUser.js
+        # - path: url path is /users
+        # - method: GET request
+        handler: lambdas/users/getUser.main
+        events:
+            - http:
+                  path: users
+                  method: get
                   cors: true
                   authorizer: aws_iam
 resources:
