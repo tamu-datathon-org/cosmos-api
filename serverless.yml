@@ -1,4 +1,4 @@
-service: cosmos-api2
+service: cosmos-api
 
 # Use the serverless-webpack plugin to transpile ES6
 plugins:
@@ -10,7 +10,8 @@ custom:
     # commands. Or fallsback to what we have set in the provider section.
     stage: ${opt:stage, self:provider.stage}
     # Set the table name here so we can use it while testing locally
-    tableName: ${self:custom.stage}-cosmos-attempts
+    attemptsTableName: ${self:custom.stage}-cosmos-attempts
+    projectsTableName: ${self:custom.stage}-cosmos-projects
     # Set our DynamoDB throughput for prod and all other non-prod stages.
     tableThroughputs:
         prod: 5
@@ -30,7 +31,8 @@ provider:
     # These environment variables are made available to our functions
     # under process.env.
     environment:
-    tableName: ${self:custom.tableName}
+        attemptsTableName: ${self:custom.attemptsTableName}
+        projectsTableName: ${self:custom.projectsTableName}
 
     iamRoleStatements:
     - Effect: Allow
@@ -45,7 +47,8 @@ provider:
           # Restrict our IAM role permissions to
           # the specific table for the stage
       Resource:
-          - "Fn::GetAtt": [ NotesTable, Arn ]
+          - "Fn::GetAtt": [ AttemptsTable, Arn ]
+          - "Fn::GetAtt": [ ProjectsTable, Arn ]
 
 functions:
     # Defines an HTTP API endpoint that calls the main function in createAttempt.js

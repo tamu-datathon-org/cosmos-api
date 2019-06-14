@@ -1,8 +1,8 @@
 Resources:
-    NotesTable:
+    AttemptsTable:
         Type: AWS::DynamoDB::Table
         Properties:
-            TableName: ${self:custom.tableName}
+            TableName: ${self:custom.attemptsTableName}
             AttributeDefinitions:
                 - AttributeName: userId
                   AttributeType: S
@@ -14,6 +14,19 @@ Resources:
                 - AttributeName: attemptId
                   KeyType: RANGE
             # Set the capacity based on the stage
+            ProvisionedThroughput:
+                ReadCapacityUnits: ${self:custom.tableThroughput}
+                WriteCapacityUnits: ${self:custom.tableThroughput}
+    ProjectsTable:
+        Type: AWS::DynamoDB::Table
+        Properties:
+            TableName: ${self:custom.projectsTableName}
+            AttributeDefinitions:
+                - AttributeName: project
+                  AttributeType: S
+            KeySchema:
+                - AttributeName: project
+                  KeyType: HASH
             ProvisionedThroughput:
                 ReadCapacityUnits: ${self:custom.tableThroughput}
                 WriteCapacityUnits: ${self:custom.tableThroughput}
