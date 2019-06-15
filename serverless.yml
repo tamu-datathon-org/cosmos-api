@@ -10,7 +10,8 @@ custom:
     # commands. Or fallsback to what we have set in the provider section.
     stage: ${opt:stage, self:provider.stage}
     # Set the table name here so we can use it while testing locally
-    tableName: ${self:custom.stage}-cosmos-attempts
+    attemptsTableName: ${self:custom.stage}-cosmos-attempts
+    usersTableName: ${self:custom.stage}-cosmos-users
     # Set our DynamoDB throughput for prod and all other non-prod stages.
     tableThroughputs:
         prod: 5
@@ -30,7 +31,8 @@ provider:
     # These environment variables are made available to our functions
     # under process.env.
     environment:
-    tableName: ${self:custom.tableName}
+    attemptsTableName: ${self:custom.attemptsTableName}
+    usersTableName: ${self:custom.usersTableName}
 
     iamRoleStatements:
     - Effect: Allow

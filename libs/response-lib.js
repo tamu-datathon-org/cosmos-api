@@ -1,9 +1,9 @@
 export function success(body) {
-    return buildResponse(200, body);
+    return buildResponse(HTTPCodes.SUCCESS, body);
 }
 
 export function failure(body) {
-    return buildResponse(500, body);
+    return buildResponse(HTTPCodes.SERVER_ERROR, body);
 }
 
 function buildResponse(statusCode, body) {
@@ -15,4 +15,18 @@ function buildResponse(statusCode, body) {
         },
         body: JSON.stringify(body),
     };
+}
+
+const HTTPCodes = {
+    // 2XX Codes
+    SUCCESS: 200,
+    RESOURCE_CREATED: 201,
+    // 4XX Codes
+    BAD_REQUEST: 400,
+    UNAUTHORIZED: 401,
+    NOT_FOUND: 404,
+    METHOD_NOT_ALLOWED: 405,
+    NOT_ALLOWED: 406,
+    // 5XX Codes
+    SERVER_ERROR: 500,
 }

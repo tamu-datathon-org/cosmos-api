@@ -2,7 +2,7 @@ Resources:
     NotesTable:
         Type: AWS::DynamoDB::Table
         Properties:
-            TableName: ${self:custom.tableName}
+            TableName: ${self:custom.attemptsTableName}
             AttributeDefinitions:
                 - AttributeName: userId
                   AttributeType: S
@@ -12,6 +12,24 @@ Resources:
                 - AttributeName: userId
                   KeyType: HASH
                 - AttributeName: attemptId
+                  KeyType: RANGE
+            # Set the capacity based on the stage
+            ProvisionedThroughput:
+                ReadCapacityUnits: ${self:custom.tableThroughput}
+                WriteCapacityUnits: ${self:custom.tableThroughput}
+    UsersTable:
+		Type: AWS::DynamoDB:Table
+		Properties:
+			TableName: ${self:custom.usersTableName}
+            AttributeDefinitions:
+                - AttributeName: email
+                  AttributeType: S
+                - AttributeName: projectId
+                  AttributeType: S
+            KeySchema:
+                - AttributeName: email
+                  KeyType: HASH
+                - AttributeName: projectId
                   KeyType: RANGE
             # Set the capacity based on the stage
             ProvisionedThroughput:
