@@ -1,9 +1,8 @@
-import * as dynamoDbLib from '../../libs/dynamodb-lib';
-import { success, failure } from '../../libs/response-lib';
+import list from '../crud/list';
 
-export async function main(event, context) {
-    const params = {
-        TableName: process.env.tableName,
+export const main = (event) =>
+    list({
+        TableName: process.env.attemptsTableName,
         // 'KeyConditionExpression' defines the condition for the query
         // - 'userId = :userId': only return items with matching 'userId'
         //   partition key
@@ -14,13 +13,4 @@ export async function main(event, context) {
         ExpressionAttributeValues: {
             ':userId': event.requestContext.identity.cognitoIdentityId,
         },
-    };
-
-    try {
-        const result = await dynamoDbLib.call('query', params);
-        // Return the matching list of items in response body
-        return success(result.Items);
-    } catch (e) {
-        return failure({ status: false });
-    }
-}
+    });

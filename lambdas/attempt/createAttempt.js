@@ -1,11 +1,10 @@
 import uuid from 'uuid';
-import * as dynamoDbLib from '../../libs/dynamodb-lib';
-import { success, failure } from '../../libs/response-lib';
+import create from '../crud/create';
 
-export async function main(event, context) {
+const prepare = (event) => {
     const data = JSON.parse(event.body);
-    const params = {
-        TableName: process.env.tableName,
+    return {
+        TableName: process.env.attemptsTableName,
         Item: {
             userId: event.requestContext.identity.cognitoIdentityId,
             attemptId: uuid.v1(),
@@ -16,11 +15,6 @@ export async function main(event, context) {
             createdAt: Date.now(),
         },
     };
-    try {
-        await dynamoDbLib.call('put', params);
-        return success(params.Item);
-    } catch (e) {
-        // console.log(e.message);
-        return failure({ status: false });
-    }
-}
+};
+
+export const main = (event) => create(prepare(event));
