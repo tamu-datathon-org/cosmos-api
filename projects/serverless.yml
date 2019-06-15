@@ -1,4 +1,4 @@
-service: cosmos-api
+service: cosmos-projects-api
 
 # Use the serverless-webpack plugin to transpile ES6
 plugins:
@@ -10,7 +10,7 @@ custom:
     # commands. Or fallsback to what we have set in the provider section.
     stage: ${opt:stage, self:provider.stage}
     # Set the table name here so we can use it while testing locally
-    attemptsTableName: ${self:custom.stage}-cosmos-attempts
+    projectsTableName: ${self:custom.stage}-cosmos-projects
     # Set our DynamoDB throughput for prod and all other non-prod stages.
     tableThroughputs:
         prod: 5
@@ -18,7 +18,7 @@ custom:
     tableThroughput: ${self:custom.tableThroughputs.${self:custom.stage}, self:custom.tableThroughputs.default}
     # Load our webpack config
     webpack:
-        webpackConfig: ./webpack.config.js
+        webpackConfig: ../webpack.config.js
         includeModules: true
 
 provider:
@@ -30,7 +30,7 @@ provider:
     # These environment variables are made available to our functions
     # under process.env.
     environment:
-        attemptsTableName: ${self:custom.attemptsTableName}
+        projectsTableName: ${self:custom.projectsTableName}
 
     iamRoleStatements:
     - Effect: Allow
@@ -45,75 +45,73 @@ provider:
           # Restrict our IAM role permissions to
           # the specific table for the stage
       Resource:
-          - "Fn::GetAtt": [ AttemptsTable, Arn ]
           - "Fn::GetAtt": [ ProjectsTable, Arn ]
 
 functions:
-    # Defines an HTTP API endpoint that calls the main function in createAttempt.js
-    # - path: url path is /attempts
-    # - method: POST request
-    # - cors: enabled CORS (Cross-Origin Resource Sharing) for browser cross
-    #     domain api call
-    # - authorizer: authenticate using the AWS IAM role
     create:
-        handler: lambdas/attempt/createAttempt.main
+        handler: create.main
         events:
             - http:
-                  path: attempts
+                  path: projects
                   method: post
                   cors: true
                   authorizer: aws_iam
     get:
-        # Defines an HTTP API endpoint that calls the main function in getAttempt.js
-        # - path: url path is /attempts/{id}
-        # - method: GET request
-        handler: lambdas/attempt/getAttempt.main
+        handler: get.main
         events:
             - http:
-                  path: attempts/{id}
+                  path: projects/{project}
                   method: get
                   cors: true
                   authorizer: aws_iam
     list:
-        # Defines an HTTP API endpoint that calls the main function in listAttempt.js
-        # - path: url path is /attempts
-        # - method: GET request
-        handler: lambdas/attempt/listAttempts.main
+        handler: list.main
         events:
             - http:
-                  path: attempts
+                  path: projects
                   method: get
                   cors: true
                   authorizer: aws_iam
     update:
-        # Defines an HTTP API endpoint that calls the main function in updateAttempt.js
-        # - path: url path is /attempts/{id}
-        # - method: PUT request
-        handler: lambdas/attempt/updateAttempt.main
+        handler: update.main
         events:
             - http:
-                  path: attempts/{id}
+                  path: projects/{project}
                   method: put
                   cors: true
                   authorizer: aws_iam
     delete:
-        # Defines an HTTP API endpoint that calls the main function in deleteAttempt.js
-        # - path: url path is /attempts/{id}
-        # - method: DELETE request
-        handler: lambdas/attempt/deleteAttempt.main
+        handler: delete.main
         events:
             - http:
-                  path: attempts/{id}
+                  path: projects/{project}
                   method: delete
                   cors: true
                   authorizer: aws_iam
 resources:
     # API Gateway Errors
-    - ${file(resources/api-gateway-errors.yml)}
-    # DynamoDB
-    - ${file(resources/dynamodb-table.yml)}
+    - ${file(../resources/api-gateway-errors.yml)}
     # S3
-    - ${file(resources/s3-bucket.yml)}
+    - ${file(../resources/s3-bucket.yml)}
     # Cognito
-    - ${file(resources/cognito-user-pool.yml)}
-    - ${file(resources/cognito-identity-pool.yml)}
+    - ${file(../resources/cognito-user-pool.yml)}
+    - ${file(../resources/cognito-identity-pool.yml)}
+    # DynamoDB
+    - Resources:
+        ProjectsTable:
+            Type: AWS::DynamoDB::Table
+            Properties:
+                TableName: ${self:custom.projectsTableName}
+                AttributeDefinitions:
+                    - AttributeName: userId
+                      AttributeType: S
+                    - AttributeName: project
+                      AttributeType: S
+                KeySchema:
+                    - AttributeName: userId
+                      KeyType: HASH
+                    - AttributeName: project
+                      KeyType: RANGE
+                ProvisionedThroughput:
+                    ReadCapacityUnits: ${self:custom.tableThroughput}
+                    WriteCapacityUnits: ${self:custom.tableThroughput}

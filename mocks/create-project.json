@@ -1,0 +1,8 @@
+{
+    "body": "{\"project\":\"TAMU Datathon\",\"lessons\":[{\"name\":\"Data Management\",\"image\":\"https://drive.google.com/uc?export=download&id=10_FqwgamTQcvn6ACSHSA3uPaSyzPvsRv\",\"link\":\"https://research.google.com/seedbank/seed/lab__loading_and_understanding_your_data\",\"linkText\":\"View on Colab\",\"description\":\"Use Pandas to load and explore the raw data and put together all the pieces needed to train a linear regression model in TensorFlow.\",\"challenges\":[{\"name\":\"Create a scatter plot for new features\",\"points\":1,\"passingCriteria\":\"accuracy\",\"passingThreshold\":99,\"truth\":[1,2,3,4]},{\"name\":\"Explain what you see \",\"points\":1,\"passingCriteria\":\"f1\",\"passingThreshold\":90,\"truth\":[1,0,1,0]},{\"name\":\"Options to handle missing data\",\"points\":1,\"passingCriteria\":\"precision\",\"passingThreshold\":95,\"truth\":[1,0,1,0]},{\"name\":\"Build a Linear Regression Model\",\"points\":1,\"passingCriteria\":\"MAP\",\"passingThreshold\":80,\"truth\":[1,0,1,0]}]}]}",
+    "requestContext": {
+        "identity": {
+            "cognitoIdentityId": "USER-SUB-1234"
+        }
+    }
+}
