@@ -49,7 +49,7 @@ provider:
 
 functions:
     create:
-        handler: create.main
+        handler: lambdas/create.main
         events:
             - http:
                   path: projects
@@ -57,7 +57,7 @@ functions:
                   cors: true
                   authorizer: aws_iam
     get:
-        handler: get.main
+        handler: lambdas/get.main
         events:
             - http:
                   path: projects/{project}
@@ -65,7 +65,7 @@ functions:
                   cors: true
                   authorizer: aws_iam
     list:
-        handler: list.main
+        handler: lambdas/list.main
         events:
             - http:
                   path: projects
@@ -73,7 +73,7 @@ functions:
                   cors: true
                   authorizer: aws_iam
     update:
-        handler: update.main
+        handler: lambdas/update.main
         events:
             - http:
                   path: projects/{project}
@@ -81,7 +81,7 @@ functions:
                   cors: true
                   authorizer: aws_iam
     delete:
-        handler: delete.main
+        handler: lambas/delete.main
         events:
             - http:
                   path: projects/{project}
