@@ -17,28 +17,23 @@ Resources:
             ProvisionedThroughput:
                 ReadCapacityUnits: ${self:custom.tableThroughput}
                 WriteCapacityUnits: ${self:custom.tableThroughput}
-    UsersTable:
-		Type: AWS::DynamoDB:Table
-		Properties:
-			TableName: ${self:custom.usersTableName}
-            AttributeDefinitions:
-                - AttributeName: email
-                  AttributeType: S
-                - AttributeName: projectId
-                  AttributeType: S
-            KeySchema:
-                - AttributeName: email
-                  KeyType: HASH
-                - AttributeName: projectId
-                  KeyType: RANGE
-            # Set the capacity based on the stage
-            ProvisionedThroughput:
-                ReadCapacityUnits: ${self:custom.tableThroughput}
-                WriteCapacityUnits: ${self:custom.tableThroughput}
     ProjectsTable:
         Type: AWS::DynamoDB::Table
         Properties:
             TableName: ${self:custom.projectsTableName}
+            AttributeDefinitions:
+                - AttributeName: project
+                  AttributeType: S
+            KeySchema:
+                - AttributeName: project
+                  KeyType: HASH
+            ProvisionedThroughput:
+                ReadCapacityUnits: ${self:custom.tableThroughput}
+                WriteCapacityUnits: ${self:custom.tableThroughput}
+    UsersTable:
+        Type: AWS::DynamoDB::Table
+        Properties:
+            TableName: ${self:custom.usersTableName}
             AttributeDefinitions:
                 - AttributeName: project
                   AttributeType: S

@@ -1,10 +1,9 @@
 {
-    "user_id": "phulsechinmay123400",
-    "user_name": "phulsechinmay",
-    "first_name": "Chinmay",
-    "last_name": "Phulse",
+    "userId": "AWS_INCOGNITO_PHULSECHINMAY",
+    "firstName": "Chinmay",
+    "lastName": "Phulse",
     "email": "phulsechinmay@gmail.com",
-    "project_id": "tamu_datathon",
+    "projectId": "tamu_datathon",
     "attempts": {
         "data_wrangling_challenge_1": [
             "5cfc5bb4907fdd97788f4255",

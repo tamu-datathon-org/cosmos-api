@@ -51,15 +51,17 @@ provider:
       Resource:
           - "Fn::GetAtt": [ AttemptsTable, Arn ]
           - "Fn::GetAtt": [ ProjectsTable, Arn ]
+          - "Fn::GetAtt": [ UsersTable, Arn ]
 
 functions:
-    # Defines an HTTP API endpoint that calls the main function in createAttempt.js
-    # - path: url path is /attempts
-    # - method: POST request
-    # - cors: enabled CORS (Cross-Origin Resource Sharing) for browser cross
-    #     domain api call
-    # - authorizer: authenticate using the AWS IAM role
-    create:
+    # ----------- ATTEMPTS ENDPOINTS -----------
+    createAttempt:
+        # Defines an HTTP API endpoint that calls the main function in createAttempt.js
+        # - path: url path is /attempts
+        # - method: POST request
+        # - cors: enabled CORS (Cross-Origin Resource Sharing) for browser cross
+        #     domain api call
+        # - authorizer: authenticate using the AWS IAM role
         handler: lambdas/attempt/createAttempt.main
         events:
             - http:
@@ -67,7 +69,7 @@ functions:
                   method: post
                   cors: true
                   authorizer: aws_iam
-    get:
+    getAttempt:
         # Defines an HTTP API endpoint that calls the main function in getAttempt.js
         # - path: url path is /attempts/{id}
         # - method: GET request
@@ -78,7 +80,7 @@ functions:
                   method: get
                   cors: true
                   authorizer: aws_iam
-    list:
+    listAttempts:
         # Defines an HTTP API endpoint that calls the main function in listAttempt.js
         # - path: url path is /attempts
         # - method: GET request
@@ -89,7 +91,7 @@ functions:
                   method: get
                   cors: true
                   authorizer: aws_iam
-    update:
+    updateAttempt:
         # Defines an HTTP API endpoint that calls the main function in updateAttempt.js
         # - path: url path is /attempts/{id}
         # - method: PUT request
@@ -100,7 +102,7 @@ functions:
                   method: put
                   cors: true
                   authorizer: aws_iam
-    delete:
+    deleteAttempt:
         # Defines an HTTP API endpoint that calls the main function in deleteAttempt.js
         # - path: url path is /attempts/{id}
         # - method: DELETE request
@@ -111,6 +113,20 @@ functions:
                   method: delete
                   cors: true
                   authorizer: aws_iam
+
+    # ----------- USERS ENDPOINTS -----------
+    createUser:
+        # Defines an HTTP API endpoint that calls the main function in createUser.js
+        # - path: url path is /users
+        # - method: POST request
+        handler: lambdas/users/createUser.main
+        events:
+            - http:
+                  path: /users
+                  method: post
+                  cors: true
+                  authorizer: aws_iam
+
 resources:
     # API Gateway Errors
     - ${file(resources/api-gateway-errors.yml)}
