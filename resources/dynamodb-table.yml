@@ -30,3 +30,16 @@ Resources:
             ProvisionedThroughput:
                 ReadCapacityUnits: ${self:custom.tableThroughput}
                 WriteCapacityUnits: ${self:custom.tableThroughput}
+    UsersTable:
+        Type: AWS::DynamoDB::Table
+        Properties:
+            TableName: ${self:custom.usersTableName}
+            AttributeDefinitions:
+                - AttributeName: project
+                  AttributeType: S
+            KeySchema:
+                - AttributeName: project
+                  KeyType: HASH
+            ProvisionedThroughput:
+                ReadCapacityUnits: ${self:custom.tableThroughput}
+                WriteCapacityUnits: ${self:custom.tableThroughput}

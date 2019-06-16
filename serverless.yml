@@ -49,6 +49,7 @@ provider:
       Resource:
           - "Fn::GetAtt": [ AttemptsTable, Arn ]
           - "Fn::GetAtt": [ ProjectsTable, Arn ]
+          - "Fn::GetAtt": [ UsersTable, Arn ]
 
 functions:
     # Defines an HTTP API endpoint that calls the main function in createAttempt.js
