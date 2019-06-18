@@ -4,7 +4,7 @@
     },
     "requestContext": {
         "identity": {
-            "cognitoIdentityId": "USER-SUB-1234"
+            "cognitoIdentityId": "USER-SUB-12345"
         }
     }
 }

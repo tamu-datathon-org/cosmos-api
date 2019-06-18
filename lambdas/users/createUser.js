@@ -8,7 +8,7 @@ const prepare = (event) => {
     return {
         tableName: process.env.usersTableName,
         user: {
-            userId: "TEST_USER", //event.requestContext.identity.cognitoIdentityId,
+            userId: event.requestContext.identity.cognitoIdentityId,
             firstName: data.firstName,
             lastName: data.lastName,
             email: data.email,
@@ -21,6 +21,7 @@ const prepare = (event) => {
 
 const createUser = (event) => {
     var {tableName, user} = prepare(event);
+    console.log(tableName)
     // Check if user exists
     return get({
         TableName: tableName,
@@ -38,7 +39,7 @@ const createUser = (event) => {
             Item: user
         })
     }).then((user) => {
-        return respond(HTTPCodes.RESOUCE_CREATED, {user: user})
+        return respond(HTTPCodes.RESOURCE_CREATED, {user: user})
     }).catch((err) => {
         return new Promise((resolve) => resolve(failure({error: err})))
     })

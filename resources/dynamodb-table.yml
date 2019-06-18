@@ -35,11 +35,15 @@ Resources:
         Properties:
             TableName: ${self:custom.usersTableName}
             AttributeDefinitions:
-                - AttributeName: project
+                - AttributeName: email
+                  AttributeType: S
+                - AttributeName: projectId
                   AttributeType: S
             KeySchema:
-                - AttributeName: project
+                - AttributeName: email
                   KeyType: HASH
+                - AttributeName: projectId
+                  KeyType: RANGE
             ProvisionedThroughput:
                 ReadCapacityUnits: ${self:custom.tableThroughput}
                 WriteCapacityUnits: ${self:custom.tableThroughput}
