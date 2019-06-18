@@ -27,7 +27,7 @@ const createUser = (event) => {
         TableName: tableName,
         Key: {
             email: user.email,
-            projectId: user.projectId,
+            project: user.projectId,
         },
     }).then((existingUser) => {
         if (existingUser != undefined) {

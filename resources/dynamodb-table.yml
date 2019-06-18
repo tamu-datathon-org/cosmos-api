@@ -37,12 +37,12 @@ Resources:
             AttributeDefinitions:
                 - AttributeName: email
                   AttributeType: S
-                - AttributeName: projectId
+                - AttributeName: project
                   AttributeType: S
             KeySchema:
                 - AttributeName: email
                   KeyType: HASH
-                - AttributeName: projectId
+                - AttributeName: project
                   KeyType: RANGE
             ProvisionedThroughput:
                 ReadCapacityUnits: ${self:custom.tableThroughput}
