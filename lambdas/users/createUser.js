@@ -1,6 +1,6 @@
 import create from '../crud/createBase';
 import get from '../crud/getBase';
-import { respond, HTTPCodes, failure } from '../../libs/response-lib';
+import { respond, HTTPCodes, failure, buildResponse } from '../../libs/response-lib';
 import { verifyBodyParameters } from '../../libs/api-helper-lib';
 
 const prepare = (event) => {
@@ -12,37 +12,59 @@ const prepare = (event) => {
             firstName: data.firstName,
             lastName: data.lastName,
             email: data.email,
-            projectId: data.projectId,
+            project: data.project,
             attempts: {},
             createdAt: Date.now(),
         },
     };
 }
 
-const createUser = (event) => {
+const createUserPromiseTest = (event) => {
     var {tableName, user} = prepare(event);
-    console.log(tableName)
     // Check if user exists
     return get({
         TableName: tableName,
         Key: {
             email: user.email,
-            project: user.projectId,
+            project: user.project,
         },
     }).then((existingUser) => {
         if (existingUser != undefined) {
-            // User conflicts
-            return respond(HTTPCodes.CONFLICT, {'error': 'An user for the specified porject already exists for the given email.'})
+            // User already exists, deny request
+            return respond(HTTPCodes.CONFLICT, {'error': 'An user for the specified project already exists for the given email.'})
         }
-        return create({
+        create({
+            TableName: tableName,
+            Item: user
+        }).then((createdUser) =>  respond(HTTPCodes.RESOURCE_CREATED, {user: createdUser}))
+    }).catch((err) => new Promise((resolve) => resolve(failure({error: err}))))
+}
+
+const createUser = async (event) => {
+    var {tableName, user} = prepare(event);
+    try {
+        var existingUser = await get({
+            TableName: tableName,
+            Key: {
+                email: user.email,
+                project: user.project,
+            },
+        });
+        // User already exists, deny request
+        if (existingUser != undefined) {
+            return buildResponse(HTTPCodes.CONFLICT, {'error': 'An user for the specified project already exists for the given email.'});
+        }
+
+        var createdUser = await create({
             TableName: tableName,
             Item: user
         })
-    }).then((user) => {
-        return respond(HTTPCodes.RESOURCE_CREATED, {user: user})
-    }).catch((err) => {
-        return new Promise((resolve) => resolve(failure({error: err})))
-    })
+        return buildResponse(HTTPCodes.RESOURCE_CREATED, {user: createdUser});
+    } 
+    catch (err) {
+        console.log(err)
+        return failure({error: err})
+    }
 }
 
-export const main = verifyBodyParameters(['email', 'firstName', 'lastName', 'projectId'], createUser)
+export const main = verifyBodyParameters(['email', 'firstName', 'lastName', 'project'], createUser)

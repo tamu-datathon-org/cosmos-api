@@ -1,12 +1,12 @@
 import * as dynamoDbLib from '../../libs/dynamodb-lib';
 
 export default (params) =>
-    new Promise((resolve, reject) =>
+    new Promise((resolve) =>
         dynamoDbLib
-            .call('put', params)
-            .then(() => resolve(params.Item))
+            .call('delete', params)
+            .then(() => resolve(true))
             .catch((err) => {
                 console.log(err.message);
-                reject("DB Error");
+                resolve(false);
             })
     );

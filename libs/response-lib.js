@@ -14,7 +14,7 @@ export function respond(statusCode, body) {
     return new Promise((resolve) => resolve(buildResponse(statusCode, body)))
 }
 
-function buildResponse(statusCode, body) {
+export function buildResponse(statusCode, body) {
     return {
         statusCode: statusCode,
         headers: {

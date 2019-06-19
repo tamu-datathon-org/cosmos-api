@@ -1,0 +1,59 @@
+# ----------- ATTEMPTS ENDPOINTS -----------
+createAttempt:
+    # Defines an HTTP API endpoint that calls the main function in createAttempt.js
+    # - path: url path is /attempts
+    # - method: POST request
+    # - cors: enabled CORS (Cross-Origin Resource Sharing) for browser cross
+    #     domain api call
+    # - authorizer: authenticate using the AWS IAM role
+    handler: lambdas/attempt/createAttempt.main
+    events:
+        - http:
+              path: attempts
+              method: post
+              cors: true
+              authorizer: aws_iam
+getAttempt:
+    # Defines an HTTP API endpoint that calls the main function in getAttempt.js
+    # - path: url path is /attempts/{id}
+    # - method: GET request
+    handler: lambdas/attempt/getAttempt.main
+    events:
+        - http:
+              path: attempts/{id}
+              method: get
+              cors: true
+              authorizer: aws_iam
+listAttempts:
+    # Defines an HTTP API endpoint that calls the main function in listAttempt.js
+    # - path: url path is /attempts
+    # - method: GET request
+    handler: lambdas/attempt/listAttempts.main
+    events:
+        - http:
+              path: attempts
+              method: get
+              cors: true
+              authorizer: aws_iam
+updateAttempt:
+    # Defines an HTTP API endpoint that calls the main function in updateAttempt.js
+    # - path: url path is /attempts/{id}
+    # - method: PUT request
+    handler: lambdas/attempt/updateAttempt.main
+    events:
+        - http:
+              path: attempts/{id}
+              method: put
+              cors: true
+              authorizer: aws_iam
+deleteAttempt:
+    # Defines an HTTP API endpoint that calls the main function in deleteAttempt.js
+    # - path: url path is /attempts/{id}
+    # - method: DELETE request
+    handler: lambdas/attempt/deleteAttempt.main
+    events:
+        - http:
+              path: attempts/{id}
+              method: delete
+              cors: true
+              authorizer: aws_iam
