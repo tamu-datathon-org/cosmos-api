@@ -16,19 +16,19 @@ const prepare = (event) => {
 const getUser = async (event) => {
     var {tableName, userKey, userId} = prepare(event);
     try {
-        // Seperate userId and user
+        // Seperate userId and user.
         var existingUser = await get({
             TableName: tableName,
             Key: userKey,
         })
-        // User does not exist, return
+        // User does not exist, return.
         if (existingUser == undefined) { 
             return buildResponse(HTTPCodes.NOT_FOUND, {'error': 'User does not exist for the given credentials.'})
         } 
-        else if (existingUser.userId != userId){ // User exists, but userId for AWS cognito does not match
+        else if (existingUser.userId != userId){ // User exists, but userId for AWS cognito does not match.
             return buildResponse(HTTPCodes.UNAUTHORIZED, {'error': 'Not authorized to access this user.'})
         }
-        // Seperate userId and user data to not send userId
+        // We do not send the userId in the response, so seperating userData from the ID.
         var {userId: existingUserId, ...userDataToSend} = existingUser;
         return buildResponse(HTTPCodes.SUCCESS, {user: userDataToSend})
     } 

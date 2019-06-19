@@ -21,7 +21,7 @@ export const verifyBodyParameters = (keysToCheck, lambdaFunc) => {
         // Check all required keys exist in bodyJSON
         for (var keyIndex in keysToCheck) {
             if (!(keysToCheck[keyIndex] in bodyJSON)) {
-                return badRequest({'error': `Required key not present in POST body: ${keysToCheck[keyIndex]}`})
+                return badRequest({'error': `Required key not present in request body: ${keysToCheck[keyIndex]}`})
             }
         }
         return lambdaFunc(event, context);
