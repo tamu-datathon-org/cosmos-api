@@ -3,7 +3,7 @@ from typing import Dict, List
 import pymongo
 
 from .db_client import DBClient
-from ..helpers.error_helper import *
+from src.helpers.error_helper import *
 
 MONGO_CHALLENGES_COLLECTION_ID = "challenges"
 

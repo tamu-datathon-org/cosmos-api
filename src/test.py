@@ -1,6 +1,6 @@
 from pymongo import MongoClient
-from db.attempts_client import AttemptsClient
-from db.user_client import UserClient
+from src.db.attempts_client import AttemptsClient
+from src.db.user_client import UserClient
 
 users = UserClient()
 attempts = AttemptsClient()
