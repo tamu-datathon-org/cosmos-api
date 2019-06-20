@@ -1,29 +1,31 @@
-import { badRequest } from './response-lib';
+import {
+    badRequest,
+} from './response-lib';
 
 // Verify that request coming to AWS lambda contains the needed keys in query parameters
-export const verifyQueryParameters = (keysToCheck, lambdaFunc) => {
-    return async function (event, context) {
-        var queryParams = event['queryStringParameters'];
-        // Check all required keys exist in queryParams
-        for (var keyInd in keysToCheck) {
-            if (!(keysToCheck[keyInd] in queryParams)) {
-                return badRequest({'error': `Required key not present in query parameters: ${keysToCheck[keyInd]}`})
-            }
+export const verifyQueryParamsExist = (keysToCheck, lambdaFunc) => async (event, context) => {
+    const queryParams = event.queryStringParameters;
+    // Check all required keys exist in queryParams
+    Object.entries(keysToCheck).forEach((key) => {
+        if (!(key in queryParams)) {
+            return badRequest({
+                error: `Required key not present in query parameters: ${key}`,
+            });
         }
-        return await lambdaFunc(event, context);
-    }
-}
+    });
+    return await lambdaFunc(event, context);
+};
 
 // Verify that request coming to AWS lambda contains the needed keys in the body
-export const verifyBodyParameters = (keysToCheck, lambdaFunc) => {
-    return async function (event, context) {
-        const bodyJSON = JSON.parse(event.body);
-        // Check all required keys exist in bodyJSON
-        for (var keyIndex in keysToCheck) {
-            if (!(keysToCheck[keyIndex] in bodyJSON)) {
-                return badRequest({'error': `Required key not present in request body: ${keysToCheck[keyIndex]}`})
-            }
+export const verifyBodyParamsExist = (keysToCheck, lambdaFunc) => async (event, context) => {
+    const bodyJSON = JSON.parse(event.body);
+    // Check all required keys exist in bodyJSON
+    Object.entries(keysToCheck).forEach((key) => {
+        if (!(key in bodyJSON)) {
+            return badRequest({
+                error: `Required key not present in request body: ${key}`,
+            });
         }
-        return lambdaFunc(event, context);
-    }
-}
+    });
+    return await lambdaFunc(event, context);
+};

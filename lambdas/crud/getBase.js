@@ -7,13 +7,12 @@ export default (params) =>
     new Promise((resolve, reject) =>
         dynamoDbLib
             .call('get', params)
-            .then((result) =>
-                result.Item
+            .then((result) => {
+                return result.Item
                     ? resolve(result.Item)
-                    : resolve(undefined)
-            )
+                    : resolve(undefined);
+            })
             .catch((err) => {
                 console.log(err.message);
-                reject("DB Error");
-            })
-    );
+                reject('DB Error');
+            }));

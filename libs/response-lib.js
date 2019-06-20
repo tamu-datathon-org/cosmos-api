@@ -1,30 +1,3 @@
-export function success(body) {
-    return buildResponse(HTTPCodes.SUCCESS, body);
-}
-
-export function failure(body) {
-    return buildResponse(HTTPCodes.SERVER_ERROR, body);
-}
-
-export function badRequest(body) {
-    return buildResponse(HTTPCodes.BAD_REQUEST, body);
-}
-
-export function respond(statusCode, body) {
-    return new Promise((resolve) => resolve(buildResponse(statusCode, body)))
-}
-
-export function buildResponse(statusCode, body) {
-    return {
-        statusCode: statusCode,
-        headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Credentials': true,
-        },
-        body: JSON.stringify(body),
-    };
-}
-
 export const HTTPCodes = {
     // 2XX Codes
     SUCCESS: 200,
@@ -38,4 +11,31 @@ export const HTTPCodes = {
     CONFLICT: 409,
     // 5XX Codes
     SERVER_ERROR: 500,
+}
+
+export function buildResponse(statusCode, body) {
+    return {
+        statusCode: statusCode,
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Credentials': true,
+        },
+        body: JSON.stringify(body),
+    };
+}
+
+export function success(body) {
+    return buildResponse(HTTPCodes.SUCCESS, body);
+}
+
+export function failure(body) {
+    return buildResponse(HTTPCodes.SERVER_ERROR, body);
+}
+
+export function badRequest(body) {
+    return buildResponse(HTTPCodes.BAD_REQUEST, body);
+}
+
+export function respond(statusCode, body) {
+    return new Promise(resolve => resolve(buildResponse(statusCode, body)))
 }

@@ -11,5 +11,4 @@ export default (params) =>
             .catch((err) => {
                 console.log(err.message);
                 resolve(false);
-            })
-    );
+            }));

@@ -1,7 +1,13 @@
 import update from '../crud/updateBase';
 import get from '../crud/getBase';
-import { HTTPCodes, failure, buildResponse } from '../../libs/response-lib';
-import { verifyQueryParameters } from '../../libs/api-helper-lib';
+import {
+    HTTPCodes,
+    failure,
+    buildResponse,
+} from '../../libs/response-lib';
+import {
+    verifyQueryParamsExist,
+} from '../../libs/api-helper-lib';
 
 // FIELDS ALLOWED TO UPDATE
 // - First Name
@@ -18,30 +24,42 @@ const prepare = (event) => {
         },
         userData: {
             email: event.queryStringParameters.email,
-            project: event.queryStringParameters.project,
-        }
+            projectId: event.queryStringParameters.projectId,
+        },
     };
-}
+};
 
 const updateUser = async (event) => {
-    var {tableName, userUpdateData, userData} = prepare(event);
+    const {
+        tableName,
+        userUpdateData,
+        userData,
+    } = prepare(event);
     try {
-        var existingUser = await get({
+        const existingUser = await get({
             TableName: tableName,
             Key: {
                 email: userData.email,
-                project: userData.project,
+                projectId: userData.projectId,
             },
         });
-        if (existingUser.userId != userUpdateData.userId) {
-            return buildResponse(HTTPCodes.UNAUTHORIZED, {'error': 'Not authorized to access this user.'})
+        if (existingUser === undefined) {
+            return buildResponse(HTTPCodes.NOT_FOUND, {
+                error: 'User does not exist for the given credentials.',
+            });
+        }
+        
+        if (existingUser.userId !== userUpdateData.userId) {
+            return buildResponse(HTTPCodes.UNAUTHORIZED, {
+                error: 'Not authorized to access this user.',
+            });
         }
 
-        var userUpdated = await update({
+        const userUpdated = await update({
             TableName: tableName,
             Key: {
                 email: userData.email, // Partition key
-                project: userData.project, // Sort key
+                projectId: userData.projectId, // Sort key
             },
             UpdateExpression: 'SET firstName = :firstName, lastName = :lastName',
             ExpressionAttributeValues: {
@@ -49,17 +67,22 @@ const updateUser = async (event) => {
                 ':lastName': userUpdateData.lastName || existingUser.lastName,
             },
             ReturnValues: 'ALL_NEW',
-        })
+        });
         if (userUpdated) {
-            return buildResponse(HTTPCodes.SUCCESS, {message: 'User was successfully updated.'})
+            return buildResponse(HTTPCodes.SUCCESS, {
+                message: 'User was successfully updated.',
+            });
         } else {
-            return failure({error: 'There was an error is updating the user.'})
+            return failure({
+                error: 'There was an error is updating the user.',
+            });
         }
-    } 
-    catch (err) {
-        console.log(err)
-        return failure({error: err})
+    } catch (err) {
+        console.log(err);
+        return failure({
+            error: err,
+        });
     }
-}
+};
 
-export const main = verifyQueryParameters(['email', 'project'], updateUser)
+export const main = verifyQueryParamsExist(['email', 'projectId'], updateUser);

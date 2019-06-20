@@ -1,7 +1,7 @@
 {
     "queryStringParameters": {
-        "email": "testuser@gmail.com",
-        "project": "Test-Project"
+        "email": "testuser-8@gmail.com",
+        "projectId": "Test-Project"
     },    
     "body": "{\"firstName\":\"Testy\",\"lastName\":\"McTestFace\"}",
     "requestContext": {

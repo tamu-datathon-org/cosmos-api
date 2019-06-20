@@ -9,5 +9,4 @@ export default (params) =>
             .catch((err) => {
                 console.log(err.message);
                 resolve(failure({ status: false }));
-            })
-    );
+            }));

@@ -1,8 +1,4 @@
-# ----------- USERS ENDPOINTS -----------
 createUser:
-    # Defines an HTTP API endpoint that calls the main function in createUser.js
-    # - path: url path is /users
-    # - method: POST request
     handler: lambdas/users/createUser.main
     events:
         - http:
@@ -11,9 +7,6 @@ createUser:
               cors: true
               authorizer: aws_iam
 getUser:
-    # Defines an HTTP API endpoint that calls the main function in getUser.js
-    # - path: url path is /users
-    # - method: GET request
     handler: lambdas/users/getUser.main
     events:
         - http:
@@ -22,20 +15,14 @@ getUser:
               cors: true
               authorizer: aws_iam
 updateUser:
-    # Defines an HTTP API endpoint that calls the main function in updateUser.js
-    # - path: url path is /users
-    # - method: UPDATE request
     handler: lambdas/users/updateUser.main
     events:
         - http:
               path: /users
-              method: update
+              method: put
               cors: true
               authorizer: aws_iam
 deleteUser:
-    # Defines an HTTP API endpoint that calls the main function in deleteUser.js
-    # - path: url path is /users
-    # - method: DELETE request
     handler: lambdas/users/deleteUser.main
     events:
         - http:
