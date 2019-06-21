@@ -9,8 +9,5 @@ export default params => new Promise((resolve, reject) =>
         .then(() => resolve(params.Item))
         .catch((err) => {
             console.log(err.message);
-            if (err.code === 'ConditionalCheckFailedException') {
-                resolve(undefined);
-            }
-            reject('DB Error');
+            reject(err);
         }));

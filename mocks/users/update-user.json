@@ -1,6 +1,6 @@
 {
     "queryStringParameters": {
-        "email": "testuser-8@gmail.com",
+        "email": "testuser@gmail.com",
         "projectId": "Test-Project"
     },    
     "body": "{\"firstName\":\"Testy\",\"lastName\":\"McTestFace\"}",

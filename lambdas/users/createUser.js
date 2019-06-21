@@ -34,16 +34,16 @@ const createUser = async (event) => {
             Item: user,
             ConditionExpression: 'attribute_not_exists(email) AND attribute_not_exists(projectId)',
         });
-        if (createdUser === undefined) {
-            return buildResponse(HTTPCodes.CONFLICT, {
-                error: 'An user for the specified project already exists for the given email.',
-            });
-        }
         return buildResponse(HTTPCodes.RESOURCE_CREATED, {
             user: createdUser,
         });
     } catch (err) {
-        console.log(err);
+        // The only condition on the create request is to check whether a user already exists.
+        if (err.code === 'ConditionalCheckFailedException') {
+            return buildResponse(HTTPCodes.CONFLICT, {
+                error: 'An user for the specified project already exists for the given email.',
+            });
+        }
         return failure({
             error: err,
         });

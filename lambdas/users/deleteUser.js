@@ -2,7 +2,6 @@ import _delete from '../crud/deleteBase';
 import get from '../crud/getBase';
 import {
     HTTPCodes,
-    failure,
     buildResponse,
 } from '../../libs/response-lib';
 import {
@@ -27,19 +26,27 @@ const deleteUser = async (event) => {
         userId,
     } = prepare(event);
     try {
+        // Seperate userId and user
+        const existingUser = await get({
+            TableName: tableName,
+            Key: userKey,
+        });
+        // User does not exist, return
+        if (existingUser === undefined) {
+            return buildResponse(HTTPCodes.NOT_FOUND, {
+                error: 'User does not exist for the given credentials.',
+            });
+        }
+        if (existingUser.userId !== userId) {
+            // User exists, but userId for AWS cognito does not match
+            return buildResponse(HTTPCodes.UNAUTHORIZED, {
+                error: 'Not authorized to access this user.',
+            });
+        }
         const deleteSuccess = await _delete({
             TableName: tableName,
             Key: userKey,
-            ConditionExpression: 'attribute_exists(email) AND attribute_exists(projectId) AND userId = :userId',
-            ExpressionAttributeValues: {
-                ':userId': userId,
-            },
         });
-        if (deleteSuccess === undefined) {
-            return buildResponse(HTTPCodes.UNAUTHORIZED, {
-                error: 'No users exists for the given credentials.',
-            });
-        }
         if (deleteSuccess) {
             return buildResponse(HTTPCodes.SUCCESS, {
                 message: 'User was successfully deleted.',
@@ -49,9 +56,8 @@ const deleteUser = async (event) => {
             error: 'The delete request could not be successfully completed.',
         });
     } catch (err) {
-        console.log(err);
-        return failure({
-            error: err,
+        return buildResponse(HTTPCodes.SERVER_ERROR, {
+            error: 'The delete request could not be successfully completed.',
         });
     }
 };

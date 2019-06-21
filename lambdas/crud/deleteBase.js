@@ -4,14 +4,11 @@ import * as dynamoDbLib from '../../libs/dynamodb-lib';
 // Non-Base versions return objects containing DB response, status code and headers
 
 export default (params) =>
-    new Promise((resolve) =>
+    new Promise((resolve, reject) =>
         dynamoDbLib
             .call('delete', params)
             .then(() => resolve(true))
             .catch((err) => {
-                if (err.code === 'ConditionalCheckFailedException') {
-                    resolve(undefined);
-                }
                 console.log(err.message);
-                resolve(false);
+                reject(err);
             }));
