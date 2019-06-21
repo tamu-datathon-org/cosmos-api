@@ -12,8 +12,8 @@ custom:
     stage: ${opt:stage, self:provider.stage}
     # Set the table name here so we can use it while testing locally
     attemptsTableName: ${self:custom.stage}-cosmos-attempts
-    usersTableName: ${self:custom.stage}-cosmos-users2
     projectsTableName: ${self:custom.stage}-cosmos-projects
+    usersTableName: ${self:custom.stage}-cosmos-users2
     # Set our DynamoDB throughput for prod and all other non-prod stages.
     tableThroughputs:
         prod: 5
@@ -34,8 +34,8 @@ provider:
     # under process.env.
     environment:
         attemptsTableName: ${self:custom.attemptsTableName}
-        usersTableName: ${self:custom.usersTableName}
         projectsTableName: ${self:custom.projectsTableName}
+        usersTableName: ${self:custom.usersTableName}
 
     iamRoleStatements:
     - Effect: Allow
