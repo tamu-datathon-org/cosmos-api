@@ -1,0 +1,12 @@
+{
+    "queryStringParameters": {
+        "email": "testuser@gmail.com",
+        "projectId": "Test-Project"
+    },    
+    "body": "{\"firstName\":\"Testy\",\"lastName\":\"McTestFace\"}",
+    "requestContext": {
+        "identity": {
+            "cognitoIdentityId": "TEST-USER-1234"
+        }
+    }
+}

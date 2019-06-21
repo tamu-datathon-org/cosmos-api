@@ -1,16 +1,18 @@
 import * as dynamoDbLib from '../../libs/dynamodb-lib';
-import { success, failure } from '../../libs/response-lib';
+
+// Base version of CRUD GET. Only returns DB response
+// Non-Base versions return objects containing DB response, status code and headers
 
 export default (params) =>
-    new Promise((resolve) =>
+    new Promise((resolve, reject) =>
         dynamoDbLib
             .call('get', params)
             .then((result) => {
                 return result.Item
-                    ? resolve(success(result.Item))
-                    : resolve(failure({ status: false, error: 'Item not found.' }));
+                    ? resolve(result.Item)
+                    : resolve(undefined);
             })
             .catch((err) => {
                 console.log(err.message);
-                resolve(failure({ status: false }));
+                reject('DB Error');
             }));

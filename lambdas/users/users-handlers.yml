@@ -1,0 +1,32 @@
+createUser:
+    handler: lambdas/users/createUser.main
+    events:
+        - http:
+              path: /users
+              method: post
+              cors: true
+              authorizer: aws_iam
+getUser:
+    handler: lambdas/users/getUser.main
+    events:
+        - http:
+              path: /users
+              method: get
+              cors: true
+              authorizer: aws_iam
+updateUser:
+    handler: lambdas/users/updateUser.main
+    events:
+        - http:
+              path: /users
+              method: put
+              cors: true
+              authorizer: aws_iam
+deleteUser:
+    handler: lambdas/users/deleteUser.main
+    events:
+        - http:
+              path: /users
+              method: delete
+              cors: true
+              authorizer: aws_iam

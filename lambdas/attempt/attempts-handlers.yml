@@ -1,0 +1,40 @@
+createAttempt:
+    handler: lambdas/attempt/createAttempt.main
+    events:
+        - http:
+              path: attempts
+              method: post
+              cors: true
+              authorizer: aws_iam
+getAttempt:
+    handler: lambdas/attempt/getAttempt.main
+    events:
+        - http:
+              path: attempts/{id}
+              method: get
+              cors: true
+              authorizer: aws_iam
+listAttempts:
+    handler: lambdas/attempt/listAttempts.main
+    events:
+        - http:
+              path: attempts
+              method: get
+              cors: true
+              authorizer: aws_iam
+updateAttempt:
+    handler: lambdas/attempt/updateAttempt.main
+    events:
+        - http:
+              path: attempts/{id}
+              method: put
+              cors: true
+              authorizer: aws_iam
+deleteAttempt:
+    handler: lambdas/attempt/deleteAttempt.main
+    events:
+        - http:
+              path: attempts/{id}
+              method: delete
+              cors: true
+              authorizer: aws_iam
