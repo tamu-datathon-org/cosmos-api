@@ -48,13 +48,11 @@ const updateUser = async (event) => {
                 error: 'User does not exist for the given credentials.',
             });
         }
-        
         if (existingUser.userId !== userUpdateData.userId) {
             return buildResponse(HTTPCodes.UNAUTHORIZED, {
                 error: 'Not authorized to access this user.',
             });
         }
-
         const userUpdated = await update({
             TableName: tableName,
             Key: {

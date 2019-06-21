@@ -1,7 +1,7 @@
 import * as dynamoDbLib from '../../libs/dynamodb-lib';
 
-// Base version of CRUD CREATE
-// Only returns items instead of lambda return values
+// Base version of CRUD CREATE. Only returns DB response
+// Non-Base versions return objects containing DB response, status code and headers
 
 export default params => new Promise((resolve, reject) =>
     dynamoDbLib
@@ -9,7 +9,6 @@ export default params => new Promise((resolve, reject) =>
         .then(() => resolve(params.Item))
         .catch((err) => {
             console.log(err.message);
-            console.log(err.status);
             if (err.code === 'ConditionalCheckFailedException') {
                 resolve(undefined);
             }
