@@ -1,9 +1,16 @@
-import { IncorrectAnswerLengthError, NonBinaryAnswerError } from './judging-errors';
-
+import {
+    IncorrectAnswerLengthError,
+} from './judging-errors';
+import {
+    verifyBinaryContent,
+    computeTruePositives,
+    computeFalsePositives,
+    computeFalseNegatives,
+} from './judging-helpers';
 
 const verifySameLength = (predicted, truth) => {
     if (predicted.length !== truth.length) {
-        throw IncorrectAnswerLengthError('The length of the truth and the submission do not match.');
+        throw IncorrectAnswerLengthError();
     }
 };
 
@@ -18,33 +25,17 @@ export const calcAccuracy = (predicted, truth) => {
 
 export const calcPrecisionBinary = (predicted, truth) => {
     verifySameLength(predicted, truth);
-    let truePositives = 0;
-    let falsePositives = 0;
-    const binarySet = new Set([1, 0, 1.0, 0.0]);
-    truth.forEach((trueValue, index) => {
-        // Expects list of 1s and 0s.
-        if (!binarySet.has(parseFloat(predicted[index]))) {
-            throw NonBinaryAnswerError('The expected answer only contains 1s and 0s.');
-        }
-        truePositives += (parseFloat(trueValue) === 1) && (parseFloat(predicted[index]) === 1);
-        falsePositives += (parseFloat(trueValue) === 0) && (parseFloat(predicted[index]) === 1);
-    });
+    verifyBinaryContent(predicted);
+    const truePositives = computeTruePositives(predicted, truth);
+    const falsePositives = computeFalsePositives(predicted, truth);
     return truePositives / (truePositives + falsePositives);
 };
 
 export const calcRecallBinary = (predicted, truth) => {
     verifySameLength(predicted, truth);
-    let truePositives = 0;
-    let falseNegatives = 0;
-    const binarySet = new Set([1, 0, 1.0, 0.0]);
-    truth.forEach((trueValue, index) => {
-        // Expects list of 1s and 0s.
-        if (!binarySet.has(parseFloat(predicted[index]))) {
-            throw NonBinaryAnswerError('The expected answer only contains 1s and 0s.');
-        }
-        truePositives += (parseFloat(trueValue) === 1) && (parseFloat(predicted[index]) === 1);
-        falseNegatives += (parseFloat(trueValue) === 1) && (parseFloat(predicted[index]) === 0);
-    });
+    verifyBinaryContent(predicted);
+    const truePositives = computeTruePositives(predicted, truth);
+    const falseNegatives = computeFalseNegatives(predicted, truth);
     return truePositives / (truePositives + falseNegatives);
 };
 
