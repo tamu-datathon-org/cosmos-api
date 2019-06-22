@@ -4,6 +4,7 @@ service: cosmos-api
 plugins:
     - serverless-webpack
     - serverless-offline
+    - serverless-dynamodb-local
 
 custom:
     # Our stage is based on what is passed in when running serverless
@@ -11,6 +12,8 @@ custom:
     stage: ${opt:stage, self:provider.stage}
     # Set the table name here so we can use it while testing locally
     attemptsTableName: ${self:custom.stage}-cosmos-attempts
+    projectsTableName: ${self:custom.stage}-cosmos-projects
+    usersTableName: ${self:custom.stage}-cosmos-users2
     # Set our DynamoDB throughput for prod and all other non-prod stages.
     tableThroughputs:
         prod: 5
@@ -31,6 +34,8 @@ provider:
     # under process.env.
     environment:
         attemptsTableName: ${self:custom.attemptsTableName}
+        projectsTableName: ${self:custom.projectsTableName}
+        usersTableName: ${self:custom.usersTableName}
 
     iamRoleStatements:
     - Effect: Allow
@@ -47,66 +52,16 @@ provider:
       Resource:
           - "Fn::GetAtt": [ AttemptsTable, Arn ]
           - "Fn::GetAtt": [ ProjectsTable, Arn ]
+          - "Fn::GetAtt": [ UsersTable, Arn ]
 
 functions:
-    # Defines an HTTP API endpoint that calls the main function in createAttempt.js
-    # - path: url path is /attempts
-    # - method: POST request
-    # - cors: enabled CORS (Cross-Origin Resource Sharing) for browser cross
-    #     domain api call
-    # - authorizer: authenticate using the AWS IAM role
-    create:
-        handler: lambdas/attempt/createAttempt.main
-        events:
-            - http:
-                  path: attempts
-                  method: post
-                  cors: true
-                  authorizer: aws_iam
-    get:
-        # Defines an HTTP API endpoint that calls the main function in getAttempt.js
-        # - path: url path is /attempts/{id}
-        # - method: GET request
-        handler: lambdas/attempt/getAttempt.main
-        events:
-            - http:
-                  path: attempts/{id}
-                  method: get
-                  cors: true
-                  authorizer: aws_iam
-    list:
-        # Defines an HTTP API endpoint that calls the main function in listAttempt.js
-        # - path: url path is /attempts
-        # - method: GET request
-        handler: lambdas/attempt/listAttempts.main
-        events:
-            - http:
-                  path: attempts
-                  method: get
-                  cors: true
-                  authorizer: aws_iam
-    update:
-        # Defines an HTTP API endpoint that calls the main function in updateAttempt.js
-        # - path: url path is /attempts/{id}
-        # - method: PUT request
-        handler: lambdas/attempt/updateAttempt.main
-        events:
-            - http:
-                  path: attempts/{id}
-                  method: put
-                  cors: true
-                  authorizer: aws_iam
-    delete:
-        # Defines an HTTP API endpoint that calls the main function in deleteAttempt.js
-        # - path: url path is /attempts/{id}
-        # - method: DELETE request
-        handler: lambdas/attempt/deleteAttempt.main
-        events:
-            - http:
-                  path: attempts/{id}
-                  method: delete
-                  cors: true
-                  authorizer: aws_iam
+    # Attempts Endpoints
+  - ${file(lambdas/attempt/attempts-handlers.yml)}
+    # Users Endpoints
+  - ${file(lambdas/users/users-handlers.yml)}
+
+    
+
 resources:
     # API Gateway Errors
     - ${file(resources/api-gateway-errors.yml)}
