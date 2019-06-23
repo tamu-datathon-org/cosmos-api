@@ -121,26 +121,24 @@ const parseResponse = (response) => {
     return { ...rest, body: JSON.parse(body) };
 };
 
-test('createGetDeleteProject', (done) => {
+test('createGetDeleteProject', async () => {
     // delete project in case it exists and expect to succeed
-    deleteProject(deleteRequest)
-        .then((response) => expect(response).toEqual(deleteSucceedResponse))
-        // create project and expect to succeed
-        .then(() => createProject(createRequest))
-        .then((response) => expect(parseResponse(response)).toMatchObject(createSucceedResponse))
-        // try to create project and expect to fail because already exists
-        .then(() => createProject(createRequest))
-        .then((response) => expect(response).toEqual(createFailResponse))
-        // try get project and expect to succeed
-        .then(() => getProject(getRequest))
-        .then((response) => expect(parseResponse(response)).toMatchObject(getSucceedResponse))
-        // delete project and expect to succeed
-        .then(() => deleteProject(deleteRequest))
-        .then((response) => expect(response).toEqual(deleteSucceedResponse))
-        // try get project and expect to fail because doesn't exist
-        .then(() => getProject(getRequest))
-        .then((response) => expect(response).toEqual(getFailResponse))
-        .then(done);
+    await deleteProject(deleteRequest).then((response) =>
+        expect(response).toEqual(deleteSucceedResponse));
+    // create project and expect to succeed
+    await createProject(createRequest).then((response) =>
+        expect(parseResponse(response)).toMatchObject(createSucceedResponse));
+    // try to create project and expect to fail because already exists
+    await createProject(createRequest).then((response) =>
+        expect(response).toEqual(createFailResponse));
+    // try get project and expect to succeed
+    await getProject(getRequest).then((response) =>
+        expect(parseResponse(response)).toMatchObject(getSucceedResponse));
+    // delete project and expect to succeed
+    await deleteProject(deleteRequest).then((response) =>
+        expect(response).toEqual(deleteSucceedResponse));
+    // try get project and expect to fail because doesn't exist
+    await getProject(getRequest).then((response) => expect(response).toEqual(getFailResponse));
 });
 
 // TODO: add tests for trying to add project with a metric that doesn't exist in judging engine
