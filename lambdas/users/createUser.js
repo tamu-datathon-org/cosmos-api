@@ -4,9 +4,7 @@ import {
     failure,
     buildResponse,
 } from '../../libs/response-lib';
-import {
-    verifyBodyParamsExist,
-} from '../../libs/api-helper-lib';
+import { verifyBodyParamsExist } from '../../libs/api-helper-lib';
 
 const prepare = (event) => {
     const data = JSON.parse(event.body);
@@ -50,4 +48,7 @@ const createUser = async (event) => {
     }
 };
 
-export const main = verifyBodyParamsExist(['email', 'firstName', 'lastName', 'projectId'], createUser);
+export const main = verifyBodyParamsExist(
+    ['email', 'firstName', 'lastName', 'projectId'],
+    createUser,
+);

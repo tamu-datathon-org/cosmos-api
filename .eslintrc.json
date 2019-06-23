@@ -11,6 +11,7 @@
         "arrow-parens": 0,
         "implicit-arrow-linebreak": 0,
         "prefer-promise-reject-errors": 0,
-        "import/prefer-default-export": 0
+        "import/prefer-default-export": 0,
+        "object-property-newline": 0
     }
 }

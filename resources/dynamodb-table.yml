@@ -37,12 +37,25 @@ Resources:
             AttributeDefinitions:
                 - AttributeName: email
                   AttributeType: S
-                - AttributeName: projectId
-                  AttributeType: S
             KeySchema:
                 - AttributeName: email
                   KeyType: HASH
+            ProvisionedThroughput:
+                ReadCapacityUnits: ${self:custom.tableThroughput}
+                WriteCapacityUnits: ${self:custom.tableThroughput}
+    ChallengesTable:
+        Type: AWS::DynamoDB::Table
+        Properties:
+            TableName: ${self:custom.challengesTableName}
+            AttributeDefinitions:
                 - AttributeName: projectId
+                  AttributeType: S
+                - AttributeName: challengeId
+                  AttributeType: S
+            KeySchema:
+                - AttributeName: projectId
+                  KeyType: HASH
+                - AttributeName: challengeId
                   KeyType: RANGE
             ProvisionedThroughput:
                 ReadCapacityUnits: ${self:custom.tableThroughput}
