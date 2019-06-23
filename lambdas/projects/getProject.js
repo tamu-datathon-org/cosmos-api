@@ -1,5 +1,7 @@
 import get from '../crud/get';
-import { success, failure } from '../../libs/response-lib';
+import {
+    success, failure, dataBody, errorBody,
+} from '../../libs/response-lib';
 
 export const main = (event) =>
     get({
@@ -8,5 +10,5 @@ export const main = (event) =>
             projectId: event.pathParameters.projectId,
         },
     })
-        .then(success)
-        .catch(failure);
+        .then((item) => success(dataBody(item)))
+        .catch(({ message }) => failure(errorBody(message)));

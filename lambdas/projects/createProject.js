@@ -1,6 +1,6 @@
 import create from '../crud/create';
 import {
-    HTTPCodes, respond, success, failure,
+    success, failure, dataBody, errorBody, conflict,
 } from '../../libs/response-lib';
 
 const prepare = (event) => {
@@ -18,11 +18,6 @@ const prepare = (event) => {
 
 export const main = (event) =>
     create(prepare(event))
-        .then(success)
-        .catch((body) =>
-            (body.errors[0] === 'The conditional request failed'
-                ? respond(HTTPCodes.CONFLICT, {
-                    data: {},
-                    errors: ['The object you tried to create already exists'],
-                })
-                : failure(body)));
+        .then((item) => success(dataBody(item)))
+        .catch(({ message }) =>
+            (message === 'The conditional request failed' ? conflict() : failure(errorBody(message))));

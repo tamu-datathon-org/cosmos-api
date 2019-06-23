@@ -1,3 +1,16 @@
+// BODY BUILDERS //
+export const buildBody = (data, errors) => ({
+    data,
+    errors,
+});
+
+export const emptyBody = buildBody({}, []);
+
+export const errorBody = (msg) => buildBody({}, [msg]);
+
+export const dataBody = (data) => buildBody(data, []);
+
+// RESPONSE BUILDERS //
 export const HTTPCodes = {
     // 2XX Codes
     SUCCESS: 200,
@@ -34,6 +47,13 @@ export function failure(body) {
 
 export function badRequest(body) {
     return buildResponse(HTTPCodes.BAD_REQUEST, body);
+}
+
+export function conflict() {
+    return buildResponse(
+        HTTPCodes.CONFLICT,
+        buildBody({}, ['The object you tried to create already exists.']),
+    );
 }
 
 export function respond(statusCode, body) {

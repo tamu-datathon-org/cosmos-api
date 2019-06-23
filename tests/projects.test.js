@@ -94,7 +94,7 @@ const createFailResponse = {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true,
     },
-    body: '{"data":{},"errors":["The object you tried to create already exists"]}',
+    body: '{"data":{},"errors":["The object you tried to create already exists."]}',
 };
 
 const getFailResponse = {
