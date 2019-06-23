@@ -53,17 +53,17 @@ const projectItem = {
 };
 
 // REQUESTS
-const createProjectRequest = {
+const createRequest = {
     body: JSON.stringify(projectItem),
 };
 
-const getProjectRequest = {
+const getRequest = {
     pathParameters: {
         projectId: 'TAMU Datathon',
     },
 };
 
-const deleteProjectRequest = {
+const deleteRequest = {
     pathParameters: {
         projectId: 'TAMU Datathon',
     },
@@ -123,22 +123,24 @@ const parseResponse = (response) => {
 
 test('createGetDeleteProject', (done) => {
     // delete project in case it exists and expect to succeed
-    deleteProject(deleteProjectRequest)
+    deleteProject(deleteRequest)
         .then((response) => expect(response).toEqual(deleteSucceedResponse))
         // create project and expect to succeed
-        .then(() => createProject(createProjectRequest))
+        .then(() => createProject(createRequest))
         .then((response) => expect(parseResponse(response)).toMatchObject(createSucceedResponse))
         // try to create project and expect to fail because already exists
-        .then(() => createProject(createProjectRequest))
+        .then(() => createProject(createRequest))
         .then((response) => expect(response).toEqual(createFailResponse))
         // try get project and expect to succeed
-        .then(() => getProject(getProjectRequest))
+        .then(() => getProject(getRequest))
         .then((response) => expect(parseResponse(response)).toMatchObject(getSucceedResponse))
         // delete project and expect to succeed
-        .then(() => deleteProject(deleteProjectRequest))
+        .then(() => deleteProject(deleteRequest))
         .then((response) => expect(response).toEqual(deleteSucceedResponse))
         // try get project and expect to fail because doesn't exist
-        .then(() => getProject(getProjectRequest))
+        .then(() => getProject(getRequest))
         .then((response) => expect(response).toEqual(getFailResponse))
         .then(done);
 });
+
+// TODO: add tests for trying to add project with a metric that doesn't exist in judging engine
