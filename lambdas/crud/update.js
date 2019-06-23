@@ -5,18 +5,8 @@ export default (params) =>
     new Promise((resolve) =>
         dynamoDbLib
             .call('update', params)
-            .then(() =>
-                resolve(
-                    success({
-                        data: {},
-                        errors: [],
-                    }),
-                ))
-            .catch(({ message }) => {
-                resolve(
-                    failure({
-                        data: {},
-                        errors: [message],
-                    }),
-                );
+            .then(() => resolve(success({ status: true })))
+            .catch((err) => {
+                console.log(err.message);
+                resolve(failure({ status: false }));
             }));
