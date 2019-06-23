@@ -5,8 +5,18 @@ export default (params) =>
     new Promise((resolve) =>
         dynamoDbLib
             .call('query', params)
-            .then((result) => resolve(success(result.Items)))
-            .catch((err) => {
-                console.log(err.message);
-                resolve(failure({ status: false }));
+            .then(({ Items }) =>
+                resolve(
+                    success({
+                        data: Items,
+                        errors: [],
+                    }),
+                ))
+            .catch(({ message }) => {
+                resolve(
+                    failure({
+                        data: {},
+                        errors: [message],
+                    }),
+                );
             }));

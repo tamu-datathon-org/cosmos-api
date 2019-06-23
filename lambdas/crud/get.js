@@ -5,12 +5,21 @@ export default (params) =>
     new Promise((resolve) =>
         dynamoDbLib
             .call('get', params)
-            .then((result) => {
-                return result.Item
-                    ? resolve(success(result.Item))
-                    : resolve(failure({ status: false, error: 'Item not found.' }));
+            .then(({ Item }) => {
+                return Item
+                    ? resolve(
+                        success({
+                            data: Item,
+                            errors: [],
+                        }),
+                    )
+                    : resolve(failure({ data: {}, errors: ['Item not found.'] }));
             })
-            .catch((err) => {
-                console.log(err.message);
-                resolve(failure({ status: false }));
+            .catch(({ message }) => {
+                resolve(
+                    failure({
+                        data: {},
+                        errors: [message],
+                    }),
+                );
             }));

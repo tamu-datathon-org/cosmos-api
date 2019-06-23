@@ -22,10 +22,10 @@ Resources:
         Properties:
             TableName: ${self:custom.projectsTableName}
             AttributeDefinitions:
-                - AttributeName: project
+                - AttributeName: projectId
                   AttributeType: S
             KeySchema:
-                - AttributeName: project
+                - AttributeName: projectId
                   KeyType: HASH
             ProvisionedThroughput:
                 ReadCapacityUnits: ${self:custom.tableThroughput}

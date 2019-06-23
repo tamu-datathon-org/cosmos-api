@@ -1,15 +1,15 @@
-import create from '../../lambdas/crud/create';
+import create from '../crud/create';
 
 const prepare = (event) => {
-    const { project, lessons } = JSON.parse(event.body);
+    const { projectId, lessons } = JSON.parse(event.body);
     return {
         TableName: process.env.projectsTableName,
         Item: {
-            project,
+            projectId,
             lessons,
-            userId: event.requestContext.identity.cognitoIdentityId,
             createdAt: Date.now(),
         },
+        ConditionExpression: 'attribute_not_exists(projectId)',
     };
 };
 
