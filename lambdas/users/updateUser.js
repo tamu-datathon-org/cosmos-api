@@ -1,5 +1,5 @@
 import update from '../crud/updateBase';
-import get from '../crud/getBase';
+import get from '../crud/get';
 import {
     HTTPCodes,
     failure,

@@ -1,5 +1,5 @@
 import _delete from '../crud/delete';
-import get from '../crud/getBase';
+import get from '../crud/get';
 import {
     HTTPCodes,
     buildResponse,
