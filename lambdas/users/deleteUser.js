@@ -1,4 +1,4 @@
-import _delete from '../crud/deleteBase';
+import _delete from '../crud/delete';
 import get from '../crud/getBase';
 import {
     HTTPCodes,
