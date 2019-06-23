@@ -89,12 +89,12 @@ const createSucceedResponse = {
 };
 
 const createFailResponse = {
-    statusCode: 500,
+    statusCode: 409,
     headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true,
     },
-    body: '{"data":{},"errors":["The conditional request failed"]}',
+    body: '{"data":{},"errors":["The object you tried to create already exists"]}',
 };
 
 const getFailResponse = {
@@ -133,7 +133,7 @@ test('createGetDeleteProject', (done) => {
         .then((response) => expect(response).toEqual(createFailResponse))
         // try get project and expect to succeed
         .then(() => getProject(getProjectRequest))
-        .then((response) => expect(parseResponse(response)).toEqual(getSucceedResponse))
+        .then((response) => expect(parseResponse(response)).toMatchObject(getSucceedResponse))
         // delete project and expect to succeed
         .then(() => deleteProject(deleteProjectRequest))
         .then((response) => expect(response).toEqual(deleteSucceedResponse))

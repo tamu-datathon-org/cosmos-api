@@ -11,7 +11,7 @@ export const HTTPCodes = {
     CONFLICT: 409,
     // 5XX Codes
     SERVER_ERROR: 500,
-}
+};
 
 export function buildResponse(statusCode, body) {
     return {
@@ -37,5 +37,5 @@ export function badRequest(body) {
 }
 
 export function respond(statusCode, body) {
-    return new Promise(resolve => resolve(buildResponse(statusCode, body)))
+    return new Promise((resolve) => resolve(buildResponse(statusCode, body)));
 }

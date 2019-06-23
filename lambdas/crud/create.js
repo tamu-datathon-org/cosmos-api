@@ -1,22 +1,20 @@
 import * as dynamoDbLib from '../../libs/dynamodb-lib';
-import { success, failure } from '../../libs/response-lib';
+
+const itemBody = (item) => ({
+    data: item,
+    errors: [],
+});
+
+const msgBody = (message) => ({
+    data: {},
+    errors: [message],
+});
 
 export default (params) =>
-    new Promise((resolve) =>
+    new Promise((resolve, reject) =>
         dynamoDbLib
             .call('put', params)
-            .then(() =>
-                resolve(
-                    success({
-                        data: params.Item,
-                        errors: [],
-                    }),
-                ))
+            .then(() => resolve(itemBody(params.Item)))
             .catch(({ message }) => {
-                resolve(
-                    failure({
-                        data: {},
-                        errors: [message],
-                    }),
-                );
+                reject(msgBody(message));
             }));

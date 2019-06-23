@@ -1,4 +1,5 @@
 import _delete from '../crud/delete';
+import { success, failure } from '../../libs/response-lib';
 
 export const main = (event) =>
     _delete({
@@ -6,4 +7,6 @@ export const main = (event) =>
         Key: {
             projectId: event.pathParameters.projectId,
         },
-    });
+    })
+        .then(success)
+        .catch(failure);

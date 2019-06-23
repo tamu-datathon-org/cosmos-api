@@ -1,22 +1,18 @@
 import * as dynamoDbLib from '../../libs/dynamodb-lib';
-import { success, failure } from '../../libs/response-lib';
+
+const emptyBody = {
+    data: {},
+    errors: [],
+};
+
+const msgBody = (message) => ({
+    data: {},
+    errors: [message],
+});
 
 export default (params) =>
-    new Promise((resolve) =>
+    new Promise((resolve, reject) =>
         dynamoDbLib
             .call('delete', params)
-            .then(() =>
-                resolve(
-                    success({
-                        data: {},
-                        errors: [],
-                    }),
-                ))
-            .catch(({ message }) => {
-                resolve(
-                    failure({
-                        data: {},
-                        errors: [message],
-                    }),
-                );
-            }));
+            .then(() => resolve(emptyBody))
+            .catch(({ message }) => reject(msgBody(message))));
