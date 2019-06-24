@@ -6,9 +6,13 @@ export const buildBody = (data, errors) => ({
 
 export const emptyBody = buildBody({}, []);
 
-export const errorBody = (msg) => buildBody({}, [msg]);
+export const errorBody = (err) => buildBody({}, [err]);
 
 export const dataBody = (data) => buildBody(data, []);
+
+export const conflictBody = buildBody({}, [
+    { message: 'The object you tried to create already exists.' },
+]);
 
 // RESPONSE BUILDERS //
 export const HTTPCodes = {
@@ -26,35 +30,26 @@ export const HTTPCodes = {
     SERVER_ERROR: 500,
 };
 
-export function buildResponse(statusCode, body) {
-    return {
-        statusCode: statusCode,
-        headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Credentials': true,
-        },
-        body: JSON.stringify(body),
-    };
-}
+export const buildResponse = (statusCode, body) => ({
+    statusCode: statusCode,
+    headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true,
+    },
+    body: JSON.stringify(body),
+});
 
-export function success(body) {
-    return buildResponse(HTTPCodes.SUCCESS, body);
-}
+export const success = (body) => buildResponse(HTTPCodes.SUCCESS, body);
 
-export function failure(body) {
-    return buildResponse(HTTPCodes.SERVER_ERROR, body);
-}
+export const failure = (error) => buildResponse(HTTPCodes.SERVER_ERROR, errorBody(error));
 
-export function badRequest(body) {
-    return buildResponse(HTTPCodes.BAD_REQUEST, body);
-}
+export const badRequest = (body) => buildResponse(HTTPCodes.BAD_REQUEST, body);
 
-export function conflict() {
-    return buildResponse(
-        HTTPCodes.CONFLICT,
-        buildBody({}, ['The object you tried to create already exists.']),
-    );
-}
+export const emptySuccess = () => success(emptyBody);
+
+export const dataSuccess = (data) => success(dataBody(data));
+
+export const conflictFailure = () => buildResponse(HTTPCodes.CONFLICT, conflictBody);
 
 export function respond(statusCode, body) {
     return new Promise((resolve) => resolve(buildResponse(statusCode, body)));

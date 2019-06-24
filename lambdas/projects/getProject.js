@@ -1,14 +1,14 @@
 import get from '../crud/get';
-import {
-    success, failure, dataBody, errorBody,
-} from '../../libs/response-lib';
+import { failure, dataSuccess } from '../../libs/response-lib';
+
+const project = (event) => ({
+    TableName: process.env.projectsTableName,
+    Key: {
+        projectId: event.pathParameters.projectId,
+    },
+});
 
 export const main = (event) =>
-    get({
-        TableName: process.env.projectsTableName,
-        Key: {
-            projectId: event.pathParameters.projectId,
-        },
-    })
-        .then((item) => success(dataBody(item)))
-        .catch(({ message }) => failure(errorBody(message)));
+    get(project(event))
+        .then(dataSuccess)
+        .catch(failure);

@@ -12,6 +12,7 @@ custom:
     # Set the table name here so we can use it while testing locally
     attemptsTableName: ${self:custom.stage}-cosmos-attempts
     projectsTableName: ${self:custom.stage}-cosmos-projects2
+    projectAdminTableName: ${self:custom.stage}-cosmos-project-admin
     usersTableName: ${self:custom.stage}-cosmos-users2
     # Set our DynamoDB throughput for prod and all other non-prod stages.
     tableThroughputs:
@@ -34,6 +35,7 @@ provider:
     environment:
         attemptsTableName: ${self:custom.attemptsTableName}
         projectsTableName: ${self:custom.projectsTableName}
+        projectAdminTableName: ${self:custom.projectAdminTableName}
         usersTableName: ${self:custom.usersTableName}
 
     iamRoleStatements:
