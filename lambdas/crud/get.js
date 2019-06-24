@@ -4,5 +4,5 @@ export default (params) =>
     new Promise((resolve, reject) =>
         dynamoDbLib
             .call('get', params)
-            .then(({ Item }) => (Item ? resolve(Item) : reject({ message: 'Item not found.' })))
+            .then(resolve)
             .catch(reject));

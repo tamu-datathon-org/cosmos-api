@@ -1,7 +1,7 @@
 import _delete from '../crud/delete';
 import list from '../crud/list';
 import { dataSuccess, failure } from '../../libs/response-lib';
-import batch from '../crud/batch';
+import batch from '../crud/batchWrite';
 
 const project = (event) => ({
     TableName: process.env.projectsTableName,
@@ -29,13 +29,16 @@ const projectAdminDelete = (admins) => ({
 });
 
 // TODO: can not batch write more than 25. must break up if more than 25
+// TODO: eventually should wrap in Transaction so all updates happen all or nothing
 export const main = (event) =>
     _delete(project(event))
         .then(() => list(projectAdmin(event)))
         .then((admins) => {
+            // batch has to update between 1 and 25 items
             if (admins.length > 0) {
                 return batch(projectAdminDelete(admins));
             }
+            // this is what is returned in the case that batch succeeds
             return { UnprocessedItems: {} };
         })
         .then(dataSuccess)

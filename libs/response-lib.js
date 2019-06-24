@@ -14,6 +14,8 @@ export const conflictBody = buildBody({}, [
     { message: 'The object you tried to create already exists.' },
 ]);
 
+export const notFoundBody = buildBody({}, [{ message: 'Item not found.' }]);
+
 // RESPONSE BUILDERS //
 export const HTTPCodes = {
     // 2XX Codes
@@ -50,6 +52,8 @@ export const emptySuccess = () => success(emptyBody);
 export const dataSuccess = (data) => success(dataBody(data));
 
 export const conflictFailure = () => buildResponse(HTTPCodes.CONFLICT, conflictBody);
+
+export const notFoundFailure = () => buildResponse(HTTPCodes.NOT_FOUND, notFoundBody);
 
 export function respond(statusCode, body) {
     return new Promise((resolve) => resolve(buildResponse(statusCode, body)));
