@@ -13,7 +13,7 @@ custom:
     # Set the table name here so we can use it while testing locally
     attemptsTableName: ${self:custom.stage}-cosmos-attempts
     projectsTableName: ${self:custom.stage}-cosmos-projects
-    usersTableName: ${self:custom.stage}-cosmos-users2
+    usersTableName: ${self:custom.stage}-cosmos-users
     # Set our DynamoDB throughput for prod and all other non-prod stages.
     tableThroughputs:
         prod: 5

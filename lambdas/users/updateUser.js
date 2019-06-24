@@ -18,13 +18,12 @@ const prepare = (event) => {
     return {
         tableName: process.env.usersTableName,
         userUpdateData: {
-            userId: event.requestContext.identity.cognitoIdentityId,
             firstName: data.firstName,
             lastName: data.lastName,
         },
         userData: {
             email: event.queryStringParameters.email,
-            projectId: event.queryStringParameters.projectId,
+            userId: event.requestContext.identity.cognitoIdentityId,
         },
     };
 };
@@ -40,7 +39,7 @@ const updateUser = async (event) => {
             TableName: tableName,
             Key: {
                 email: userData.email,
-                projectId: userData.projectId,
+                userId: userData.userId,
             },
         });
         if (existingUser === undefined) {
@@ -48,7 +47,7 @@ const updateUser = async (event) => {
                 error: 'User does not exist for the given credentials.',
             });
         }
-        if (existingUser.userId !== userUpdateData.userId) {
+        if (existingUser.userId !== userData.userId) {
             return buildResponse(HTTPCodes.UNAUTHORIZED, {
                 error: 'Not authorized to access this user.',
             });
@@ -57,7 +56,7 @@ const updateUser = async (event) => {
             TableName: tableName,
             Key: {
                 email: userData.email, // Partition key
-                projectId: userData.projectId, // Sort key
+                userId: userData.userId, // Sort key
             },
             UpdateExpression: 'SET firstName = :firstName, lastName = :lastName',
             ExpressionAttributeValues: {

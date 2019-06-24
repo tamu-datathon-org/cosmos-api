@@ -14,10 +14,10 @@ const prepare = (event) => {
         tableName: process.env.usersTableName,
         user: {
             userId: event.requestContext.identity.cognitoIdentityId,
+            email: data.email,
             firstName: data.firstName,
             lastName: data.lastName,
-            email: data.email,
-            projectId: data.projectId,
+            projects: [],
             createdAt: Date.now(),
         },
     };
@@ -32,7 +32,7 @@ const createUser = async (event) => {
         const createdUser = await create({
             TableName: tableName,
             Item: user,
-            ConditionExpression: 'attribute_not_exists(email) AND attribute_not_exists(projectId)',
+            ConditionExpression: 'attribute_not_exists(email)',
         });
         return buildResponse(HTTPCodes.RESOURCE_CREATED, {
             user: createdUser,
@@ -50,4 +50,4 @@ const createUser = async (event) => {
     }
 };
 
-export const main = verifyBodyParamsExist(['email', 'firstName', 'lastName', 'projectId'], createUser);
+export const main = verifyBodyParamsExist(['email', 'firstName', 'lastName'], createUser);
