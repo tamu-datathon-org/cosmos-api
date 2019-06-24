@@ -166,3 +166,5 @@ test('Project: Delete, Create, Get', async () => {
     await getProject(getRequest).then((response) =>
         expect(parseResponseBody(response)).toMatchObject(getSucceedResponse));
 });
+
+// TODO: (when we have grader) assert that we have a grader for each challenge's metric
