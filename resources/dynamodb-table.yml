@@ -22,10 +22,10 @@ Resources:
         Properties:
             TableName: ${self:custom.projectsTableName}
             AttributeDefinitions:
-                - AttributeName: project
+                - AttributeName: projectId
                   AttributeType: S
             KeySchema:
-                - AttributeName: project
+                - AttributeName: projectId
                   KeyType: HASH
             ProvisionedThroughput:
                 ReadCapacityUnits: ${self:custom.tableThroughput}
@@ -56,6 +56,23 @@ Resources:
                 - AttributeName: projectId
                   KeyType: HASH
                 - AttributeName: challengeId
+                  KeyType: RANGE
+            ProvisionedThroughput:
+                ReadCapacityUnits: ${self:custom.tableThroughput}
+                WriteCapacityUnits: ${self:custom.tableThroughput}
+    ProjectAdminTable:
+        Type: AWS::DynamoDB::Table
+        Properties:
+            TableName: ${self:custom.projectAdminTableName}
+            AttributeDefinitions:
+                - AttributeName: projectId
+                  AttributeType: S
+                - AttributeName: userId
+                  AttributeType: S
+            KeySchema:
+                - AttributeName: projectId
+                  KeyType: HASH
+                - AttributeName: userId
                   KeyType: RANGE
             ProvisionedThroughput:
                 ReadCapacityUnits: ${self:custom.tableThroughput}

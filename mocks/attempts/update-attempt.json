@@ -1,5 +1,5 @@
 {
-    "body": "{\"project\":\"TAMU Datathon\",\"lesson\":\"Data Management\",\"challenge\":\"Create a scatter plot for new features\",\"answer\":[1,2,3,5]}",
+    "body": "{\"projectId\":\"TAMU Datathon\",\"lesson\":\"Data Management\",\"challenge\":\"Create a scatter plot for new features\",\"answer\":[1,2,3,5]}",
     "pathParameters": {
         "id": "81cf0bd0-8a99-11e9-95a3-51ef4ebf4fce"
     },
