@@ -41,6 +41,6 @@ export const calcRecallBinary = (predicted, truth) => {
 
 export const calcF1Binary = (predicted, truth) => {
     const precision = calcPrecisionBinary(predicted, truth);
-    const recall = calcPrecisionBinary(predicted, truth);
+    const recall = calcRecallBinary(predicted, truth);
     return 2 * ((precision * recall) / (precision + recall));
 };

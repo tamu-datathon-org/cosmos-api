@@ -1,5 +1,8 @@
 {
     "extends": ["airbnb"],
+    "env": {
+        "jest": true
+    },
     "rules": {
         "indent": ["error", 4],
         "no-return-await": 0,
@@ -11,6 +14,7 @@
         "arrow-parens": 0,
         "implicit-arrow-linebreak": 0,
         "prefer-promise-reject-errors": 0,
-        "import/prefer-default-export": 0
+        "import/prefer-default-export": 0,
+        "eol-last": 0
     }
 }
