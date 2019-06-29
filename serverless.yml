@@ -11,15 +11,10 @@ custom:
     stage: ${opt:stage, self:provider.stage}
     # Set the table name here so we can use it while testing locally
     attemptsTableName: ${self:custom.stage}-cosmos-attempts
-<<<<<<< HEAD
-    projectsTableName: ${self:custom.stage}-cosmos-projects
-    usersTableName: ${self:custom.stage}-cosmos-users
-    challengesTableName: ${self:custom.stage}-cosmos-challenges
-=======
     projectsTableName: ${self:custom.stage}-cosmos-projects2
     projectAdminTableName: ${self:custom.stage}-cosmos-project-admin
-    usersTableName: ${self:custom.stage}-cosmos-users2
->>>>>>> origin/master
+    usersTableName: ${self:custom.stage}-cosmos-users
+    challengesTableName: ${self:custom.stage}-cosmos-challenges
     # Set our DynamoDB throughput for prod and all other non-prod stages.
     tableThroughputs:
         prod: 5
@@ -41,12 +36,9 @@ provider:
     environment:
         attemptsTableName: ${self:custom.attemptsTableName}
         projectsTableName: ${self:custom.projectsTableName}
-<<<<<<< HEAD
         challengesTableName: ${self:custom.challengesTableName}
-=======
         projectAdminTableName: ${self:custom.projectAdminTableName}
         usersTableName: ${self:custom.usersTableName}
->>>>>>> origin/master
 
     iamRoleStatements:
         - Effect: Allow
@@ -71,6 +63,7 @@ functions:
     # Users Endpoints
     - ${file(lambdas/users/users-handlers.yml)}
     - ${file(lambdas/projects/project-handlers.yml)}
+    - ${file(lambdas/challenges/challenge-handlers.yml)}
 
 resources:
     # API Gateway Errors
