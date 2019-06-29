@@ -1,5 +1,7 @@
 import { NonBinaryAnswerError } from './judging-errors';
 
+const zip = (xs, ys) => xs.map((x, i) => [x, ys[i]]);
+
 export const verifyBinaryContent = (contentToCheck) => {
     const binarySet = new Set([1, 0, 1.0, 0.0]);
     contentToCheck.forEach((value) => {
@@ -10,13 +12,11 @@ export const verifyBinaryContent = (contentToCheck) => {
     });
 };
 
-export const computeTruePositives = (predicted, truth) => {
-    let truePositives = 0;
-    truth.forEach((trueValue, index) => {
-        truePositives += (parseFloat(predicted[index]) === 1) && (parseFloat(trueValue) === 1);
-    });
-    return truePositives;
-};
+export const computeTruePositives = (predicted, truth) => (
+    zip(predicted, truth).reduce((truePos, [predictedValue, trueValue]) => (
+        (predictedValue == 1 && trueValue == 1) ? truePos + 1 : truePos;
+    ))
+);
 
 export const computeFalsePositives = (predicted, truth) => {
     let falsePositives = 0;

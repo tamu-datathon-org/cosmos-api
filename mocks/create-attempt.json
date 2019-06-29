@@ -1,8 +1,0 @@
-{
-    "body": "{\"project\":\"TAMU Datathon\",\"lesson\":\"Data Management\",\"challenge\":\"Create a scatter plot for new features\",\"answer\":[1,2,3,4]}",
-    "requestContext": {
-        "identity": {
-            "cognitoIdentityId": "USER-SUB-1234"
-        }
-    }
-}
