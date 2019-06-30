@@ -1,0 +1,11 @@
+{
+    "body": "{ \"projectId\": \"test_project_1234\",\"challengeName\": \"Our First Test Challenge - Changed\",\"points\": 100, \"solution\": [1, 3, 5.0, 2, 40]}",
+    "requestContext": {
+        "identity": {
+            "cognitoIdentityId": "test_admin_12345"
+        }
+    },
+    "pathParameters": {
+        "challengeId": "test_challenge_1"
+    }
+}

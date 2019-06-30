@@ -47,6 +47,8 @@ export const failure = (error) => buildResponse(HTTPCodes.SERVER_ERROR, errorBod
 
 export const badRequest = (body) => buildResponse(HTTPCodes.BAD_REQUEST, body);
 
+export const unauthorizedRequest = () => buildResponse(HTTPCodes.UNAUTHORIZED, errorBody('This request needs authorization'));
+
 export const emptySuccess = () => success(emptyBody);
 
 export const dataSuccess = (data) => success(dataBody(data));

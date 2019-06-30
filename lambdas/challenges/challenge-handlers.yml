@@ -1,0 +1,32 @@
+createChallenge:
+    handler: lambdas/challenges/createChallenge.main
+    events:
+        - http:
+              path: challenges
+              method: post
+              cors: true
+              authorizer: aws_iam
+getChallenge:
+    handler: lambdas/challenges/getChallenge.main
+    events:
+        - http:
+              path: challenges/{id}
+              method: get
+              cors: true
+              authorizer: aws_iam
+updateChallenge:
+    handler: lambdas/challenges/updateChallenge.main
+    events:
+        - http:
+              path: challenges/{id}
+              method: put
+              cors: true
+              authorizer: aws_iam
+deleteChallenge:
+    handler: lambdas/challenges/deleteChallenge.main
+    events:
+        - http:
+              path: challenges/{id}
+              method: delete
+              cors: true
+              authorizer: aws_iam

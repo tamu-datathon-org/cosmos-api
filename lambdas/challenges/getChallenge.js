@@ -1,0 +1,71 @@
+import get from '../crud/get';
+import {
+    HTTPCodes,
+    failure,
+    buildResponse,
+    errorBody,
+    dataBody,
+} from '../../libs/response-lib';
+import {
+    verifyQueryParamsExist,
+} from '../../libs/api-helper-lib';
+
+const prepare = (event) => {
+    return {
+        challengesTable: process.env.challengesTableName,
+        adminTable: process.env.projectAdminTableName,
+        challengeKey: {
+            challengeId: event.pathParameters.challengeId,
+            projectId: event.queryStringParameters.projectId,
+        },
+        adminKey: {
+            userId: event.requestContext.identity.cognitoIdentityId,
+            projectId: event.queryStringParameters.projectId,
+        },
+    };
+};
+
+const getChallenge = async (event) => {
+    const {
+        challengesTable,
+        adminTable,
+        challengeKey,
+        adminKey,
+    } = prepare(event);
+    try {
+        // Get request will throw ConditionalCheckFailedException if challenge does not exist.
+        const challenge = await get({
+            TableName: challengesTable,
+            Key: challengeKey,
+            ConditionExpression: 'attribute_exists(challengeId) AND attribute_exists(projectId)',
+        });
+        if (challenge.Item === undefined) {
+            return buildResponse(HTTPCodes.NOT_FOUND, errorBody('No challenge exists for the given project with the specified ID.'));
+        }
+        // Check if user is admin, and if not, don't return the challenge answers.
+        const userAdmin = await get({
+            TableName: adminTable,
+            Key: adminKey,
+        });
+        if (userAdmin.Item === undefined) {
+            const {
+                passingThreshold,
+                solution,
+                ...safeChallengeData
+            } = challenge.Item;
+            return buildResponse(HTTPCodes.SUCCESS, dataBody(safeChallengeData));
+        } else {
+            return buildResponse(HTTPCodes.SUCCESS, dataBody(challenge.Item));
+        }
+    } catch (err) {
+        if (err.code === 'ConditionalCheckFailedException') {
+            return buildResponse(HTTPCodes.NOT_FOUND, errorBody('No challenge exists for the given project with the specified ID.'));
+        }
+        return failure(err);
+    }
+};
+
+export const main = verifyQueryParamsExist(
+    ['projectId'],
+    getChallenge,
+);
