@@ -23,6 +23,7 @@ const prepare = (event) => {
             points: data.points,
             passingThreshold: data.passingThreshold,
             solution: data.solution,
+            metric: data.metric,
             createdAt: Date.now(),
         },
         adminKey: {
@@ -67,6 +68,6 @@ const createChallenge = async (event) => {
 };
 
 export const main = verifyBodyParamsExist(
-    ['challengeId', 'projectId', 'challengeName', 'points', 'passingThreshold', 'solution'],
+    ['challengeId', 'projectId', 'challengeName', 'points', 'passingThreshold', 'solution', 'metric'],
     createChallenge,
 );

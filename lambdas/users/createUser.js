@@ -11,7 +11,6 @@ const prepare = (event) => {
             firstName: data.firstName,
             lastName: data.lastName,
             email: data.email,
-            projectId: data.projectId,
             createdAt: Date.now(),
         },
     };
@@ -42,6 +41,6 @@ const createUser = async (event) => {
 };
 
 export const main = verifyBodyParamsExist(
-    ['email', 'firstName', 'lastName', 'projectId'],
+    ['email', 'firstName', 'lastName'],
     createUser,
 );

@@ -28,6 +28,7 @@ export const HTTPCodes = {
     METHOD_NOT_ALLOWED: 405,
     NOT_ALLOWED: 406,
     CONFLICT: 409,
+    PRECONDITION_FAILED: 412,
     // 5XX Codes
     SERVER_ERROR: 500,
 };

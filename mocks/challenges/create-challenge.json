@@ -1,5 +1,5 @@
 {
-    "body": "{ \"challengeId\": \"test_challenge_1\", \"projectId\": \"test_project_1234\",\"challengeName\": \"Our First Test Challenge\",\"points\": 143,\"passingThreshold\": 0.94,\"solution\": [1, 3, 5.0, 2, 40.895]}",
+    "body": "{ \"challengeId\": \"test_challenge_1\", \"projectId\": \"test_project_1234\",\"challengeName\": \"Our First Test Challenge\",\"points\": 143,\"passingThreshold\": 0.94,\"solution\": [1, 3, 5.0, 2, 40.895], \"metric\": \"accuracy\"}",
     "requestContext": {
         "identity": {
             "cognitoIdentityId": "test_admin_12345"
