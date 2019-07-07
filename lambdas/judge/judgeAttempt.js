@@ -3,10 +3,10 @@ import create from '../crud/create';
 import { judge } from '../../libs/judgement-engine-lib';
 import * as judgingErrors from '../../libs/judging/judging-errors';
 import {
-    HTTPCodes,
+    resourceCreated,
     failure,
-    buildResponse,
-    errorBody,
+    notFound,
+    preconditionFailed,
 } from '../../libs/response-lib';
 import {
     verifyBodyParamsExist,
@@ -64,7 +64,7 @@ const judgeAttempt = async (event) => {
             },
         });
         const passed = score >= passingThreshold;
-        return buildResponse(HTTPCodes.RESOURCE_CREATED, {
+        return resourceCreated({
             passed: passed,
             points: (passed) ? challenge.points : 0,
         });
@@ -72,12 +72,10 @@ const judgeAttempt = async (event) => {
         console.log(err);
 
         if (err instanceof NotFoundError) {
-            return buildResponse(HTTPCodes.NOT_FOUND, errorBody(err.message));
+            return notFound(err.message);
         } else if (err instanceof judgingErrors.MetricNotFoundError) {
-            return buildResponse(HTTPCodes.PRECONDITION_FAILED, errorBody(
-                'There was an error in judging your attempt. '
-                + 'Please contact a project supervisor to resolve this problem.',
-            ));
+            return preconditionFailed('There was an error in judging your attempt. '
+            + 'Please contact a project supervisor to resolve this problem.');
         }
 
         return failure({

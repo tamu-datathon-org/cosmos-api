@@ -1,10 +1,8 @@
 import scan from '../crud/query';
-import * as judgingErrors from '../../libs/judging/judging-errors';
 import {
-    HTTPCodes,
+    success,
     failure,
-    buildResponse,
-    errorBody,
+    notFound,
 } from '../../libs/response-lib';
 import {
     verifyQueryParamsExist,
@@ -52,28 +50,21 @@ const judgeChallengeForUser = async (event) => {
         let numAttempts = 0;
         userAttemptsResponse.Items.filter(
             item => item.projectChallengeId
-                === (challenge.projectId + PROJECT_CHALLENGE_ID_SEPARATOR + challenge.challengeId))
-            .forEach((item) => {
-                numAttempts += 1;
-                if (item.score >= challenge.passingThreshold) passed = true;
-            });
-        return buildResponse(HTTPCodes.SUCCESS, {
+                === (challenge.projectId + PROJECT_CHALLENGE_ID_SEPARATOR + challenge.challengeId),
+        ).forEach((item) => {
+            numAttempts += 1;
+            if (item.score >= challenge.passingThreshold) passed = true;
+        });
+        return success({
             passed: passed,
             points: (passed) ? challenge.points : 0,
             numAttempts: numAttempts,
         });
     } catch (err) {
         console.log(err);
-
         if (err instanceof NotFoundError) {
-            return buildResponse(HTTPCodes.NOT_FOUND, errorBody(err.message));
-        } else if (err instanceof judgingErrors.MetricNotFoundError) {
-            return buildResponse(HTTPCodes.PRECONDITION_FAILED, errorBody(
-                'There was an error in judging your attempt. '
-                + 'Please contact a project supervisor to resolve this problem.',
-            ));
+            return notFound(err.message);
         }
-
         return failure({
             error: err,
         });

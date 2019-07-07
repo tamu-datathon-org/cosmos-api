@@ -60,7 +60,8 @@ export const notFoundFailure = () => buildResponse(HTTPCodes.NOT_FOUND, notFound
 
 export const conflictFailure = () => buildResponse(HTTPCodes.CONFLICT, conflictBody);
 
-export const unauthorizedRequest = () => buildResponse(HTTPCodes.UNAUTHORIZED, errorBody('This request needs authorization'));
+export const unauthorizedRequest = () =>
+    buildResponse(HTTPCodes.UNAUTHORIZED, errorBody('This request needs authorization'));
 
 // Specific Failures
 
@@ -73,3 +74,5 @@ export const notFound = (err) => buildResponse(HTTPCodes.NOT_FOUND, errorBody(er
 export const failure = (err) => buildResponse(HTTPCodes.SERVER_ERROR, errorBody(err));
 
 export const badRequest = (err) => buildResponse(HTTPCodes.BAD_REQUEST, errorBody(err));
+
+export const preconditionFailed = (err) => buildResponse(HTTPCodes.PRECONDITION_FAILED, errorBody(err));
