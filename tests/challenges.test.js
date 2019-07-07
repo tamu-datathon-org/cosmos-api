@@ -37,6 +37,7 @@ const safeBaseChallengeObject = {
     metric: 'accuracy',
     passingThreshold: 0.94,
     points: 1234,
+    metric: 'accuracy',
     createdAt: expect.stringMatching(/\d{13}/),
 };
 

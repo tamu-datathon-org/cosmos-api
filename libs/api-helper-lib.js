@@ -12,11 +12,11 @@ export const verifyQueryParamsExist = (keysToCheck, lambdaFunc) =>
             });
         }
         // Check all required keys exist in queryParams
-        Object.entries(keysToCheck).forEach((key) => {
-            if (!(key in queryParams)) {
-                return badRequest(`Required key not present in query parameters: ${key}`);
+        for (let i = 0; i < keysToCheck.length; i += 1) {
+            if (!(keysToCheck[i] in queryParams)) {
+                return badRequest(`Required key not present in request body: ${keysToCheck[i]}`);
             }
-        });
+        }
         return await lambdaFunc(event, context);
     };
 
@@ -30,10 +30,10 @@ export const verifyBodyParamsExist = (keysToCheck, lambdaFunc) =>
         }
         const bodyJSON = JSON.parse(event.body);
         // Check all required keys exist in bodyJSON
-        Object.entries(keysToCheck).forEach((key) => {
-            if (!(key in bodyJSON)) {
-                return badRequest(`Required key not present in request body: ${key}`);
+        for (let i = 0; i < keysToCheck.length; i += 1) {
+            if (!(keysToCheck[i] in bodyJSON)) {
+                return badRequest(`Required key not present in request body: ${keysToCheck[i]}`);
             }
-        });
+        }
         return await lambdaFunc(event, context);
     };
