@@ -41,22 +41,34 @@ export const buildResponse = (statusCode, body) => ({
     body: JSON.stringify(body),
 });
 
-export const success = (body) => buildResponse(HTTPCodes.SUCCESS, body);
+// 2XX Responses
 
-export const failure = (error) => buildResponse(HTTPCodes.SERVER_ERROR, errorBody(error));
+export const success = (body) => buildResponse(HTTPCodes.SUCCESS, dataBody(body));
 
-export const badRequest = (body) => buildResponse(HTTPCodes.BAD_REQUEST, body);
-
-export const unauthorizedRequest = () => buildResponse(HTTPCodes.UNAUTHORIZED, errorBody('This request needs authorization'));
+export const resourceCreated = (body) => buildResponse(HTTPCodes.RESOURCE_CREATED, dataBody(body));
 
 export const emptySuccess = () => success(emptyBody);
-
-export const dataSuccess = (data) => success(dataBody(data));
-
-export const conflictFailure = () => buildResponse(HTTPCodes.CONFLICT, conflictBody);
-
-export const notFoundFailure = () => buildResponse(HTTPCodes.NOT_FOUND, notFoundBody);
 
 export function respond(statusCode, body) {
     return new Promise((resolve) => resolve(buildResponse(statusCode, body)));
 }
+
+// Generic Failures
+
+export const notFoundFailure = () => buildResponse(HTTPCodes.NOT_FOUND, notFoundBody);
+
+export const conflictFailure = () => buildResponse(HTTPCodes.CONFLICT, conflictBody);
+
+export const unauthorizedRequest = () => buildResponse(HTTPCodes.UNAUTHORIZED, errorBody('This request needs authorization'));
+
+// Specific Failures
+
+export const conflict = (err) => buildResponse(HTTPCodes.CONFLICT, errorBody(err));
+
+export const unauthorized = (err) => buildResponse(HTTPCodes.UNAUTHORIZED, errorBody(err));
+
+export const notFound = (err) => buildResponse(HTTPCodes.NOT_FOUND, errorBody(err));
+
+export const failure = (err) => buildResponse(HTTPCodes.SERVER_ERROR, errorBody(err));
+
+export const badRequest = (err) => buildResponse(HTTPCodes.BAD_REQUEST, errorBody(err));

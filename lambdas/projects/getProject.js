@@ -1,5 +1,5 @@
 import get from '../crud/get';
-import { failure, dataSuccess, notFoundFailure } from '../../libs/response-lib';
+import { failure, success, notFoundFailure } from '../../libs/response-lib';
 
 const project = (event) => ({
     TableName: process.env.projectsTableName,
@@ -10,5 +10,5 @@ const project = (event) => ({
 
 export const main = (event) =>
     get(project(event))
-        .then(({ Item }) => (Item ? dataSuccess(Item) : notFoundFailure()))
+        .then(({ Item }) => (Item ? success(Item) : notFoundFailure()))
         .catch(failure);

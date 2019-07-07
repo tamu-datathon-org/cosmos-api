@@ -1,10 +1,8 @@
 import get from '../crud/get';
 import {
-    HTTPCodes,
     failure,
-    buildResponse,
-    errorBody,
-    dataBody,
+    success,
+    notFound,
 } from '../../libs/response-lib';
 import {
     verifyQueryParamsExist,
@@ -40,7 +38,7 @@ const getChallenge = async (event) => {
             ConditionExpression: 'attribute_exists(challengeId) AND attribute_exists(projectId)',
         });
         if (challenge.Item === undefined) {
-            return buildResponse(HTTPCodes.NOT_FOUND, errorBody('No challenge exists for the given project with the specified ID.'));
+            return notFound('No challenge exists for the given project with the specified ID.');
         }
         // Check if user is admin, and if not, don't return the challenge answers.
         const userAdmin = await get({
@@ -49,17 +47,16 @@ const getChallenge = async (event) => {
         });
         if (userAdmin.Item === undefined) {
             const {
-                passingThreshold,
                 solution,
                 ...safeChallengeData
             } = challenge.Item;
-            return buildResponse(HTTPCodes.SUCCESS, dataBody(safeChallengeData));
+            return success(safeChallengeData);
         } else {
-            return buildResponse(HTTPCodes.SUCCESS, dataBody(challenge.Item));
+            return success(challenge.Item);
         }
     } catch (err) {
         if (err.code === 'ConditionalCheckFailedException') {
-            return buildResponse(HTTPCodes.NOT_FOUND, errorBody('No challenge exists for the given project with the specified ID.'));
+            return notFound('No challenge exists for the given project with the specified ID.');
         }
         return failure(err);
     }

@@ -13,8 +13,6 @@ import {
     main as updateChallenge,
 } from '../lambdas/challenges/updateChallenge';
 import {
-    conflictBody,
-    notFoundBody,
     HTTPCodes,
 } from '../libs/response-lib';
 
@@ -29,13 +27,16 @@ const baseChallengeObject = {
     points: 1234,
     passingThreshold: 0.94,
     solution: [1, 10, 100, 100.0, 111.111],
+    createdAt: expect.stringMatching(/\d{13}/),
 };
 
 const safeBaseChallengeObject = {
     challengeId: 'test_challenge_112358',
     projectId: 'test_project_1234',
     challengeName: 'Test Challenge Base',
+    passingThreshold: 0.94,
     points: 1234,
+    createdAt: expect.stringMatching(/\d{13}/),
 };
 
 const challengeUpdateObject = {
@@ -45,13 +46,7 @@ const challengeUpdateObject = {
     points: 5678,
     passingThreshold: 1.0,
     solution: [1.0, 11.1, 123.45, 314.59],
-};
-
-const safeUpdatedChallengeObject = {
-    challengeId: 'test_challenge_112358',
-    projectId: 'test_project_1234',
-    challengeName: 'Test Challenge Updated',
-    points: 5678,
+    createdAt: expect.stringMatching(/\d{13}/),
 };
 
 // REQUESTS
@@ -104,7 +99,7 @@ const parseResponseBody = (response) => {
 // ---------- TEST SETUP ---------------
 
 // Delete the test project before tests start.
-beforeAll(async () => {
+beforeEach(async () => {
     // delete challenge in case it exists. Nothing to expect
     await deleteChallenge({
         ...challengeRequest,
@@ -116,26 +111,13 @@ beforeAll(async () => {
         ...incorrectAuthAddOn,
     });
     expect(getResponse.statusCode).toEqual(HTTPCodes.NOT_FOUND);
-});
 
-// Create challenge before each test.
-beforeEach(async () => {
     // Try to create challenge with correct auth and expect it to succeed.
     const authCreateChallenge = await createChallenge({
         ...createChallengeRequest,
         ...authAddOn,
     });
     expect(authCreateChallenge.statusCode).toEqual(HTTPCodes.RESOURCE_CREATED);
-});
-
-// Delete the created project after each test finishes.
-afterEach(async () => {
-    // Delete created challenge with correct auth, expect success.
-    const authDeleteResponse = await deleteChallenge({
-        ...challengeRequest,
-        ...authAddOn,
-    });
-    expect(authDeleteResponse.statusCode).toEqual(HTTPCodes.SUCCESS);
 });
 
 
@@ -176,10 +158,7 @@ test('Challenges: Update Challenge - Auth & No Auth', async () => {
         ...authAddOn,
     });
     expect(authGetChallenge.statusCode).toEqual(HTTPCodes.SUCCESS);
-    const {
-        createdAt: getCreatedAt,
-        ...getChallengeData
-    } = parseResponseBody(authGetChallenge).body.data;
+    const getChallengeData = parseResponseBody(authGetChallenge).body.data;
     expect(getChallengeData).toEqual(baseChallengeObject);
 
     // Update challenge with correct auth, expect success.
@@ -195,10 +174,7 @@ test('Challenges: Update Challenge - Auth & No Auth', async () => {
         ...authAddOn,
     });
     expect(authGetUpdatedChallenge.statusCode).toEqual(HTTPCodes.SUCCESS);
-    const {
-        createdAt: updatedGetCreatedAt,
-        ...updatedGetChallengeData
-    } = parseResponseBody(authGetUpdatedChallenge).body.data;
+    const updatedGetChallengeData = parseResponseBody(authGetUpdatedChallenge).body.data;
     expect(updatedGetChallengeData).toEqual(challengeUpdateObject);
 });
 
@@ -225,10 +201,7 @@ test('Challenges: Get Challenge - Auth & No Auth', async () => {
         ...incorrectAuthAddOn,
     });
     expect(noAuthGetChallenge.statusCode).toEqual(HTTPCodes.SUCCESS);
-    const {
-        createdAt,
-        ...noAuthChallengeData
-    } = parseResponseBody(noAuthGetChallenge).body.data;
+    const noAuthChallengeData = parseResponseBody(noAuthGetChallenge).body.data;
     expect(noAuthChallengeData).toEqual(safeBaseChallengeObject);
 
     // Get challenge with correct auth, expect full challenge;
@@ -237,9 +210,6 @@ test('Challenges: Get Challenge - Auth & No Auth', async () => {
         ...authAddOn,
     });
     expect(authGetChallenge.statusCode).toEqual(HTTPCodes.SUCCESS);
-    const {
-        createdAt: authCreatedAt,
-        ...authChallengeData
-    } = parseResponseBody(authGetChallenge).body.data;
+    const authChallengeData = parseResponseBody(authGetChallenge).body.data;
     expect(authChallengeData).toEqual(baseChallengeObject);
 });
