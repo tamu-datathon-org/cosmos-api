@@ -1,8 +1,8 @@
 {
-    "body": "{\"email\":\"challengetestuser@gmail.com\",\"firstName\":\"Challenge-Testy\",\"lastName\":\"McTest\"}",
+    "body": "{\"email\":\"jest_test_user@gmail.com\",\"firstName\":\"Challenge-Testy\",\"lastName\":\"McTest\"}",
     "requestContext": {
         "identity": {
-            "cognitoIdentityId": "CHALLENGE-TEST-USER-1234"
+            "cognitoIdentityId": "JUDGE-JEST-USER-1234"
         }
     }
 }

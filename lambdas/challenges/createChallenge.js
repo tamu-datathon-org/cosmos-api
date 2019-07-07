@@ -33,8 +33,6 @@ const prepare = (event) => {
     };
 };
 
-// TODO(phulsechinmay): Add logic here that inserts challengeID into list of challenges
-// inside given project.
 const createChallenge = async (event) => {
     const {
         challengesTable,

@@ -1,0 +1,14 @@
+{
+    "queryStringParameters": {
+        "projectId": "test_project_1234",
+        "email": "challengetestuser@gmail.com"
+    },
+    "pathParameters": {
+        "challengeId": "judge_test_challenge_1"
+    },
+    "requestContext": {
+        "identity": {
+            "cognitoIdentityId": "USER-SUB-1234"
+        }
+    }
+}

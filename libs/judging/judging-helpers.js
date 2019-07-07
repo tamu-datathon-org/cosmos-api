@@ -4,6 +4,11 @@ import {
 
 const zip = (xs, ys) => xs.map((x, i) => [x, ys[i]]);
 
+const EPSILON = 1e-4;
+export const isClose = (n1, n2, epsilon = EPSILON) => {
+    return Math.abs(n1 - n2) < epsilon;
+};
+
 export const verifyBinaryContent = (contentToCheck) => {
     const binarySet = new Set([1, 0, 1.0, 0.0]);
     contentToCheck.forEach((value) => {

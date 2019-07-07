@@ -1,6 +1,4 @@
-import uuid from 'uuid';
-import create from '../crud/create';
-import { judge } from '../../libs/judgement-engine-lib';
+import scan from '../crud/query';
 import * as judgingErrors from '../../libs/judging/judging-errors';
 import {
     HTTPCodes,
@@ -9,64 +7,60 @@ import {
     errorBody,
 } from '../../libs/response-lib';
 import {
-    verifyBodyParamsExist,
+    verifyQueryParamsExist,
 } from '../../libs/api-helper-lib';
 import {
     NotFoundError,
 } from '../../libs/errors-lib';
-import { getUserAndChallenge, PROJECT_CHALLENGE_ID_SEPARATOR } from './judgement-handlers-helper';
+import { getUserAndChallenge, PROJECT_CHALLENGE_ID_SEPARATOR } from './score-handlers-helper';
 
 const prepare = (event) => {
-    const data = JSON.parse(event.body);
     return {
         usersTableName: process.env.usersTableName,
         attemptsTableName: process.env.attemptsTableName,
         challengesTableName: process.env.challengesTableName,
         userKey: {
-            email: data.email,
+            email: event.queryStringParameters.email,
         },
         challengeKey: {
-            challengeId: data.challengeId,
-            projectId: data.projectId,
+            challengeId: event.pathParameters.challengeId,
+            projectId: event.queryStringParameters.projectId,
         },
-        userSolution: data.solution,
     };
 };
 
-const judgeAttempt = async (event) => {
+const judgeChallengeForUser = async (event) => {
     const {
         usersTableName,
         attemptsTableName,
         challengesTableName,
         userKey,
         challengeKey,
-        userSolution,
     } = prepare(event);
     try {
         // Check if user and challenge exist
         const [user, challenge] = await getUserAndChallenge(userKey, challengeKey,
             usersTableName, challengesTableName);
-        const {
-            passingThreshold,
-            solution,
-            metric,
-        } = challenge;
-        const score = judge(userSolution, solution, metric);
-        await create({
+        const userAttemptsResponse = await scan({
             TableName: attemptsTableName,
-            Item: {
-                userId: user.userId,
-                projectChallengeId: challenge.projectId
-                    + PROJECT_CHALLENGE_ID_SEPARATOR + challenge.challengeId,
-                attemptId: uuid.v1(),
-                solution: userSolution,
-                score: score,
+            KeyConditionExpression: 'userId = :userId',
+            ExpressionAttributeValues: {
+                ':userId': user.userId,
             },
         });
-        const passed = score >= passingThreshold;
-        return buildResponse(HTTPCodes.RESOURCE_CREATED, {
+        let passed = false;
+        let numAttempts = 0;
+        userAttemptsResponse.Items.filter(
+            item => item.projectChallengeId
+                === (challenge.projectId + PROJECT_CHALLENGE_ID_SEPARATOR + challenge.challengeId))
+            .forEach((item) => {
+                numAttempts += 1;
+                if (item.score >= challenge.passingThreshold) passed = true;
+            });
+        return buildResponse(HTTPCodes.SUCCESS, {
             passed: passed,
             points: (passed) ? challenge.points : 0,
+            numAttempts: numAttempts,
         });
     } catch (err) {
         console.log(err);
@@ -86,7 +80,7 @@ const judgeAttempt = async (event) => {
     }
 };
 
-export const main = verifyBodyParamsExist(
-    ['email', 'projectId', 'challengeId', 'solution'],
-    judgeAttempt,
+export const main = verifyQueryParamsExist(
+    ['projectId', 'challengeId', 'email'],
+    judgeChallengeForUser,
 );

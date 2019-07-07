@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import AWS from 'aws-sdk';
 import {
     main as deleteChallenge,
@@ -13,8 +12,6 @@ import {
     main as updateChallenge,
 } from '../lambdas/challenges/updateChallenge';
 import {
-    conflictBody,
-    notFoundBody,
     HTTPCodes,
 } from '../libs/response-lib';
 
@@ -28,6 +25,7 @@ const baseChallengeObject = {
     challengeName: 'Test Challenge Base',
     points: 1234,
     passingThreshold: 0.94,
+    metric: 'accuracy',
     solution: [1, 10, 100, 100.0, 111.111],
 };
 
@@ -35,6 +33,7 @@ const safeBaseChallengeObject = {
     challengeId: 'test_challenge_112358',
     projectId: 'test_project_1234',
     challengeName: 'Test Challenge Base',
+    metric: 'accuracy',
     points: 1234,
 };
 
@@ -44,14 +43,8 @@ const challengeUpdateObject = {
     challengeName: 'Test Challenge Updated',
     points: 5678,
     passingThreshold: 1.0,
+    metric: 'accuracy',
     solution: [1.0, 11.1, 123.45, 314.59],
-};
-
-const safeUpdatedChallengeObject = {
-    challengeId: 'test_challenge_112358',
-    projectId: 'test_project_1234',
-    challengeName: 'Test Challenge Updated',
-    points: 5678,
 };
 
 // REQUESTS
@@ -103,7 +96,7 @@ const parseResponseBody = (response) => {
 
 // ---------- TEST SETUP ---------------
 
-// Delete the test project before tests start.
+// Delete the test challenges before tests start.
 beforeAll(async () => {
     // delete challenge in case it exists. Nothing to expect
     await deleteChallenge({
@@ -128,7 +121,7 @@ beforeEach(async () => {
     expect(authCreateChallenge.statusCode).toEqual(HTTPCodes.RESOURCE_CREATED);
 });
 
-// Delete the created project after each test finishes.
+// Delete the created challenge after each test finishes.
 afterEach(async () => {
     // Delete created challenge with correct auth, expect success.
     const authDeleteResponse = await deleteChallenge({
