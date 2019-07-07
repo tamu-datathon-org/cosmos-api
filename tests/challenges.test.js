@@ -26,6 +26,7 @@ const baseChallengeObject = {
     challengeName: 'Test Challenge Base',
     points: 1234,
     passingThreshold: 0.94,
+    metric: 'accuracy',
     solution: [1, 10, 100, 100.0, 111.111],
     createdAt: expect.stringMatching(/\d{13}/),
 };
@@ -36,6 +37,7 @@ const safeBaseChallengeObject = {
     challengeName: 'Test Challenge Base',
     passingThreshold: 0.94,
     points: 1234,
+    metric: 'accuracy',
     createdAt: expect.stringMatching(/\d{13}/),
 };
 
@@ -45,6 +47,7 @@ const challengeUpdateObject = {
     challengeName: 'Test Challenge Updated',
     points: 5678,
     passingThreshold: 1.0,
+    metric: 'accuracy',
     solution: [1.0, 11.1, 123.45, 314.59],
     createdAt: expect.stringMatching(/\d{13}/),
 };
