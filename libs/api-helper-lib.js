@@ -1,6 +1,5 @@
 import {
     badRequest,
-    unauthorizedRequest,
 } from './response-lib';
 
 // Verify that request coming to AWS lambda contains the needed keys in query parameters.
@@ -15,9 +14,7 @@ export const verifyQueryParamsExist = (keysToCheck, lambdaFunc) =>
         // Check all required keys exist in queryParams
         Object.entries(keysToCheck).forEach((key) => {
             if (!(key in queryParams)) {
-                return badRequest({
-                    error: `Required key not present in query parameters: ${key}`,
-                });
+                return badRequest(`Required key not present in query parameters: ${key}`);
             }
         });
         return await lambdaFunc(event, context);
@@ -35,9 +32,7 @@ export const verifyBodyParamsExist = (keysToCheck, lambdaFunc) =>
         // Check all required keys exist in bodyJSON
         Object.entries(keysToCheck).forEach((key) => {
             if (!(key in bodyJSON)) {
-                return badRequest({
-                    error: `Required key not present in request body: ${key}`,
-                });
+                return badRequest(`Required key not present in request body: ${key}`);
             }
         });
         return await lambdaFunc(event, context);

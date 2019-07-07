@@ -1,11 +1,9 @@
 import get from '../crud/get';
 import _delete from '../crud/delete';
 import {
-    HTTPCodes,
     failure,
-    buildResponse,
-    errorBody,
-    dataBody,
+    success,
+    unauthorized,
 } from '../../libs/response-lib';
 import {
     verifyQueryParamsExist,
@@ -40,19 +38,13 @@ const deleteChallenge = async (event) => {
             Key: adminKey,
         });
         if (userAdmin.Item === undefined) {
-            return buildResponse(HTTPCodes.UNAUTHORIZED, errorBody('Not authorized to access this challenge'));
+            return unauthorized('Not authorized to access this challenge');
         }
-        const deleteSuccess = await _delete({
+        await _delete({
             TableName: challengesTable,
             Key: challengeKey,
         });
-        if (deleteSuccess) {
-            return buildResponse(HTTPCodes.SUCCESS, dataBody({
-                message: 'Challenge is successfully deleted.',
-            }));
-        } else {
-            return failure('Failed to delete the challenges.');
-        }
+        return success({ message: 'Challenge is successfully deleted.' });
     } catch (err) {
         return failure(err);
     }

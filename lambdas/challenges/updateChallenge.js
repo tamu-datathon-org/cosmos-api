@@ -1,11 +1,10 @@
 import get from '../crud/get';
 import update from '../crud/update';
 import {
-    HTTPCodes,
+    success,
     failure,
-    buildResponse,
-    errorBody,
-    dataBody,
+    unauthorized,
+    notFound
 } from '../../libs/response-lib';
 import {
     verifyBodyParamsExist,
@@ -48,7 +47,7 @@ const updateChallenge = async (event) => {
             Key: adminKey,
         });
         if (userAdmin.Item === undefined) {
-            return buildResponse(HTTPCodes.UNAUTHORIZED, errorBody('Not authorized to update this challenge.'));
+            return unauthorized('Not authorized to update this challenge.');
         }
         // Get request will throw ConditionalCheckFailedException if challenge does not exist.
         const challengeGetResponse = await get({
@@ -57,10 +56,10 @@ const updateChallenge = async (event) => {
             ConditionExpression: 'attribute_exists(challengeId) AND attribute_exists(projectId)',
         });
         if (challengeGetResponse.Item === undefined) {
-            return buildResponse(HTTPCodes.NOT_FOUND, errorBody('No challenge exists for the given project with the specified ID.'));
+            return notFound('No challenge exists for the given project with the specified ID.');
         }
         const existingChallenge = challengeGetResponse.Item;
-        const isChallengeUpdated = await update({
+        const updateSuccess = await update({
             TableName: challengesTable,
             Key: challengeKey,
             UpdateExpression: 'SET challengeName = :challengeName, points = :points, passingThreshold = :passingThreshold, solution = :solution',
@@ -72,12 +71,10 @@ const updateChallenge = async (event) => {
             },
             ReturnValues: 'ALL_NEW',
         });
-        if (isChallengeUpdated) {
-            return buildResponse(HTTPCodes.SUCCESS, dataBody({
-                message: 'Challenge was successfully updated.',
-            }));
+        if (updateSuccess) {
+            return success({ message: 'Challenge was successfully updated.' });
         } else {
-            return failure('There was an error is updating the user.');
+            return failure('There was an error in updating the challenge.');
         }
     } catch (err) {
         return failure(err);
