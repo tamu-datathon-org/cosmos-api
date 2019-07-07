@@ -145,14 +145,14 @@ test('Judge: Passing Attempt', async () => {
     const judgeAttemptResponse = await judgeAttempt(passingAttemptRequest);
     expect(judgeAttemptResponse.statusCode).toEqual(HTTPCodes.RESOURCE_CREATED);
     const { body: judgeBody } = parseResponseBody(judgeAttemptResponse);
-    expect(judgeBody.passed).toEqual(true);
-    expect(judgeBody.points).toEqual(accuracyChallengeObject.points);
+    expect(judgeBody.data.passed).toEqual(true);
+    expect(judgeBody.data.points).toEqual(accuracyChallengeObject.points);
 });
 
 test('Judge: Failing Attempt', async () => {
     const judgeAttemptResponse = await judgeAttempt(failingAttemptRequest);
     expect(judgeAttemptResponse.statusCode).toEqual(HTTPCodes.RESOURCE_CREATED);
     const { body: judgeBody } = parseResponseBody(judgeAttemptResponse);
-    expect(judgeBody.passed).toEqual(false);
-    expect(judgeBody.points).toEqual(0);
+    expect(judgeBody.data.passed).toEqual(false);
+    expect(judgeBody.data.points).toEqual(0);
 });

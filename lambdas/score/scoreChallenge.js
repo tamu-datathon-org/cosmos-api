@@ -72,6 +72,6 @@ const judgeChallengeForUser = async (event) => {
 };
 
 export const main = verifyQueryParamsExist(
-    ['projectId', 'challengeId', 'email'],
+    ['projectId', 'email'],
     judgeChallengeForUser,
 );

@@ -171,7 +171,7 @@ test('Score: Score Challenge', async () => {
     const scoreAttemptResponse = await scoreChallenge(scoreChallengeRequest);
     expect(scoreAttemptResponse.statusCode).toEqual(HTTPCodes.SUCCESS);
     const { body: scoreBody } = parseResponseBody(scoreAttemptResponse);
-    expect(scoreBody.passed).toEqual(true);
-    expect(scoreBody.points).toEqual(accuracyChallengeObject.points);
-    expect(scoreBody.numAttempts).toEqual(2);
+    expect(scoreBody.data.passed).toEqual(true);
+    expect(scoreBody.data.points).toEqual(accuracyChallengeObject.points);
+    expect(scoreBody.data.numAttempts).toEqual(2);
 });
