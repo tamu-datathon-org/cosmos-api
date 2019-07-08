@@ -1,6 +1,6 @@
 import _delete from '../crud/delete';
 import get from '../crud/get';
-import query from '../crud/query';
+import list from '../crud/list';
 import {
     HTTPCodes,
     buildResponse,
@@ -54,15 +54,15 @@ const deleteUser = async (event) => {
         // Delete all the attempts from the given user.
         // TODO: Make batch request so that user does not get deleted if there is a failure
         // in deleteing the attempts.
-        const userAttempts = await query({
+        const userAttempts = await list({
             TableName: attemptsTableName,
             KeyConditionExpression: 'userId = :userId',
             ExpressionAttributeValues: {
                 ':userId': existingUser.userId,
             },
         });
-        if (userAttempts.Items !== undefined) {
-            const attemptsDeletePromises = userAttempts.Items.map((attempt) => (
+        if (userAttempts !== undefined) {
+            const attemptsDeletePromises = userAttempts.map((attempt) => (
                 _delete({
                     TableName: attemptsTableName,
                     Key: {
@@ -77,7 +77,6 @@ const deleteUser = async (event) => {
             message: 'User was successfully deleted.',
         });
     } catch (err) {
-        console.log(err);
         return buildResponse(HTTPCodes.SERVER_ERROR, {
             error: 'The delete request could not be successfully completed.',
         });

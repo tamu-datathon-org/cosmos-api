@@ -1,16 +1,12 @@
-import scan from '../crud/query';
+import list from '../crud/list';
 import {
     success,
     failure,
     notFound,
 } from '../../libs/response-lib';
-import {
-    verifyQueryParamsExist,
-} from '../../libs/api-helper-lib';
-import {
-    NotFoundError,
-} from '../../libs/errors-lib';
-import { getUserAndChallenge, PROJECT_CHALLENGE_ID_SEPARATOR } from './score-handlers-helper';
+import { verifyQueryParamsExist } from '../../libs/api-helper-lib';
+import { NotFoundError } from '../../libs/errors-lib';
+import { getUserAndChallenge } from '../../libs/scoring-helper-lib';
 
 const prepare = (event) => {
     return {
@@ -39,35 +35,28 @@ const judgeChallengeForUser = async (event) => {
         // Check if user and challenge exist
         const [user, challenge] = await getUserAndChallenge(userKey, challengeKey,
             usersTableName, challengesTableName);
-        const userAttemptsResponse = await scan({
+        const userAttempts = await list({
             TableName: attemptsTableName,
             KeyConditionExpression: 'userId = :userId',
             ExpressionAttributeValues: {
                 ':userId': user.userId,
             },
         });
-        let passed = false;
-        let numAttempts = 0;
-        userAttemptsResponse.Items.filter(
-            item => item.projectChallengeId
-                === (challenge.projectId + PROJECT_CHALLENGE_ID_SEPARATOR + challenge.challengeId),
-        ).forEach((item) => {
-            numAttempts += 1;
-            if (item.score >= challenge.passingThreshold) passed = true;
-        });
+        const matching = userAttempts.filter(item =>
+            item.projectId === challenge.projectId && item.challengeId === challenge.challengeId);
+        const numAttempts = matching.length;
+        const passing = matching.filter(item => item.score >= challenge.passingThreshold);
+        const passed = passing.length > 0;
         return success({
-            passed: passed,
+            passed,
             points: (passed) ? challenge.points : 0,
             numAttempts: numAttempts,
         });
     } catch (err) {
-        console.log(err);
         if (err instanceof NotFoundError) {
             return notFound(err.message);
         }
-        return failure({
-            error: err,
-        });
+        return failure({ error: err });
     }
 };
 

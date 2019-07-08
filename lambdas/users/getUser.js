@@ -51,7 +51,6 @@ const getUser = async (event) => {
             user: userDataToSend,
         });
     } catch (err) {
-        console.log(err);
         return failure({
             error: err,
         });

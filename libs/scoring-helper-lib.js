@@ -1,9 +1,7 @@
-import get from '../crud/get';
+import get from '../lambdas/crud/get';
 import {
     NotFoundError,
-} from '../../libs/errors-lib';
-
-export const PROJECT_CHALLENGE_ID_SEPARATOR = '_?_';
+} from './errors-lib';
 
 // Get user and challenge asynchronously to check existence of both and then resolve with
 // challenge object.

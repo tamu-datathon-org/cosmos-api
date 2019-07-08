@@ -77,7 +77,6 @@ const updateUser = async (event) => {
             });
         }
     } catch (err) {
-        console.log(err);
         return failure({
             error: err,
         });

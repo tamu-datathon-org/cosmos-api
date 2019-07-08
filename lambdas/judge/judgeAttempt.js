@@ -8,13 +8,9 @@ import {
     notFound,
     preconditionFailed,
 } from '../../libs/response-lib';
-import {
-    verifyBodyParamsExist,
-} from '../../libs/api-helper-lib';
-import {
-    NotFoundError,
-} from '../../libs/errors-lib';
-import { getUserAndChallenge, PROJECT_CHALLENGE_ID_SEPARATOR } from './judgement-handlers-helper';
+import { verifyBodyParamsExist } from '../../libs/api-helper-lib';
+import { NotFoundError } from '../../libs/errors-lib';
+import { getUserAndChallenge } from '../../libs/scoring-helper-lib';
 
 const prepare = (event) => {
     const data = JSON.parse(event.body);
@@ -56,31 +52,27 @@ const judgeAttempt = async (event) => {
             TableName: attemptsTableName,
             Item: {
                 userId: user.userId,
-                projectChallengeId: challenge.projectId
-                    + PROJECT_CHALLENGE_ID_SEPARATOR + challenge.challengeId,
-                attemptId: uuid.v1(),
+                projectId: challenge.projectId,
+                challengeId: challenge.challengeId,
+                attemptId: uuid.v4(),
                 solution: userSolution,
-                score: score,
+                score,
             },
         });
         const passed = score >= passingThreshold;
         return resourceCreated({
             passed: passed,
             points: (passed) ? challenge.points : 0,
+            score
         });
     } catch (err) {
-        console.log(err);
-
         if (err instanceof NotFoundError) {
             return notFound(err.message);
         } else if (err instanceof judgingErrors.MetricNotFoundError) {
             return preconditionFailed('There was an error in judging your attempt. '
-            + 'Please contact a project supervisor to resolve this problem.');
+                + 'Please contact a project supervisor to resolve this problem.');
         }
-
-        return failure({
-            error: err,
-        });
+        return failure({ error: err });
     }
 };
 

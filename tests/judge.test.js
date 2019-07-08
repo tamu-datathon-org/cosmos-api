@@ -43,6 +43,12 @@ const passingAttemptRequest = {
     body: JSON.stringify(passingAttemptObject),
 };
 
+const passingAttemptResponse = {
+    passed: true,
+    points: 1234,
+    score: 1.0,
+};
+
 const failingAttemptObject = {
     email: 'judge_test_user@gmail.com',
     challengeId: 'judge_test_challenge_112358',
@@ -52,6 +58,12 @@ const failingAttemptObject = {
 
 const failingAttemptRequest = {
     body: JSON.stringify(failingAttemptObject),
+};
+
+const failingAttemptResponse = {
+    passed: false,
+    points: 0,
+    score: 0.6,
 };
 
 const testUser = {
@@ -145,14 +157,12 @@ test('Judge: Passing Attempt', async () => {
     const judgeAttemptResponse = await judgeAttempt(passingAttemptRequest);
     expect(judgeAttemptResponse.statusCode).toEqual(HTTPCodes.RESOURCE_CREATED);
     const { body: judgeBody } = parseResponseBody(judgeAttemptResponse);
-    expect(judgeBody.data.passed).toEqual(true);
-    expect(judgeBody.data.points).toEqual(accuracyChallengeObject.points);
+    expect(judgeBody.data).toEqual(passingAttemptResponse);
 });
 
 test('Judge: Failing Attempt', async () => {
     const judgeAttemptResponse = await judgeAttempt(failingAttemptRequest);
     expect(judgeAttemptResponse.statusCode).toEqual(HTTPCodes.RESOURCE_CREATED);
     const { body: judgeBody } = parseResponseBody(judgeAttemptResponse);
-    expect(judgeBody.data.passed).toEqual(false);
-    expect(judgeBody.data.points).toEqual(0);
+    expect(judgeBody.data).toEqual(failingAttemptResponse);
 });
