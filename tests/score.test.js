@@ -35,6 +35,12 @@ const accuracyChallengeObject = {
     solution: [1, 10, 100, 100.0, 111.111],
 };
 
+const accuracyScoreResponse = {
+    passed: true,
+    points: 1234,
+    numAttempts: 2,
+}
+
 const passingAttemptObject = {
     email: 'score_test_user@gmail.com',
     challengeId: 'score_test_challenge_112358',
@@ -171,7 +177,5 @@ test('Score: Score Challenge', async () => {
     const scoreAttemptResponse = await scoreChallenge(scoreChallengeRequest);
     expect(scoreAttemptResponse.statusCode).toEqual(HTTPCodes.SUCCESS);
     const { body: scoreBody } = parseResponseBody(scoreAttemptResponse);
-    expect(scoreBody.data.passed).toEqual(true);
-    expect(scoreBody.data.points).toEqual(accuracyChallengeObject.points);
-    expect(scoreBody.data.numAttempts).toEqual(2);
+    expect(scoreBody.data).toEqual(accuracyScoreResponse);
 });
