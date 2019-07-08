@@ -13,7 +13,8 @@ custom:
     attemptsTableName: ${self:custom.stage}-cosmos-attempts
     projectsTableName: ${self:custom.stage}-cosmos-projects2
     projectAdminTableName: ${self:custom.stage}-cosmos-project-admin
-    usersTableName: ${self:custom.stage}-cosmos-users2
+    usersTableName: ${self:custom.stage}-cosmos-users
+    challengesTableName: ${self:custom.stage}-cosmos-challenges
     # Set our DynamoDB throughput for prod and all other non-prod stages.
     tableThroughputs:
         prod: 5
@@ -35,6 +36,7 @@ provider:
     environment:
         attemptsTableName: ${self:custom.attemptsTableName}
         projectsTableName: ${self:custom.projectsTableName}
+        challengesTableName: ${self:custom.challengesTableName}
         projectAdminTableName: ${self:custom.projectAdminTableName}
         usersTableName: ${self:custom.usersTableName}
 
@@ -61,6 +63,7 @@ functions:
     # Users Endpoints
     - ${file(lambdas/users/users-handlers.yml)}
     - ${file(lambdas/projects/project-handlers.yml)}
+    - ${file(lambdas/challenges/challenge-handlers.yml)}
 
 resources:
     # API Gateway Errors

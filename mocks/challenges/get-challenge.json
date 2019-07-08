@@ -1,0 +1,13 @@
+{
+    "requestContext": {
+        "identity": {
+            "cognitoIdentityId": "test_admin_12345"
+        }
+    },
+    "pathParameters": {
+        "challengeId": "test_challenge_1"
+    },
+    "queryStringParameters": {
+        "projectId": "test_project_1234"
+    }
+}

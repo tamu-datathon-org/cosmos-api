@@ -10,11 +10,11 @@ export const errorBody = (err) => buildBody({}, [err]);
 
 export const dataBody = (data) => buildBody(data, []);
 
-export const conflictBody = buildBody({}, [
-    { message: 'The object you tried to create already exists.' },
-]);
+export const conflictMsg = 'The object you tried to create already exists.';
 
-export const notFoundBody = buildBody({}, [{ message: 'Item not found.' }]);
+export const notFoundMsg = 'Item not found.';
+
+export const unauthorizedMsg = 'This request needs authorization';
 
 // RESPONSE BUILDERS //
 export const HTTPCodes = {
@@ -41,20 +41,23 @@ export const buildResponse = (statusCode, body) => ({
     body: JSON.stringify(body),
 });
 
-export const success = (body) => buildResponse(HTTPCodes.SUCCESS, body);
+// 2XX Responses
 
-export const failure = (error) => buildResponse(HTTPCodes.SERVER_ERROR, errorBody(error));
+export const success = (data) => buildResponse(HTTPCodes.SUCCESS, dataBody(data));
 
-export const badRequest = (body) => buildResponse(HTTPCodes.BAD_REQUEST, body);
+export const resourceCreated = (data) => buildResponse(HTTPCodes.RESOURCE_CREATED, dataBody(data));
 
 export const emptySuccess = () => success(emptyBody);
 
-export const dataSuccess = (data) => success(dataBody(data));
+// Specific Failures
 
-export const conflictFailure = () => buildResponse(HTTPCodes.CONFLICT, conflictBody);
+export const conflict = (err = conflictMsg) => buildResponse(HTTPCodes.CONFLICT, errorBody(err));
 
-export const notFoundFailure = () => buildResponse(HTTPCodes.NOT_FOUND, notFoundBody);
+export const unauthorized = (err = unauthorizedMsg) =>
+    buildResponse(HTTPCodes.UNAUTHORIZED, errorBody(err));
 
-export function respond(statusCode, body) {
-    return new Promise((resolve) => resolve(buildResponse(statusCode, body)));
-}
+export const notFound = (err = notFoundMsg) => buildResponse(HTTPCodes.NOT_FOUND, errorBody(err));
+
+export const failure = (err) => buildResponse(HTTPCodes.SERVER_ERROR, errorBody(err));
+
+export const badRequest = (err) => buildResponse(HTTPCodes.BAD_REQUEST, errorBody(err));

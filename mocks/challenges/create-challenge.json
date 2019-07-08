@@ -1,0 +1,8 @@
+{
+    "body": "{ \"challengeId\": \"test_challenge_2\", \"projectId\": \"test_project_1234\",\"challengeName\": \"Our First Test Challenge\",\"metric\": \"accuracy\",\"points\": 143,\"passingThreshold\": 0.94,\"solution\": [1, 3, 5.0, 2, 40.895]}",
+    "requestContext": {
+        "identity": {
+            "cognitoIdentityId": "test_admin_12345"
+        }
+    }
+}

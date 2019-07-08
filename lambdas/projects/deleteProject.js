@@ -1,6 +1,6 @@
 import _delete from '../crud/delete';
 import list from '../crud/list';
-import { dataSuccess, failure } from '../../libs/response-lib';
+import { success, failure } from '../../libs/response-lib';
 import batch from '../crud/batchWrite';
 
 const project = (event) => ({
@@ -41,5 +41,5 @@ export const main = (event) =>
             // this is what is returned in the case that batch succeeds
             return { UnprocessedItems: {} };
         })
-        .then(dataSuccess)
+        .then(success)
         .catch(failure);
