@@ -3,7 +3,7 @@ import AWS from 'aws-sdk';
 import { main as deleteProject } from '../lambdas/projects/deleteProject';
 import { main as createProject } from '../lambdas/projects/createProject';
 import { main as getProject } from '../lambdas/projects/getProject';
-import { conflictBody, notFoundBody } from '../libs/response-lib';
+import { conflictMsg, notFoundMsg, errorBody } from '../libs/response-lib';
 
 AWS.config.update({ region: 'us-east-1' });
 
@@ -100,7 +100,7 @@ const createFailResponse = {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true,
     },
-    body: JSON.stringify(conflictBody),
+    body: JSON.stringify(errorBody(conflictMsg)),
 };
 
 const getFailResponse = {
@@ -109,7 +109,7 @@ const getFailResponse = {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true,
     },
-    body: JSON.stringify(notFoundBody),
+    body: JSON.stringify(errorBody(notFoundMsg)),
 };
 
 const getSucceedResponse = {

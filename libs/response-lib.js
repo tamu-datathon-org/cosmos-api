@@ -10,11 +10,11 @@ export const errorBody = (err) => buildBody({}, [err]);
 
 export const dataBody = (data) => buildBody(data, []);
 
-export const conflictBody = buildBody({}, [
-    { message: 'The object you tried to create already exists.' },
-]);
+export const conflictMsg = 'The object you tried to create already exists.';
 
-export const notFoundBody = buildBody({}, [{ message: 'Item not found.' }]);
+export const notFoundMsg = 'Item not found.';
+
+export const unauthorizedMsg = 'This request needs authorization';
 
 // RESPONSE BUILDERS //
 export const HTTPCodes = {
@@ -43,31 +43,20 @@ export const buildResponse = (statusCode, body) => ({
 
 // 2XX Responses
 
-export const success = (body) => buildResponse(HTTPCodes.SUCCESS, dataBody(body));
+export const success = (data) => buildResponse(HTTPCodes.SUCCESS, dataBody(data));
 
-export const resourceCreated = (body) => buildResponse(HTTPCodes.RESOURCE_CREATED, dataBody(body));
+export const resourceCreated = (data) => buildResponse(HTTPCodes.RESOURCE_CREATED, dataBody(data));
 
 export const emptySuccess = () => success(emptyBody);
 
-export function respond(statusCode, body) {
-    return new Promise((resolve) => resolve(buildResponse(statusCode, body)));
-}
-
-// Generic Failures
-
-export const notFoundFailure = () => buildResponse(HTTPCodes.NOT_FOUND, notFoundBody);
-
-export const conflictFailure = () => buildResponse(HTTPCodes.CONFLICT, conflictBody);
-
-export const unauthorizedRequest = () => buildResponse(HTTPCodes.UNAUTHORIZED, errorBody('This request needs authorization'));
-
 // Specific Failures
 
-export const conflict = (err) => buildResponse(HTTPCodes.CONFLICT, errorBody(err));
+export const conflict = (err = conflictMsg) => buildResponse(HTTPCodes.CONFLICT, errorBody(err));
 
-export const unauthorized = (err) => buildResponse(HTTPCodes.UNAUTHORIZED, errorBody(err));
+export const unauthorized = (err = unauthorizedMsg) =>
+    buildResponse(HTTPCodes.UNAUTHORIZED, errorBody(err));
 
-export const notFound = (err) => buildResponse(HTTPCodes.NOT_FOUND, errorBody(err));
+export const notFound = (err = notFoundMsg) => buildResponse(HTTPCodes.NOT_FOUND, errorBody(err));
 
 export const failure = (err) => buildResponse(HTTPCodes.SERVER_ERROR, errorBody(err));
 
