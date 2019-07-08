@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import AWS from 'aws-sdk';
 import { main as deleteProject } from '../lambdas/projects/deleteProject';
 import { main as createProject } from '../lambdas/projects/createProject';
