@@ -2,7 +2,7 @@
     "body": "{\"email\":\"jest_test_user@gmail.com\",\"firstName\":\"Challenge-Testy\",\"lastName\":\"McTest\"}",
     "requestContext": {
         "identity": {
-            "cognitoIdentityId": "JUDGE-JEST-USER-1234"
+            "cognitoIdentityId": "TEST-USER-1234"
         }
     }
 }

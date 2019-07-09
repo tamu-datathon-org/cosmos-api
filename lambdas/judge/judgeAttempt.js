@@ -10,7 +10,7 @@ import {
 } from '../../libs/response-lib';
 import { verifyBodyParamsExist } from '../../libs/api-helper-lib';
 import { NotFoundError } from '../../libs/errors-lib';
-import { getUserAndChallenge } from '../../libs/scoring-helper-lib';
+import { getUserAndChallenge } from '../../libs/helpers/scoring-helper-lib';
 
 const prepare = (event) => {
     const data = JSON.parse(event.body);
