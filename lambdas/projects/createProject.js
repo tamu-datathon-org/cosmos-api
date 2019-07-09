@@ -1,5 +1,5 @@
 import create from '../crud/create';
-import { success, failure, conflictFailure } from '../../libs/response-lib';
+import { success, failure, conflict } from '../../libs/response-lib';
 import { verifyBodyParamsExist } from '../../libs/api-helper-lib';
 
 const project = (event) => {
@@ -31,6 +31,6 @@ const createProject = (event) =>
         .then(() => create(project(event)))
         .then(success)
         .catch(({ message, ...rest }) =>
-            (message === 'The conditional request failed' ? conflictFailure() : failure({ message, ...rest })));
+            (message === 'The conditional request failed' ? conflict() : failure({ message, ...rest })));
 
 export const main = verifyBodyParamsExist(['projectId', 'lessons'], createProject);
