@@ -64,6 +64,8 @@ functions:
     - ${file(lambdas/users/users-handlers.yml)}
     - ${file(lambdas/projects/project-handlers.yml)}
     - ${file(lambdas/challenges/challenge-handlers.yml)}
+    - ${file(lambdas/judge/judge-handlers.yml)}
+    - ${file(lambdas/score/score-handlers.yml)}
 
 resources:
     # API Gateway Errors

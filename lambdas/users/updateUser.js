@@ -1,4 +1,4 @@
-import update from '../crud/updateBase';
+import update from '../crud/update';
 import get from '../crud/get';
 import {
     HTTPCodes,
@@ -36,13 +36,14 @@ const updateUser = async (event) => {
         userData,
     } = prepare(event);
     try {
-        const existingUser = await get({
+        const existingUserRequest = await get({
             TableName: tableName,
             Key: {
                 email: userData.email,
                 projectId: userData.projectId,
             },
         });
+        const existingUser = existingUserRequest.Item;
         if (existingUser === undefined) {
             return buildResponse(HTTPCodes.NOT_FOUND, {
                 error: 'User does not exist for the given credentials.',
@@ -76,7 +77,6 @@ const updateUser = async (event) => {
             });
         }
     } catch (err) {
-        console.log(err);
         return failure({
             error: err,
         });

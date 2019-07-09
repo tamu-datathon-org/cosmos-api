@@ -28,6 +28,7 @@ export const HTTPCodes = {
     METHOD_NOT_ALLOWED: 405,
     NOT_ALLOWED: 406,
     CONFLICT: 409,
+    PRECONDITION_FAILED: 412,
     // 5XX Codes
     SERVER_ERROR: 500,
 };
@@ -49,6 +50,19 @@ export const resourceCreated = (data) => buildResponse(HTTPCodes.RESOURCE_CREATE
 
 export const emptySuccess = () => success(emptyBody);
 
+export function respond(statusCode, body) {
+    return new Promise((resolve) => resolve(buildResponse(statusCode, body)));
+}
+
+// Generic Failures
+
+export const notFoundFailure = () => buildResponse(HTTPCodes.NOT_FOUND, notFoundBody);
+
+export const conflictFailure = () => buildResponse(HTTPCodes.CONFLICT, conflictBody);
+
+export const unauthorizedRequest = () =>
+    buildResponse(HTTPCodes.UNAUTHORIZED, errorBody('This request needs authorization'));
+
 // Specific Failures
 
 export const conflict = (err = conflictMsg) => buildResponse(HTTPCodes.CONFLICT, errorBody(err));
@@ -61,3 +75,5 @@ export const notFound = (err = notFoundMsg) => buildResponse(HTTPCodes.NOT_FOUND
 export const failure = (err) => buildResponse(HTTPCodes.SERVER_ERROR, errorBody(err));
 
 export const badRequest = (err) => buildResponse(HTTPCodes.BAD_REQUEST, errorBody(err));
+
+export const preconditionFailed = (err) => buildResponse(HTTPCodes.PRECONDITION_FAILED, errorBody(err));

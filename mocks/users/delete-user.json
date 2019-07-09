@@ -1,11 +1,10 @@
 {
     "queryStringParameters": {
-        "email": "testuser@gmail.com",
-        "projectId": "Test-Project"
+        "email": "jest_test_user@gmail.com"
     },
     "requestContext": {
         "identity": {
-            "cognitoIdentityId": "TEST-USER-1234"
+            "cognitoIdentityId": "JUDGE-JEST-USER-1234"
         }
     }
 }

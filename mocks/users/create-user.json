@@ -1,5 +1,5 @@
 {
-    "body": "{\"email\":\"testuser@gmail.com\",\"firstName\":\"Testy-2\",\"lastName\":\"McTest\",\"projectId\":\"Test-Project\"}",
+    "body": "{\"email\":\"jest_test_user@gmail.com\",\"firstName\":\"Challenge-Testy\",\"lastName\":\"McTest\"}",
     "requestContext": {
         "identity": {
             "cognitoIdentityId": "TEST-USER-1234"

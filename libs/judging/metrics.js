@@ -2,6 +2,7 @@ import {
     IncorrectAnswerLengthError,
 } from './judging-errors';
 import {
+    isClose,
     verifyBinaryContent,
     computeTruePositives,
     computeFalsePositives,
@@ -18,7 +19,7 @@ export const calcAccuracy = (predicted, truth) => {
     verifySameLength(predicted, truth);
     let numCorrect = 0;
     truth.forEach((trueValue, index) => {
-        numCorrect += parseFloat(trueValue) === parseFloat(predicted[index]);
+        numCorrect += isClose(parseFloat(trueValue), parseFloat(predicted[index]));
     });
     return numCorrect / predicted.length;
 };

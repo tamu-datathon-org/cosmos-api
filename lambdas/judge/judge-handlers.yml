@@ -1,0 +1,7 @@
+judgeAttempt:
+    handler: lambdas/judge/judgeAttempt.main
+    events:
+        - http:
+              path: /judge/attempt
+              method: post
+              cors: true

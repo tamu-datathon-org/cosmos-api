@@ -13,7 +13,6 @@ const prepare = (event) => {
         tableName: process.env.usersTableName,
         userKey: {
             email: event.queryStringParameters.email,
-            projectId: event.queryStringParameters.projectId,
         },
         userId: event.requestContext.identity.cognitoIdentityId,
     };
@@ -27,10 +26,11 @@ const getUser = async (event) => {
     } = prepare(event);
     try {
         // Seperate userId and user.
-        const existingUser = await get({
+        const existingUserRequest = await get({
             TableName: tableName,
             Key: userKey,
         });
+        const existingUser = existingUserRequest.Item;
         // User does not exist, return.
         if (existingUser === undefined) {
             return buildResponse(HTTPCodes.NOT_FOUND, {
@@ -51,11 +51,10 @@ const getUser = async (event) => {
             user: userDataToSend,
         });
     } catch (err) {
-        console.log(err);
         return failure({
             error: err,
         });
     }
 };
 
-export const main = verifyQueryParamsExist(['email', 'projectId'], getUser);
+export const main = verifyQueryParamsExist(['email'], getUser);

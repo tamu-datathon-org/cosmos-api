@@ -6,6 +6,5 @@ export default (params) =>
             .call('update', params)
             .then(() => resolve(true))
             .catch((err) => {
-                console.log(err);
                 resolve(false);
             }));

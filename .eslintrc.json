@@ -1,5 +1,5 @@
 {
-    "extends": ["airbnb"],
+    "extends": ["airbnb", "prettier"],
     "env": {
         "jest": true
     },
@@ -15,7 +15,7 @@
         "implicit-arrow-linebreak": 0,
         "prefer-promise-reject-errors": 0,
         "import/prefer-default-export": 0,
-        "object-property-newline": 0
-        "eol-last": 0
+        "object-property-newline": 0,
+        "max-len": ["error", { "code": 120 }]
     }
 }

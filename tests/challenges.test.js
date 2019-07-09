@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import AWS from 'aws-sdk';
 import {
     main as deleteChallenge,
@@ -35,6 +34,7 @@ const safeBaseChallengeObject = {
     challengeId: 'test_challenge_112358',
     projectId: 'test_project_1234',
     challengeName: 'Test Challenge Base',
+    metric: 'accuracy',
     passingThreshold: 0.94,
     points: 1234,
     metric: 'accuracy',

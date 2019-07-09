@@ -1,5 +1,6 @@
 import _delete from '../crud/delete';
 import get from '../crud/get';
+import list from '../crud/list';
 import {
     HTTPCodes,
     buildResponse,
@@ -10,10 +11,10 @@ import {
 
 const prepare = (event) => {
     return {
-        tableName: process.env.usersTableName,
+        attemptsTableName: process.env.attemptsTableName,
+        usersTableName: process.env.usersTableName,
         userKey: {
             email: event.queryStringParameters.email,
-            projectId: event.queryStringParameters.projectId,
         },
         userId: event.requestContext.identity.cognitoIdentityId,
     };
@@ -21,16 +22,18 @@ const prepare = (event) => {
 
 const deleteUser = async (event) => {
     const {
-        tableName,
+        attemptsTableName,
+        usersTableName,
         userKey,
         userId,
     } = prepare(event);
     try {
         // Seperate userId and user
-        const existingUser = await get({
-            TableName: tableName,
+        const existingUserRequest = await get({
+            TableName: usersTableName,
             Key: userKey,
         });
+        const existingUser = existingUserRequest.Item;
         // User does not exist, return
         if (existingUser === undefined) {
             return buildResponse(HTTPCodes.NOT_FOUND, {
@@ -43,17 +46,35 @@ const deleteUser = async (event) => {
                 error: 'Not authorized to access this user.',
             });
         }
-        const deleteSuccess = await _delete({
-            TableName: tableName,
+        await _delete({
+            TableName: usersTableName,
             Key: userKey,
         });
-        if (deleteSuccess) {
-            return buildResponse(HTTPCodes.SUCCESS, {
-                message: 'User was successfully deleted.',
-            });
+
+        // Delete all the attempts from the given user.
+        // TODO: Make batch request so that user does not get deleted if there is a failure
+        // in deleteing the attempts.
+        const userAttempts = await list({
+            TableName: attemptsTableName,
+            KeyConditionExpression: 'userId = :userId',
+            ExpressionAttributeValues: {
+                ':userId': existingUser.userId,
+            },
+        });
+        if (userAttempts !== undefined) {
+            const attemptsDeletePromises = userAttempts.map((attempt) => (
+                _delete({
+                    TableName: attemptsTableName,
+                    Key: {
+                        userId: existingUser.userId,
+                        attemptId: attempt.attemptId,
+                    },
+                })
+            ));
+            await Promise.all(attemptsDeletePromises);
         }
-        return buildResponse(HTTPCodes.SERVER_ERROR, {
-            error: 'The delete request could not be successfully completed.',
+        return buildResponse(HTTPCodes.SUCCESS, {
+            message: 'User was successfully deleted.',
         });
     } catch (err) {
         return buildResponse(HTTPCodes.SERVER_ERROR, {
@@ -62,4 +83,4 @@ const deleteUser = async (event) => {
     }
 };
 
-export const main = verifyQueryParamsExist(['email', 'projectId'], deleteUser);
+export const main = verifyQueryParamsExist(['email'], deleteUser);
