@@ -56,6 +56,8 @@ provider:
               - 'Fn::GetAtt': [AttemptsTable, Arn]
               - 'Fn::GetAtt': [ProjectsTable, Arn]
               - 'Fn::GetAtt': [UsersTable, Arn]
+              - 'Fn::GetAtt': [ChallengesTable, Arn]
+              - 'Fn::GetAtt': [ProjectAdminTable, Arn]
 
 functions:
     # Attempts Endpoints
