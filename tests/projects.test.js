@@ -6,8 +6,11 @@ import { conflictMsg, notFoundMsg, errorBody } from '../libs/response-lib';
 
 AWS.config.update({ region: 'us-east-1' });
 
+// TODO(phulsechinmay): Add lessonIds to lessons and challenges once implemented
 const projectItem = {
-    projectId: 'TAMU Datathon',
+    projectId: 'tamu_datathon',
+    projectName: 'TAMU Datathon',
+    projectDescription: 'The first ever Datathon at Texas A&M University!',
     lessons: [
         {
             name: 'Data Management',
@@ -17,40 +20,32 @@ const projectItem = {
                 'https://research.google.com/seedbank/seed/lab__loading_and_understanding_your_data',
             linkText: 'View on Colab',
             description:
-                'Use Pandas to load and explore the raw data and put together all the pieces needed to train a linear regression model in TensorFlow.',
-            challenges: [
-                {
-                    name: 'Create a scatter plot for new features',
-                    points: 1,
-                    gradingMetric: 'accuracy',
-                    passingThreshold: 99,
-                    solution: [1, 2, 3, 4],
-                },
-                {
-                    name: 'Explain what you see ',
-                    points: 1,
-                    gradingMetric: 'f1',
-                    passingThreshold: 90,
-                    solution: [1, 0, 1, 0],
-                },
-                {
-                    name: 'Options to handle missing data',
-                    points: 1,
-                    gradingMetric: 'precision',
-                    passingThreshold: 95,
-                    solution: [1, 0, 1, 0],
-                },
-                {
-                    name: 'Build a Linear Regression Model',
-                    points: 1,
-                    gradingMetric: 'MAP',
-                    passingThreshold: 80,
-                    solution: [1, 0, 1, 0],
-                },
-            ],
+                'Use Pandas to load and explore the raw data and put together '
+                + 'all the pieces needed to train a linear regression model in TensorFlow.',
         },
     ],
 };
+
+const challenges = [
+    {
+        challengeName: 'Create a scatter plot for new features',
+        challengeId: 'scatter_plot',
+        projectId: 'tamu_datathon',
+        points: 1,
+        gradingMetric: 'accuracy',
+        passingThreshold: 99,
+        solution: [1, 2, 3, 4],
+    },
+    {
+        name: 'Explain what you see:',
+        challengeId: 'explain_answer',
+        projectId: 'tamu_datathon',
+        points: 10,
+        gradingMetric: 'f1',
+        passingThreshold: 90,
+        solution: [1, 0, 1, 0],
+    },
+];
 
 // REQUESTS
 const createRequest = {
@@ -61,6 +56,15 @@ const createRequest = {
         },
     },
 };
+
+const createChallengeRequest = (index) => ({
+    body: JSON.stringify(challenges[index]),
+    requestContext: {
+        identity: {
+            cognitoIdentityId: 'USER-SUB-1234',
+        },
+    },
+});
 
 const getRequest = {
     pathParameters: {
@@ -117,7 +121,7 @@ const getSucceedResponse = {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true,
     },
-    body: { data: { ...projectItem, createdAt: expect.stringMatching(/\d{13}/) }, errors: [] },
+    body: { data: { ...projectItem, createdAt: expect.stringMatching(/\d{13}/), challenges: [] }, errors: [] },
 };
 
 const parseResponseBody = (response) => {
@@ -125,27 +129,27 @@ const parseResponseBody = (response) => {
     return { ...rest, body: JSON.parse(body) };
 };
 
-test('Project: Delete, Get', async () => {
-    // delete project in case it exists and expect to succeed
-    await deleteProject(deleteRequest).then((response) =>
-        expect(response).toEqual(deleteSucceedResponse));
+// Test Setup
+
+beforeEach(async () => {
+    const deleteResponse = await deleteProject(deleteRequest);
+    expect(deleteResponse).toEqual(deleteSucceedResponse);
+})
+
+// Tests
+
+test('Project: Get non-existent project', async () => {
     // try get project and expect to fail because doesn't exist
     await getProject(getRequest).then((response) => expect(response).toEqual(getFailResponse));
 });
 
-test('Project: Delete, Create', async () => {
-    // delete project in case it exists and expect to succeed
-    await deleteProject(deleteRequest).then((response) =>
-        expect(response).toEqual(deleteSucceedResponse));
+test('Project: Create project', async () => {
     // create project and expect to succeed
     await createProject(createRequest).then((response) =>
         expect(parseResponseBody(response)).toMatchObject(createSucceedResponse));
 });
 
-test('Project: Delete, Create, Create', async () => {
-    // delete project in case it exists and expect to succeed
-    await deleteProject(deleteRequest).then((response) =>
-        expect(response).toEqual(deleteSucceedResponse));
+test('Project: Create project twice', async () => {
     // create project and expect to succeed
     await createProject(createRequest).then((response) =>
         expect(parseResponseBody(response)).toMatchObject(createSucceedResponse));
@@ -154,10 +158,7 @@ test('Project: Delete, Create, Create', async () => {
         expect(response).toEqual(createFailResponse));
 });
 
-test('Project: Delete, Create, Get', async () => {
-    // delete project in case it exists and expect to succeed
-    await deleteProject(deleteRequest).then((response) =>
-        expect(response).toEqual(deleteSucceedResponse));
+test('Project: Create, Get', async () => {
     // create project and expect to succeed
     await createProject(createRequest).then((response) =>
         expect(parseResponseBody(response)).toMatchObject(createSucceedResponse));
@@ -166,4 +167,4 @@ test('Project: Delete, Create, Get', async () => {
         expect(parseResponseBody(response)).toMatchObject(getSucceedResponse));
 });
 
-// TODO: (when we have grader) assert that we have a grader for each challenge's metric
+
