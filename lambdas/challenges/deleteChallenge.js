@@ -1,35 +1,24 @@
 import get from '../crud/get';
 import _delete from '../crud/delete';
-import {
-    failure,
-    success,
-    unauthorized,
-} from '../../libs/response-lib';
-import {
-    verifyQueryParamsExist,
-} from '../../libs/api-helper-lib';
+import { failure, success, unauthorized } from '../../libs/response-lib';
+import { verifyQueryParamsExist } from '../../libs/api-helper-lib';
 
-const prepare = (event) => {
-    return {
-        challengesTable: process.env.challengesTableName,
-        adminTable: process.env.projectAdminTableName,
-        challengeKey: {
-            challengeId: event.pathParameters.challengeId,
-            projectId: event.queryStringParameters.projectId,
-        },
-        adminKey: {
-            userId: event.requestContext.identity.cognitoIdentityId,
-            projectId: event.queryStringParameters.projectId,
-        },
-    };
-};
+const prepare = event => ({
+    challengesTable: process.env.challengesTableName,
+    adminTable: process.env.projectAdminTableName,
+    challengeKey: {
+        challengeId: event.pathParameters.challengeId,
+        projectId: event.queryStringParameters.projectId,
+    },
+    adminKey: {
+        userId: event.requestContext.identity.cognitoIdentityId,
+        projectId: event.queryStringParameters.projectId,
+    },
+});
 
 const deleteChallenge = async (event) => {
     const {
-        challengesTable,
-        adminTable,
-        challengeKey,
-        adminKey,
+        challengesTable, adminTable, challengeKey, adminKey,
     } = prepare(event);
     try {
         // User needs to be admin to delete challenge.
@@ -50,7 +39,4 @@ const deleteChallenge = async (event) => {
     }
 };
 
-export const main = verifyQueryParamsExist(
-    ['projectId'],
-    deleteChallenge,
-);
+export const main = verifyQueryParamsExist(['projectId'], deleteChallenge);

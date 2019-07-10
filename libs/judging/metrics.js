@@ -1,6 +1,4 @@
-import {
-    IncorrectAnswerLengthError,
-} from './judging-errors';
+import { IncorrectAnswerLengthError } from './judging-errors';
 import {
     isClose,
     verifyBinaryContent,

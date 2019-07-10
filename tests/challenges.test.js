@@ -1,19 +1,9 @@
 import AWS from 'aws-sdk';
-import {
-    main as deleteChallenge,
-} from '../lambdas/challenges/deleteChallenge';
-import {
-    main as createChallenge,
-} from '../lambdas/challenges/createChallenge';
-import {
-    main as getChallenge,
-} from '../lambdas/challenges/getChallenge';
-import {
-    main as updateChallenge,
-} from '../lambdas/challenges/updateChallenge';
-import {
-    HTTPCodes,
-} from '../libs/response-lib';
+import { main as deleteChallenge } from '../lambdas/challenges/deleteChallenge';
+import { main as createChallenge } from '../lambdas/challenges/createChallenge';
+import { main as getChallenge } from '../lambdas/challenges/getChallenge';
+import { main as updateChallenge } from '../lambdas/challenges/updateChallenge';
+import { HTTPCodes } from '../libs/response-lib';
 
 AWS.config.update({
     region: 'us-east-1',
@@ -89,10 +79,7 @@ const incorrectAuthAddOn = {
 };
 
 const parseResponseBody = (response) => {
-    const {
-        body,
-        ...rest
-    } = response;
+    const { body, ...rest } = response;
     return {
         ...rest,
         body: JSON.parse(body),
@@ -122,7 +109,6 @@ beforeEach(async () => {
     });
     expect(authCreateChallenge.statusCode).toEqual(HTTPCodes.RESOURCE_CREATED);
 });
-
 
 // ------- TESTS ---------
 

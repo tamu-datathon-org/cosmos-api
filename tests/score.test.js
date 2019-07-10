@@ -1,25 +1,11 @@
 import AWS from 'aws-sdk';
-import {
-    main as createUser,
-} from '../lambdas/users/createUser';
-import {
-    main as deleteUser,
-} from '../lambdas/users/deleteUser';
-import {
-    main as createChallenge,
-} from '../lambdas/challenges/createChallenge';
-import {
-    main as deleteChallenge,
-} from '../lambdas/challenges/deleteChallenge';
-import {
-    main as judgeAttempt,
-} from '../lambdas/judge/judgeAttempt';
-import {
-    main as scoreChallenge,
-} from '../lambdas/score/scoreChallenge';
-import {
-    HTTPCodes,
-} from '../libs/response-lib';
+import { main as createUser } from '../lambdas/users/createUser';
+import { main as deleteUser } from '../lambdas/users/deleteUser';
+import { main as createChallenge } from '../lambdas/challenges/createChallenge';
+import { main as deleteChallenge } from '../lambdas/challenges/deleteChallenge';
+import { main as judgeAttempt } from '../lambdas/judge/judgeAttempt';
+import { main as scoreChallenge } from '../lambdas/score/scoreChallenge';
+import { HTTPCodes } from '../libs/response-lib';
 
 AWS.config.update({
     region: 'us-east-1',
@@ -39,7 +25,7 @@ const accuracyScoreResponse = {
     passed: true,
     points: 1234,
     numAttempts: 2,
-}
+};
 
 const passingAttemptObject = {
     email: 'score_test_user@gmail.com',
@@ -129,10 +115,7 @@ const scoreChallengeRequest = {
 };
 
 const parseResponseBody = (response) => {
-    const {
-        body,
-        ...rest
-    } = response;
+    const { body, ...rest } = response;
     return {
         ...rest,
         body: JSON.parse(body),

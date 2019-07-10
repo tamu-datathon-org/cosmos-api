@@ -127,43 +127,34 @@ const parseResponseBody = (response) => {
 
 test('Project: Delete, Get', async () => {
     // delete project in case it exists and expect to succeed
-    await deleteProject(deleteRequest).then((response) =>
-        expect(response).toEqual(deleteSucceedResponse));
+    await deleteProject(deleteRequest).then(response => expect(response).toEqual(deleteSucceedResponse));
     // try get project and expect to fail because doesn't exist
-    await getProject(getRequest).then((response) => expect(response).toEqual(getFailResponse));
+    await getProject(getRequest).then(response => expect(response).toEqual(getFailResponse));
 });
 
 test('Project: Delete, Create', async () => {
     // delete project in case it exists and expect to succeed
-    await deleteProject(deleteRequest).then((response) =>
-        expect(response).toEqual(deleteSucceedResponse));
+    await deleteProject(deleteRequest).then(response => expect(response).toEqual(deleteSucceedResponse));
     // create project and expect to succeed
-    await createProject(createRequest).then((response) =>
-        expect(parseResponseBody(response)).toMatchObject(createSucceedResponse));
+    await createProject(createRequest).then(response => expect(parseResponseBody(response)).toMatchObject(createSucceedResponse));
 });
 
 test('Project: Delete, Create, Create', async () => {
     // delete project in case it exists and expect to succeed
-    await deleteProject(deleteRequest).then((response) =>
-        expect(response).toEqual(deleteSucceedResponse));
+    await deleteProject(deleteRequest).then(response => expect(response).toEqual(deleteSucceedResponse));
     // create project and expect to succeed
-    await createProject(createRequest).then((response) =>
-        expect(parseResponseBody(response)).toMatchObject(createSucceedResponse));
+    await createProject(createRequest).then(response => expect(parseResponseBody(response)).toMatchObject(createSucceedResponse));
     // try to create project and expect to fail because already exists
-    await createProject(createRequest).then((response) =>
-        expect(response).toEqual(createFailResponse));
+    await createProject(createRequest).then(response => expect(response).toEqual(createFailResponse));
 });
 
 test('Project: Delete, Create, Get', async () => {
     // delete project in case it exists and expect to succeed
-    await deleteProject(deleteRequest).then((response) =>
-        expect(response).toEqual(deleteSucceedResponse));
+    await deleteProject(deleteRequest).then(response => expect(response).toEqual(deleteSucceedResponse));
     // create project and expect to succeed
-    await createProject(createRequest).then((response) =>
-        expect(parseResponseBody(response)).toMatchObject(createSucceedResponse));
+    await createProject(createRequest).then(response => expect(parseResponseBody(response)).toMatchObject(createSucceedResponse));
     // try get project and expect to succeed
-    await getProject(getRequest).then((response) =>
-        expect(parseResponseBody(response)).toMatchObject(getSucceedResponse));
+    await getProject(getRequest).then(response => expect(parseResponseBody(response)).toMatchObject(getSucceedResponse));
 });
 
 // TODO: (when we have grader) assert that we have a grader for each challenge's metric
