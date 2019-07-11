@@ -1,13 +1,7 @@
 import update from '../crud/update';
 import get from '../crud/get';
-import {
-    HTTPCodes,
-    failure,
-    buildResponse,
-} from '../../libs/response-lib';
-import {
-    verifyQueryParamsExist,
-} from '../../libs/api-helper-lib';
+import { HTTPCodes, failure, buildResponse } from '../../libs/response-lib';
+import { verifyQueryParamsExist } from '../../libs/api-helper-lib';
 
 // FIELDS ALLOWED TO UPDATE
 // - First Name
@@ -30,11 +24,7 @@ const prepare = (event) => {
 };
 
 const updateUser = async (event) => {
-    const {
-        tableName,
-        userUpdateData,
-        userData,
-    } = prepare(event);
+    const { tableName, userUpdateData, userData } = prepare(event);
     try {
         const existingUserRequest = await get({
             TableName: tableName,
@@ -71,11 +61,10 @@ const updateUser = async (event) => {
             return buildResponse(HTTPCodes.SUCCESS, {
                 message: 'User was successfully updated.',
             });
-        } else {
-            return failure({
-                error: 'There was an error is updating the user.',
-            });
         }
+        return failure({
+            error: 'There was an error is updating the user.',
+        });
     } catch (err) {
         return failure({
             error: err,

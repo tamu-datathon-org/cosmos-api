@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 // BODY BUILDERS //
 export const buildBody = (data, errors) => ({
     data,
@@ -6,9 +7,9 @@ export const buildBody = (data, errors) => ({
 
 export const emptyBody = buildBody({}, []);
 
-export const errorBody = (err) => buildBody({}, [err]);
+export const errorBody = err => buildBody({}, [err]);
 
-export const dataBody = (data) => buildBody(data, []);
+export const dataBody = data => buildBody(data, []);
 
 export const conflictMsg = 'The object you tried to create already exists.';
 
@@ -34,7 +35,7 @@ export const HTTPCodes = {
 };
 
 export const buildResponse = (statusCode, body) => ({
-    statusCode: statusCode,
+    statusCode,
     headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true,
@@ -44,36 +45,28 @@ export const buildResponse = (statusCode, body) => ({
 
 // 2XX Responses
 
-export const success = (data) => buildResponse(HTTPCodes.SUCCESS, dataBody(data));
+export const success = data => buildResponse(HTTPCodes.SUCCESS, dataBody(data));
 
-export const resourceCreated = (data) => buildResponse(HTTPCodes.RESOURCE_CREATED, dataBody(data));
+export const resourceCreated = data => buildResponse(HTTPCodes.RESOURCE_CREATED, dataBody(data));
 
 export const emptySuccess = () => success(emptyBody);
 
 export function respond(statusCode, body) {
-    return new Promise((resolve) => resolve(buildResponse(statusCode, body)));
+    return new Promise(resolve => resolve(buildResponse(statusCode, body)));
 }
 
-// Generic Failures
+// Failures
 
-export const notFoundFailure = () => buildResponse(HTTPCodes.NOT_FOUND, notFoundBody);
-
-export const conflictFailure = () => buildResponse(HTTPCodes.CONFLICT, conflictBody);
-
-export const unauthorizedRequest = () =>
-    buildResponse(HTTPCodes.UNAUTHORIZED, errorBody('This request needs authorization'));
-
-// Specific Failures
+export const unauthorizedRequest = () => buildResponse(HTTPCodes.UNAUTHORIZED, errorBody('This request needs authorization'));
 
 export const conflict = (err = conflictMsg) => buildResponse(HTTPCodes.CONFLICT, errorBody(err));
 
-export const unauthorized = (err = unauthorizedMsg) =>
-    buildResponse(HTTPCodes.UNAUTHORIZED, errorBody(err));
+export const unauthorized = (err = unauthorizedMsg) => buildResponse(HTTPCodes.UNAUTHORIZED, errorBody(err));
 
 export const notFound = (err = notFoundMsg) => buildResponse(HTTPCodes.NOT_FOUND, errorBody(err));
 
-export const failure = (err) => buildResponse(HTTPCodes.SERVER_ERROR, errorBody(err));
+export const failure = err => buildResponse(HTTPCodes.SERVER_ERROR, errorBody(err));
 
-export const badRequest = (err) => buildResponse(HTTPCodes.BAD_REQUEST, errorBody(err));
+export const badRequest = err => buildResponse(HTTPCodes.BAD_REQUEST, errorBody(err));
 
-export const preconditionFailed = (err) => buildResponse(HTTPCodes.PRECONDITION_FAILED, errorBody(err));
+export const preconditionFailed = err => buildResponse(HTTPCodes.PRECONDITION_FAILED, errorBody(err));
