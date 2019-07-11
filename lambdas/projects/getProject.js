@@ -16,7 +16,7 @@ const getProject = async (event) => {
         const projectPromise = get({
             TableName: projectsTable,
             Key: projectKey,
-        })
+        });
         const challengesPromise = list({
             TableName: challengesTable,
             KeyConditionExpression: 'projectId = :projectId',

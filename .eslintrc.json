@@ -22,7 +22,8 @@
         "import/no-unresolved": ["off"],
         "import/extensions": ["off"],
         "no-alert": ["off"],
-        "react/destructuring-assignment": ["off"]
+        "react/destructuring-assignment": ["off"],
+        "object-curly-newline": ["off"]
     },
     "env": {
         "browser": true,

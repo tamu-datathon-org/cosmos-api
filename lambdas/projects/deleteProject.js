@@ -56,7 +56,7 @@ const deleteProject = async (event) => {
     try {
         await _delete(project(event));
         const admins = await list(projectAdmin(event));
-        if (admins.length > 0 ) {
+        if (admins.length > 0) {
             await batch(projectAdminDelete(admins));
         }
         const challenges = await list(projectChallenges(event));
