@@ -51,7 +51,7 @@ const projectChallengesDelete = challenges => ({
 
 // TODO: can not batch write more than 25. must break up if more than 25
 // TODO: eventually should wrap in Transaction so all updates happen all or nothing
-// TODO(josiahcoad): Add check that cognitoID of user is present in projectAdminTable
+// TODO#17(josiahcoad): Add check that cognitoID of user is present in projectAdminTable
 const deleteProject = async (event) => {
     try {
         await _delete(project(event));
@@ -63,7 +63,7 @@ const deleteProject = async (event) => {
         if (challenges.length > 0) {
             await batch(projectChallengesDelete(challenges));
         }
-        return success();
+        return success({});
     } catch (err) {
         return failure(err);
     }

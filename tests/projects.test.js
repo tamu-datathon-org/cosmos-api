@@ -8,7 +8,7 @@ import 'jest-extended';
 
 AWS.config.update({ region: 'us-east-1' });
 
-// TODO(phulsechinmay): Add lessonIds to lessons and challenges once implemented
+// TODO#19(phulsechinmay): Add lessonIds to lessons and challenges once implemented
 const projectItem = {
     projectId: 'tamu_datathon',
     projectName: 'TAMU Datathon',
@@ -89,7 +89,7 @@ const deleteSucceedResponse = {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true,
     },
-    body: '{"errors":[]}',
+    body: '{"data":{},"errors":[]}',
 };
 
 const createSucceedResponse = {
