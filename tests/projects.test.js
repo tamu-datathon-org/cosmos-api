@@ -1,9 +1,10 @@
-/* eslint-disable max-len */
 import AWS from 'aws-sdk';
 import { main as deleteProject } from '../lambdas/projects/deleteProject';
 import { main as createProject } from '../lambdas/projects/createProject';
 import { main as getProject } from '../lambdas/projects/getProject';
-import { conflictMsg, notFoundMsg, errorBody } from '../libs/response-lib';
+import { main as createChallenge } from '../lambdas/challenges/createChallenge';
+import { conflictMsg, errorBody, HTTPCodes } from '../libs/response-lib';
+import 'jest-extended';
 
 AWS.config.update({ region: 'us-east-1' });
 
@@ -33,18 +34,20 @@ const challenges = [
         challengeId: 'scatter_plot',
         projectId: 'tamu_datathon',
         points: 1,
-        gradingMetric: 'accuracy',
+        metric: 'accuracy',
         passingThreshold: 99,
         solution: [1, 2, 3, 4],
+        createdAt: expect.stringMatching(/\d{13}/),
     },
     {
-        name: 'Explain what you see:',
+        challengeName: 'Explain what you see:',
         challengeId: 'explain_answer',
         projectId: 'tamu_datathon',
         points: 10,
-        gradingMetric: 'f1',
+        metric: 'f1',
         passingThreshold: 90,
         solution: [1, 0, 1, 0],
+        createdAt: expect.stringMatching(/\d{13}/),
     },
 ];
 
@@ -58,7 +61,7 @@ const createRequest = {
     },
 };
 
-const createChallengeRequest = (index) => ({
+const createChallengeRequest = index => ({
     body: JSON.stringify(challenges[index]),
     requestContext: {
         identity: {
@@ -69,13 +72,13 @@ const createChallengeRequest = (index) => ({
 
 const getRequest = {
     pathParameters: {
-        projectId: 'TAMU Datathon',
+        projectId: 'tamu_datathon',
     },
 };
 
 const deleteRequest = {
     pathParameters: {
-        projectId: 'TAMU Datathon',
+        projectId: 'tamu_datathon',
     },
 };
 
@@ -86,7 +89,7 @@ const deleteSucceedResponse = {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true,
     },
-    body: '{"data":{"UnprocessedItems":{}},"errors":[]}',
+    body: '{"errors":[]}',
 };
 
 const createSucceedResponse = {
@@ -113,7 +116,7 @@ const getFailResponse = {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true,
     },
-    body: JSON.stringify(errorBody(notFoundMsg)),
+    body: JSON.stringify(errorBody('A project with the specified ID could not be found')),
 };
 
 const getSucceedResponse = {
@@ -133,34 +136,57 @@ const parseResponseBody = (response) => {
 // Test Setup
 
 beforeEach(async () => {
-    const deleteResponse = await deleteProject(deleteRequest);
-    expect(deleteResponse).toEqual(deleteSucceedResponse);
-})
+    await deleteProject(deleteRequest)
+        .then(response => expect(response).toEqual(deleteSucceedResponse));
+});
 
 // Tests
 
 test('Project: Get non-existent project', async () => {
     // try get project and expect to fail because doesn't exist
-    await getProject(getRequest).then(response => expect(response).toEqual(getFailResponse));
+    await getProject(getRequest)
+        .then(response => expect(response).toEqual(getFailResponse));
 });
 
 test('Project: Create project', async () => {
     // create project and expect to succeed
-    await createProject(createRequest).then(response => expect(parseResponseBody(response)).toMatchObject(createSucceedResponse));
+    await createProject(createRequest)
+        .then(response => expect(parseResponseBody(response)).toMatchObject(createSucceedResponse));
 });
 
 test('Project: Create project twice', async () => {
     // create project and expect to succeed
-    await createProject(createRequest).then(response => expect(parseResponseBody(response)).toMatchObject(createSucceedResponse));
+    await createProject(createRequest)
+        .then(response => expect(parseResponseBody(response)).toMatchObject(createSucceedResponse));
     // try to create project and expect to fail because already exists
-    await createProject(createRequest).then(response => expect(response).toEqual(createFailResponse));
+    await createProject(createRequest)
+        .then(response => expect(response).toEqual(createFailResponse));
 });
 
 test('Project: Create, Get', async () => {
     // create project and expect to succeed
-    await createProject(createRequest).then(response => expect(parseResponseBody(response)).toMatchObject(createSucceedResponse));
+    await createProject(createRequest)
+        .then(response => expect(parseResponseBody(response)).toMatchObject(createSucceedResponse));
     // try get project and expect to succeed
-    await getProject(getRequest).then(response => expect(parseResponseBody(response)).toMatchObject(getSucceedResponse));
+    await getProject(getRequest)
+        .then(response => expect(parseResponseBody(response)).toMatchObject(getSucceedResponse));
 });
 
-
+test('Project: Create, Add Challenges and Get', async () => {
+    // create project and expect to succeed
+    await createProject(createRequest)
+        .then(response => expect(parseResponseBody(response)).toMatchObject(createSucceedResponse));
+    // try get project and expect to succeed without any challenges
+    await getProject(getRequest)
+        .then(response => expect(parseResponseBody(response)).toMatchObject(getSucceedResponse));
+    // Add two challenges.
+    await createChallenge(createChallengeRequest(0))
+        .then(response => expect(response.statusCode).toEqual(HTTPCodes.RESOURCE_CREATED));
+    // Add two challenges.
+    await createChallenge(createChallengeRequest(1))
+        .then(response => expect(response.statusCode).toEqual(HTTPCodes.RESOURCE_CREATED));
+    // try get project and expect to succeed with new challenges.
+    await getProject(getRequest)
+        .then(response => expect(parseResponseBody(response).body.data.challenges)
+            .toIncludeSameMembers(challenges));
+});
