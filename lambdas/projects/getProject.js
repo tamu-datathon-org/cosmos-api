@@ -2,14 +2,21 @@ import get from '../crud/get';
 import list from '../crud/list';
 import { failure, success, notFound } from '../../libs/response-lib';
 
+<<<<<<< HEAD
 const prepare = (event) => ({
     projectsTable: process.env.projectsTableName,
     challengesTable: process.env.challengesTableName,
     projectKey: {
+=======
+const project = event => ({
+    TableName: process.env.projectsTableName,
+    Key: {
+>>>>>>> origin/master
         projectId: event.pathParameters.projectId,
     },
 });
 
+<<<<<<< HEAD
 const getProject = (event) => {
     const { projectsTable, challengesTable, projectKey} = prepare(event);
     try{
@@ -38,3 +45,8 @@ const getProject = (event) => {
 }
 
 export const main = getProject;
+=======
+export const main = event => get(project(event))
+    .then(({ Item }) => (Item ? success(Item) : notFound()))
+    .catch(failure);
+>>>>>>> origin/master

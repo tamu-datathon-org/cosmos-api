@@ -3,10 +3,7 @@ import create from '../crud/create';
 import { judge } from '../../libs/judgement-engine-lib';
 import * as judgingErrors from '../../libs/judging/judging-errors';
 import {
-    resourceCreated,
-    failure,
-    notFound,
-    preconditionFailed,
+    resourceCreated, failure, notFound, preconditionFailed,
 } from '../../libs/response-lib';
 import { verifyBodyParamsExist } from '../../libs/api-helper-lib';
 import { NotFoundError } from '../../libs/errors-lib';
@@ -40,13 +37,13 @@ const judgeAttempt = async (event) => {
     } = prepare(event);
     try {
         // Check if user and challenge exist
-        const [user, challenge] = await getUserAndChallenge(userKey, challengeKey,
-            usersTableName, challengesTableName);
-        const {
-            passingThreshold,
-            solution,
-            metric,
-        } = challenge;
+        const [user, challenge] = await getUserAndChallenge(
+            userKey,
+            challengeKey,
+            usersTableName,
+            challengesTableName,
+        );
+        const { passingThreshold, solution, metric } = challenge;
         const score = judge(userSolution, solution, metric);
         await create({
             TableName: attemptsTableName,
@@ -61,16 +58,18 @@ const judgeAttempt = async (event) => {
         });
         const passed = score >= passingThreshold;
         return resourceCreated({
-            passed: passed,
-            points: (passed) ? challenge.points : 0,
-            score
+            passed,
+            points: passed ? challenge.points : 0,
+            score,
         });
     } catch (err) {
         if (err instanceof NotFoundError) {
             return notFound(err.message);
-        } else if (err instanceof judgingErrors.MetricNotFoundError) {
-            return preconditionFailed('There was an error in judging your attempt. '
-                + 'Please contact a project supervisor to resolve this problem.');
+        } if (err instanceof judgingErrors.MetricNotFoundError) {
+            return preconditionFailed(
+                'There was an error in judging your attempt. '
+                    + 'Please contact a project supervisor to resolve this problem.',
+            );
         }
         return failure({ error: err });
     }

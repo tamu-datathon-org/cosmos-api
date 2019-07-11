@@ -26,11 +26,11 @@ const projectAdmin = (event) => {
     };
 };
 
-const createProject = (event) =>
-    create(projectAdmin(event))
-        .then(() => create(project(event)))
-        .then(success)
-        .catch(({ message, ...rest }) =>
-            (message === 'The conditional request failed' ? conflict() : failure({ message, ...rest })));
+const createProject = event => create(projectAdmin(event))
+    .then(() => create(project(event)))
+    .then(success)
+    .catch(({ message, ...rest }) => (message === 'The conditional request failed'
+        ? conflict()
+        : failure({ message, ...rest })));
 
 export const main = verifyBodyParamsExist(['projectId', 'lessons'], createProject);

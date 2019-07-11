@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import AWS from 'aws-sdk';
 import { main as deleteProject } from '../lambdas/projects/deleteProject';
 import { main as createProject } from '../lambdas/projects/createProject';
@@ -140,31 +141,26 @@ beforeEach(async () => {
 
 test('Project: Get non-existent project', async () => {
     // try get project and expect to fail because doesn't exist
-    await getProject(getRequest).then((response) => expect(response).toEqual(getFailResponse));
+    await getProject(getRequest).then(response => expect(response).toEqual(getFailResponse));
 });
 
 test('Project: Create project', async () => {
     // create project and expect to succeed
-    await createProject(createRequest).then((response) =>
-        expect(parseResponseBody(response)).toMatchObject(createSucceedResponse));
+    await createProject(createRequest).then(response => expect(parseResponseBody(response)).toMatchObject(createSucceedResponse));
 });
 
 test('Project: Create project twice', async () => {
     // create project and expect to succeed
-    await createProject(createRequest).then((response) =>
-        expect(parseResponseBody(response)).toMatchObject(createSucceedResponse));
+    await createProject(createRequest).then(response => expect(parseResponseBody(response)).toMatchObject(createSucceedResponse));
     // try to create project and expect to fail because already exists
-    await createProject(createRequest).then((response) =>
-        expect(response).toEqual(createFailResponse));
+    await createProject(createRequest).then(response => expect(response).toEqual(createFailResponse));
 });
 
 test('Project: Create, Get', async () => {
     // create project and expect to succeed
-    await createProject(createRequest).then((response) =>
-        expect(parseResponseBody(response)).toMatchObject(createSucceedResponse));
+    await createProject(createRequest).then(response => expect(parseResponseBody(response)).toMatchObject(createSucceedResponse));
     // try get project and expect to succeed
-    await getProject(getRequest).then((response) =>
-        expect(parseResponseBody(response)).toMatchObject(getSucceedResponse));
+    await getProject(getRequest).then(response => expect(parseResponseBody(response)).toMatchObject(getSucceedResponse));
 });
 
 

@@ -24,4 +24,4 @@ const prepare = (event) => {
     };
 };
 
-export const main = (event) => update(prepare(event));
+export const main = event => update(prepare(event));

@@ -18,8 +18,7 @@ const truthBinary = [1, 0, 0, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1];
 const predictedBinary = [1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0];
 
 test('Judgement Engine: Length Mismatch', async () => {
-    expect(() => judge(shortPredicted, truthNonBinary, ACCURACY))
-        .toThrow();
+    expect(() => judge(shortPredicted, truthNonBinary, ACCURACY)).toThrow();
 });
 
 test('Judgement Enginer: Non Binary Accuracy', async () => {
@@ -44,6 +43,6 @@ test('Judgement Enginer: Binary Recall', async () => {
 
 test('Judgement Enginer: Binary F1', async () => {
     const accuracy = judge(predictedBinary, truthBinary, F1_BINARY);
-    const expectedF1 = 2 * (5 / 8 * 5 / 7) / (5 / 8 + 5 / 7);
+    const expectedF1 = (2 * (((5 / 8) * 5) / 7)) / (5 / 8 + 5 / 7);
     expect(accuracy).toEqual(expectedF1);
 });
