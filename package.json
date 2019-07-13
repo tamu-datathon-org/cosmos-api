@@ -6,6 +6,11 @@
   "scripts": {
     "test": "env projectAdminTableName=\"dev-cosmos-project-admin\" challengesTableName=\"dev-cosmos-challenges\" projectsTableName=\"dev-cosmos-projects2\" attemptsTableName=\"dev-cosmos-attempts\" usersTableName=\"dev-cosmos-users\" jest"
   },
+  "jest": {
+    "setupFiles": [
+      "./tests/setup.test.js"
+    ]
+  },
   "author": "",
   "license": "MIT",
   "repository": {

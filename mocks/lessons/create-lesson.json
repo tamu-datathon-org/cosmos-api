@@ -1,0 +1,8 @@
+{
+    "body": "{\"projectId\":\"tamu_datathon\",\"lessonId\":\"test_lesson\",\"name\":\"Test Lesson\",\"image\":\"test\",\"link\":\"test\",\"linkText\":\"Test Link\",\"description\":\"Test Lesson Description\"}",
+    "requestContext": {
+        "identity": {
+            "cognitoIdentityId": "USER-SUB-1234"
+        }
+    }
+}
