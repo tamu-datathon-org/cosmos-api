@@ -2,7 +2,7 @@ scoreChallenge:
     handler: lambdas/score/scoreChallenge.main
     events:
         - http:
-              path: /score/challenge/{challengeId}
+              path: /score/challenge/{id}
               method: get
               cors: true
               authorizer: aws_iam

@@ -15,7 +15,7 @@ const prepare = event => ({
         userId: event.requestContext.identity.cognitoIdentityId,
         projectId: event.queryStringParameters.projectId,
     },
-    lessonId: event.pathParameters.lessonId,
+    lessonId: event.pathParameters.id,
 });
 
 const lessonChallengesDelete = challenges => ({

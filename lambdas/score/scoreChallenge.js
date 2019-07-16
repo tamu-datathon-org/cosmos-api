@@ -12,7 +12,7 @@ const prepare = event => ({
         email: event.queryStringParameters.email,
     },
     challengeKey: {
-        challengeId: event.pathParameters.challengeId,
+        challengeId: event.pathParameters.id,
         projectId: event.queryStringParameters.projectId,
     },
 });

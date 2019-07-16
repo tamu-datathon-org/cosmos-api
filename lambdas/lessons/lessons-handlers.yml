@@ -10,7 +10,7 @@ deleteLesson:
     handler: lambdas/lessons/deleteLesson.main
     events:
         - http:
-              path: lessons/{lessonId}
+              path: lessons/{id}
               method: delete
               cors: true
               authorizer: aws_iam
@@ -18,7 +18,7 @@ getLesson:
     handler: lambdas/lessons/getLesson.main
     events:
         - http:
-              path: lessons/{lessonId}
+              path: lessons/{id}
               method: get
               cors: true
               authorizer: aws_iam

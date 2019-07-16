@@ -6,7 +6,7 @@ const prepare = event => ({
     projectsTable: process.env.projectsTableName,
     challengesTable: process.env.challengesTableName,
     projectKey: {
-        projectId: event.pathParameters.projectId,
+        projectId: event.pathParameters.id,
     },
 });
 

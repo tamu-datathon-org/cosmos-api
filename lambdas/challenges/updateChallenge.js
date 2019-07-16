@@ -11,7 +11,7 @@ const prepare = (event) => {
         challengesTable: process.env.challengesTableName,
         adminTable: process.env.projectAdminTableName,
         challengeKey: {
-            challengeId: event.pathParameters.challengeId,
+            challengeId: event.pathParameters.id,
             projectId: data.projectId,
         },
         challengeData: {

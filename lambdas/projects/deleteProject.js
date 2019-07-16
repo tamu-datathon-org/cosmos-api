@@ -6,7 +6,7 @@ import batch from '../crud/batchWrite';
 const project = event => ({
     TableName: process.env.projectsTableName,
     Key: {
-        projectId: event.pathParameters.projectId,
+        projectId: event.pathParameters.id,
     },
 });
 

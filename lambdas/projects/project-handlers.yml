@@ -10,7 +10,7 @@ getProject:
     handler: lambdas/projects/getProject.main
     events:
         - http:
-              path: projects/{projectId}
+              path: projects/{id}
               method: get
               cors: true
               authorizer: aws_iam
@@ -18,7 +18,7 @@ deleteProject:
     handler: lambdas/projects/deleteProject.main
     events:
         - http:
-              path: projects/{projectId}
+              path: projects/{id}
               method: delete
               cors: true
               authorizer: aws_iam
