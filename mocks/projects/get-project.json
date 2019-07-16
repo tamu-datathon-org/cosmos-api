@@ -1,6 +1,6 @@
 {
     "pathParameters": {
-        "projectId": "tamu_datathon"
+        "id": "tamu_datathon"
     },
     "requestContext": {
         "identity": {

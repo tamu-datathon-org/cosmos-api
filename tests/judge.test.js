@@ -97,7 +97,7 @@ const deleteChallengeRequest = {
         },
     },
     pathParameters: {
-        challengeId: 'judge_test_challenge_112358',
+        id: 'judge_test_challenge_112358',
     },
     queryStringParameters: {
         projectId: 'test_project_1234',

@@ -92,7 +92,7 @@ const deleteChallengeRequest = {
         },
     },
     pathParameters: {
-        challengeId: 'score_test_challenge_112358',
+        id: 'score_test_challenge_112358',
     },
     queryStringParameters: {
         projectId: 'test_project_1234',
@@ -106,7 +106,7 @@ const scoreChallengeRequest = {
         email: 'score_test_user@gmail.com',
     },
     pathParameters: {
-        challengeId: 'score_test_challenge_112358',
+        id: 'score_test_challenge_112358',
     },
     requestContext: {
         identity: {

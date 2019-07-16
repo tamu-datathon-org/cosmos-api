@@ -74,13 +74,13 @@ const createChallengeRequest = index => ({
 
 const getRequest = {
     pathParameters: {
-        projectId: 'tamu_datathon',
+        id: 'tamu_datathon',
     },
 };
 
 const deleteRequest = {
     pathParameters: {
-        projectId: 'tamu_datathon',
+        id: 'tamu_datathon',
     },
 };
 

@@ -14,7 +14,7 @@ const projectAdmin = event => ({
     TableName: process.env.projectAdminTableName,
     KeyConditionExpression: 'projectId = :projectId',
     ExpressionAttributeValues: {
-        ':projectId': event.pathParameters.projectId,
+        ':projectId': event.pathParameters.id,
     },
 });
 
@@ -22,7 +22,7 @@ const projectChallenges = event => ({
     TableName: process.env.challengesTableName,
     KeyConditionExpression: 'projectId = :projectId',
     ExpressionAttributeValues: {
-        ':projectId': event.pathParameters.projectId,
+        ':projectId': event.pathParameters.id,
     },
 });
 

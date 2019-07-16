@@ -103,7 +103,7 @@ const createChallengeRequest = (index, lessonId) => {
 
 const deleteChallengeRequest = index => ({
     pathParameters: {
-        challengeId: challenges[index].challengeId,
+        id: challenges[index].challengeId,
     },
     queryStringParameters: {
         projectId: challenges[index].projectId,
@@ -113,7 +113,7 @@ const deleteChallengeRequest = index => ({
 
 const getChallengeRequest = index => ({
     pathParameters: {
-        challengeId: challenges[index].challengeId,
+        id: challenges[index].challengeId,
     },
     queryStringParameters: {
         projectId: challenges[index].projectId,
@@ -129,18 +129,18 @@ const createLessonRequest = {
     ...authAddOn,
 };
 
-const getLessonRequest = lessonId => ({
+const getLessonRequest = id => ({
     pathParameters: {
-        lessonId,
+        id,
     },
     queryStringParameters: {
         projectId: 'jest_project_1234',
     },
 });
 
-const deleteLessonRequest = lessonId => ({
+const deleteLessonRequest = id => ({
     pathParameters: {
-        lessonId,
+        id,
     },
     queryStringParameters: {
         projectId: 'jest_project_1234',

@@ -49,7 +49,7 @@ const challengeUpdateObject = {
 
 const challengeRequest = {
     pathParameters: {
-        challengeId: 'test_challenge_112358',
+        id: 'test_challenge_112358',
     },
     queryStringParameters: {
         projectId: 'test_project_1234',
