@@ -8,13 +8,13 @@ import 'jest-extended';
 
 AWS.config.update({ region: 'us-east-1' });
 
-// TODO#19(phulsechinmay): Add lessonIds to lessons and challenges once implemented
 const projectItem = {
     projectId: 'tamu_datathon',
     projectName: 'TAMU Datathon',
     projectDescription: 'The first ever Datathon at Texas A&M University!',
     lessons: [
         {
+            lessonId: 'data_management',
             name: 'Data Management',
             image:
                 'https://drive.google.com/uc?export=download&id=10_FqwgamTQcvn6ACSHSA3uPaSyzPvsRv',
@@ -33,6 +33,7 @@ const challenges = [
         challengeName: 'Create a scatter plot for new features',
         challengeId: 'scatter_plot',
         projectId: 'tamu_datathon',
+        lessonId: 'data_management',
         points: 1,
         metric: 'accuracy',
         passingThreshold: 99,
@@ -43,6 +44,7 @@ const challenges = [
         challengeName: 'Explain what you see:',
         challengeId: 'explain_answer',
         projectId: 'tamu_datathon',
+        lessonId: 'data_management',
         points: 10,
         metric: 'f1',
         passingThreshold: 90,

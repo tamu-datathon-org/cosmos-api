@@ -53,3 +53,5 @@ env.yml
 
 # AWS
 .dynamodb
+
+.gitignore

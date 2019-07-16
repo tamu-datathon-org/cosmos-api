@@ -1,0 +1,13 @@
+{
+    "queryStringParameters": {
+        "projectId": "tamu_datathon"
+    },
+    "pathParameters": {
+        "lessonId": "test_lesson"
+    },
+    "requestContext": {
+        "identity": {
+            "cognitoIdentityId": "USER-SUB-1234"
+        }
+    }
+}

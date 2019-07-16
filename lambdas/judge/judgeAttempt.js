@@ -1,12 +1,10 @@
 import uuid from 'uuid';
 import create from '../crud/create';
 import { judge } from '../../libs/judgement-engine-lib';
-import * as judgingErrors from '../../libs/judging/judging-errors';
 import {
     resourceCreated, failure, notFound, preconditionFailed,
 } from '../../libs/response-lib';
 import { verifyBodyParamsExist } from '../../libs/api-helper-lib';
-import { NotFoundError } from '../../libs/errors-lib';
 import { getUserAndChallenge } from '../../libs/helpers/scoring-helper-lib';
 
 const prepare = (event) => {
@@ -63,9 +61,9 @@ const judgeAttempt = async (event) => {
             score,
         });
     } catch (err) {
-        if (err instanceof NotFoundError) {
+        if (err.name === 'NotFoundError') {
             return notFound(err.message);
-        } if (err instanceof judgingErrors.MetricNotFoundError) {
+        } if (err.name === 'MetricNotFoundError') {
             return preconditionFailed(
                 'There was an error in judging your attempt. '
                     + 'Please contact a project supervisor to resolve this problem.',

@@ -13,6 +13,7 @@ const prepare = (event) => {
         challenge: {
             challengeId: data.challengeId,
             projectId: data.projectId,
+            lessonId: data.lessonId,
             challengeName: data.challengeName,
             points: data.points,
             passingThreshold: data.passingThreshold,
@@ -63,6 +64,7 @@ export const main = verifyBodyParamsExist(
     [
         'challengeId',
         'projectId',
+        'lessonId',
         'challengeName',
         'points',
         'passingThreshold',
