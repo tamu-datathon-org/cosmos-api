@@ -1,5 +1,5 @@
 import AWS from 'aws-sdk';
-import { main as createProject } from '../lambdas/projects/createProject';
+import { main as createProject } from '../../lambdas/projects/createProject';
 
 AWS.config.update({ region: 'us-east-1' });
 

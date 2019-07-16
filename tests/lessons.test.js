@@ -1,5 +1,6 @@
 import AWS from 'aws-sdk';
 import { main as createChallenge } from '../lambdas/challenges/createChallenge';
+import { main as deleteChallenge } from '../lambdas/challenges/deleteChallenge';
 import { main as getChallenge } from '../lambdas/challenges/getChallenge';
 import { main as getLesson } from '../lambdas/lessons/getLesson';
 import { main as createLesson } from '../lambdas/lessons/createLesson';
@@ -100,6 +101,16 @@ const createChallengeRequest = (index, lessonId) => {
     };
 };
 
+const deleteChallengeRequest = index => ({
+    pathParameters: {
+        challengeId: challenges[index].challengeId,
+    },
+    queryStringParameters: {
+        projectId: challenges[index].projectId,
+    },
+    ...authAddOn,
+});
+
 const getChallengeRequest = index => ({
     pathParameters: {
         challengeId: challenges[index].challengeId,
@@ -146,6 +157,16 @@ const parseResponseBody = (response) => {
 };
 
 // ---------- TEST SETUP ---------------
+
+// Delete test challenges before all tests start.
+beforeAll(async () => {
+    for (let i = 0; i < challenges.length; i += 1) {
+        deleteChallenge({
+            ...deleteChallengeRequest(i),
+            ...authAddOn,
+        }).then(response => expect(response.statusCode).toEqual(HTTPCodes.SUCCESS));
+    }
+});
 
 // Delete the test project before tests start.
 beforeEach(async () => {

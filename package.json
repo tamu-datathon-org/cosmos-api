@@ -8,7 +8,10 @@
   },
   "jest": {
     "setupFiles": [
-      "./tests/setup.test.js"
+      "./tests/setup/setup.test.js"
+    ],
+    "modulePathIgnorePatterns": [
+      "./tests/setup/"
     ]
   },
   "author": "",

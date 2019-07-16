@@ -12,6 +12,7 @@ AWS.config.update({
 const baseChallengeObject = {
     challengeId: 'test_challenge_112358',
     projectId: 'test_project_1234',
+    lessonId: 'jest_lesson_1234',
     challengeName: 'Test Challenge Base',
     points: 1234,
     passingThreshold: 0.94,
@@ -23,6 +24,7 @@ const baseChallengeObject = {
 const safeBaseChallengeObject = {
     challengeId: 'test_challenge_112358',
     projectId: 'test_project_1234',
+    lessonId: 'jest_lesson_1234',
     challengeName: 'Test Challenge Base',
     metric: 'accuracy',
     passingThreshold: 0.94,
@@ -34,6 +36,7 @@ const safeBaseChallengeObject = {
 const challengeUpdateObject = {
     challengeId: 'test_challenge_112358',
     projectId: 'test_project_1234',
+    lessonId: 'jest_lesson_1234',
     challengeName: 'Test Challenge Updated',
     points: 5678,
     passingThreshold: 1.0,

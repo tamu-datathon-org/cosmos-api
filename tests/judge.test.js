@@ -13,6 +13,7 @@ AWS.config.update({
 const accuracyChallengeObject = {
     challengeId: 'judge_test_challenge_112358',
     projectId: 'test_project_1234',
+    lessonId: 'jest_judge_lesson_1234',
     challengeName: 'Test Challenge Base',
     points: 1234,
     passingThreshold: 0.94,
