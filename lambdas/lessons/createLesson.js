@@ -1,3 +1,4 @@
+import uuid from 'uuid';
 import get from '../crud/get';
 import {
     failure, conflict, unauthorized, resourceCreated, notFound,
@@ -11,7 +12,7 @@ const prepare = (event) => {
         projectsTable: process.env.projectsTableName,
         adminTable: process.env.projectAdminTableName,
         lesson: {
-            lessonId: data.lessonId,
+            lessonId: uuid.v4(),
             name: data.name,
             image: data.image,
             link: data.link,
@@ -71,7 +72,6 @@ const createLesson = async (event) => {
 export const main = verifyBodyParamsExist(
     [
         'projectId',
-        'lessonId',
         'name',
         'image',
         'link',
