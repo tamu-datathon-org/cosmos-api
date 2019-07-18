@@ -20,3 +20,20 @@ The paths for the endpoints need to be appended to these URLs.
 ## User endpoints
 
 * [Create User](users/post.md) : `POST /users` (**AWS Auth Required**)
+* [Delete User](users/delete.md) : `DELETE /users?email=<email>` (**AWS Auth Required**)
+* [Get User](users/get.md) : `GET /users?email=<email>` (**AWS Auth Required**)
+* [Update User](users/update.md) : `UPDATE /users?email=<email>` (**AWS Auth Required**)
+
+## Projects endpoints
+
+* [Create Project](projects/post.md) : `POST /projects` (**AWS Auth Required**)
+* [Delete Project](projects/delete.md) : `DELETE /projects/{projectId}` (**AWS Auth Required**)
+* [Get Project](projects/get.md) : `GET /projects/{projectId}` (**AWS Auth Required**)
+
+## Judging endpoints
+
+* [Judge Attempt](judge/post.md) : `POST /judge/attempt`
+
+## Scoring endpoints
+
+* [Score Challenge](score/get-score-challenge.md) : `GET /score/challenge/{challengeId}?email=<email>&projectId=<projectId>` (**AWS Auth Required**)

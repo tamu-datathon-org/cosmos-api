@@ -10,11 +10,13 @@ Creates a new user with the provided information. User is access through email a
 
 **Permissions required** : AWS Cognito ID
 
+**Required parts of request:** `['email', 'firstName', 'lastName']`
+
 ## Success Response
 
-**Code** : `200 OK`
+**Code** : `201 Resource Created`
 
-**Content examples**
+**Request**
 
 The cognito ID is provided by AWS, so we just need the following fields in the POST body.
 

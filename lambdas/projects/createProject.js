@@ -3,12 +3,12 @@ import { success, failure, conflict } from '../../libs/response-lib';
 import { verifyBodyParamsExist } from '../../libs/api-helper-lib';
 
 const project = (event) => {
-    const { projectId, lessons, projectName, projectDescription } = JSON.parse(event.body);
+    const { projectId, projectName, projectDescription } = JSON.parse(event.body);
     return {
         TableName: process.env.projectsTableName,
         Item: {
             projectId,
-            lessons,
+            lessons: [],
             projectName,
             projectDescription,
             createdAt: Date.now(),
@@ -35,4 +35,4 @@ const createProject = event => create(projectAdmin(event))
         ? conflict()
         : failure({ message, ...rest })));
 
-export const main = verifyBodyParamsExist(['projectId', 'lessons'], createProject);
+export const main = verifyBodyParamsExist(['projectId', 'projectName', 'projectDescription'], createProject);
