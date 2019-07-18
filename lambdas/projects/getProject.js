@@ -10,28 +10,33 @@ const prepare = event => ({
     },
 });
 
+const getProjectCore = async ({ projectsTable, challengesTable, projectKey }) => {
+    const projectPromise = get({
+        TableName: projectsTable,
+        Key: projectKey,
+    });
+    const challengesPromise = list({
+        TableName: challengesTable,
+        KeyConditionExpression: 'projectId = :projectId',
+        ExpressionAttributeValues: {
+            ':projectId': projectKey.projectId,
+        },
+    });
+    const [{ Item: project }, challenges] = await Promise.all([projectPromise, challengesPromise]);
+    if (project === undefined) {
+        return notFound('A project with the specified ID could not be found');
+    }
+    return {
+        ...project,
+        challenges: challenges || [],
+    };
+};
+
 const getProject = async (event) => {
-    const { projectsTable, challengesTable, projectKey } = prepare(event);
+    const eventData = prepare(event);
     try {
-        const projectPromise = get({
-            TableName: projectsTable,
-            Key: projectKey,
-        });
-        const challengesPromise = list({
-            TableName: challengesTable,
-            KeyConditionExpression: 'projectId = :projectId',
-            ExpressionAttributeValues: {
-                ':projectId': projectKey.projectId,
-            },
-        });
-        const [project, challenges] = await Promise.all([projectPromise, challengesPromise]);
-        if (project.Item === undefined) {
-            return notFound('A project with the specified ID could not be found');
-        }
-        return success({
-            ...project.Item,
-            challenges: challenges || [],
-        });
+        const project = await getProjectCore(eventData);
+        return success(project);
     } catch (err) {
         return failure(err);
     }

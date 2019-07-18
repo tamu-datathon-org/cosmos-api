@@ -2,9 +2,12 @@ import AWS from 'aws-sdk';
 import { main as createUser } from '../lambdas/users/createUser';
 import { main as deleteUser } from '../lambdas/users/deleteUser';
 import { main as createChallenge } from '../lambdas/challenges/createChallenge';
+import { main as createProject } from '../lambdas/projects/createProject';
 import { main as deleteChallenge } from '../lambdas/challenges/deleteChallenge';
+import { main as deleteProject } from '../lambdas/projects/deleteProject';
 import { main as judgeAttempt } from '../lambdas/judge/judgeAttempt';
 import { main as scoreChallenge } from '../lambdas/score/scoreChallenge';
+import { main as scoreProject } from '../lambdas/score/scoreProject';
 import { HTTPCodes } from '../libs/response-lib';
 
 AWS.config.update({
@@ -26,6 +29,35 @@ const accuracyScoreResponse = {
     passed: true,
     points: 1234,
     numAttempts: 2,
+};
+
+const projectResponse = {
+    projectId: 'test_project_1234',
+    projectName: 'TAMU Datathon',
+    projectDescription: 'The first ever Datathon at Texas A&M University!',
+    lessons: [
+        {
+            lessonId: 'jest_score_lesson_1234',
+            name: '',
+            image: '',
+            link: '',
+            linkText: '',
+            description: '',
+            challenges: [
+                {
+                    challengeId: 'score_test_challenge_112358',
+                    projectId: 'test_project_1234',
+                    lessonId: 'jest_score_lesson_1234',
+                    challengeName: 'Test Challenge Base',
+                    points: 1234,
+                    passingThreshold: 0.94,
+                    metric: 'accuracy',
+                    passed: true,
+                    numAttempts: 2,
+                },
+            ],
+        },
+    ],
 };
 
 const passingAttemptObject = {
@@ -85,6 +117,37 @@ const createChallengeRequest = {
     },
 };
 
+const projectItem = {
+    projectId: 'test_project_1234',
+    projectName: 'TAMU Datathon',
+    projectDescription: 'The first ever Datathon at Texas A&M University!',
+    lessons: [
+        {
+            lessonId: 'jest_score_lesson_1234',
+            name: '',
+            image: '',
+            link: '',
+            linkText: '',
+            description: '',
+        },
+    ],
+};
+
+const createProjectRequest = {
+    body: JSON.stringify(projectItem),
+    requestContext: {
+        identity: {
+            cognitoIdentityId: 'test_admin_12345',
+        },
+    },
+};
+
+const deleteProjectRequest = {
+    pathParameters: {
+        id: 'test_project_1234',
+    },
+};
+
 const deleteChallengeRequest = {
     requestContext: {
         identity: {
@@ -115,6 +178,20 @@ const scoreChallengeRequest = {
     },
 };
 
+const scoreProjectRequest = {
+    queryStringParameters: {
+        email: 'score_test_user@gmail.com',
+    },
+    pathParameters: {
+        id: 'test_project_1234',
+    },
+    requestContext: {
+        identity: {
+            cognitoIdentityId: 'SCORE-TEST-USER-1234',
+        },
+    },
+};
+
 const parseResponseBody = (response) => {
     const { body, ...rest } = response;
     return {
@@ -136,6 +213,8 @@ beforeAll(async () => {
     await createUser(createTestUserRequest);
     // Create challenge to post solutions for.
     await createChallenge(createChallengeRequest);
+    // Create project
+    await createProject(createProjectRequest);
 
     // Create attempts for users.
     const passingAttemptResp = await judgeAttempt(passingAttemptRequest);
@@ -152,6 +231,9 @@ afterAll(async () => {
     // Delete created test challenge.
     const challengeResponse = await deleteChallenge(deleteChallengeRequest);
     expect(challengeResponse.statusCode).toEqual(HTTPCodes.SUCCESS);
+    // Delete created test project.
+    const projectDeleteResponse = await deleteProject(deleteProjectRequest);
+    expect(projectDeleteResponse.statusCode).toEqual(HTTPCodes.SUCCESS);
 });
 
 // --------------- TESTS -------------------
@@ -162,4 +244,12 @@ test('Score: Score Challenge', async () => {
     expect(scoreAttemptResponse.statusCode).toEqual(HTTPCodes.SUCCESS);
     const { body: scoreBody } = parseResponseBody(scoreAttemptResponse);
     expect(scoreBody.data).toEqual(accuracyScoreResponse);
+});
+
+// We added a passing & failing attempt, so the score request should pass.
+test('Score: Score Project', async () => {
+    const response = await scoreProject(scoreProjectRequest);
+    expect(response.statusCode).toEqual(HTTPCodes.SUCCESS);
+    const { body } = parseResponseBody(response);
+    expect(body.data).toEqual(projectResponse);
 });
