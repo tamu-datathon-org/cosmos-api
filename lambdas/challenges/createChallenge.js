@@ -1,7 +1,7 @@
 import create from '../crud/create';
 import get from '../crud/get';
 import {
-    failure, conflict, unauthorized, resourceCreated,
+    failure, conflict, unauthorized, resourceCreated, badRequest,
 } from '../../libs/response-lib';
 import { verifyBodyParamsExist } from '../../libs/api-helper-lib';
 import { isMetricSupported } from '../../libs/judgement-engine-lib';

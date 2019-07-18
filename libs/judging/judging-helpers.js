@@ -7,6 +7,13 @@ export const zip = (xs, ys) => xs.map((x, i) => [x, ys[i]]);
 
 export const isClose = (n1, n2, epsilon = EPSILON) => Math.abs(n1 - n2) < epsilon;
 
+// Source: (Stack Overflow) https://stackoverflow.com/questions/874709/converting-user-input-string-to-regular-expression.
+export const stringToRegex = (patternStr) => {
+    const flags = patternStr.replace(/.*\/([gimy]*)$/, '$1');
+    const pattern = patternStr.replace(new RegExp(`^/(.*?)/${flags}$`), '$1');
+    return new RegExp(pattern, flags);
+};
+
 export const verifyBinaryContent = (contentToCheck) => {
     const binarySet = new Set([1, 0, 1.0, 0.0]);
     contentToCheck.forEach((value) => {

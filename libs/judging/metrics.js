@@ -2,6 +2,7 @@ import { IncorrectAnswerLengthError } from './judging-errors';
 import {
     isClose,
     zip,
+    stringToRegex,
     verifyBinaryContent,
     computeTruePositives,
     computeFalsePositives,
@@ -17,7 +18,7 @@ const verifySameLength = (predicted, truth) => {
 export const regexAccuracy = (predicted, truth) => {
     verifySameLength(predicted, truth);
     const numCorrect = zip(predicted, truth).reduce((total, [predictedValue, trueRegex]) => (
-        (new RegExp(trueRegex).test(predictedValue))
+        (stringToRegex(trueRegex).test(predictedValue))
             ? total + 1 : total
     ), 0);
     return numCorrect / predicted.length;
