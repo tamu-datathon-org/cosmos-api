@@ -4,19 +4,19 @@ import { failure, success, notFound } from '../../libs/response-lib';
 
 const prepare = event => ({
     projectsTableName: process.env.projectsTableName,
-    challengesTable: process.env.challengesTableName,
+    challengesTableName: process.env.challengesTableName,
     projectKey: {
         projectId: event.pathParameters.id,
     },
 });
 
-const getProjectCore = async ({ projectsTableName, challengesTable, projectKey }) => {
+const getProjectCore = async ({ projectsTableName, challengesTableName, projectKey }) => {
     const projectPromise = get({
         TableName: projectsTableName,
         Key: projectKey,
     });
     const challengesPromise = list({
-        TableName: challengesTable,
+        TableName: challengesTableName,
         KeyConditionExpression: 'projectId = :projectId',
         ExpressionAttributeValues: {
             ':projectId': projectKey.projectId,
