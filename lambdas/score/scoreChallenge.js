@@ -17,41 +17,45 @@ const prepare = event => ({
     },
 });
 
-const judgeChallengeForUser = async (event) => {
-    const {
-        usersTableName,
-        attemptsTableName,
-        challengesTableName,
+export const scoreChallengeCore = async ({
+    userKey,
+    challengeKey,
+    usersTableName,
+    challengesTableName,
+    attemptsTableName,
+}) => {
+    // Check if user and challenge exist
+    const [user, challenge] = await getUserAndChallenge(
         userKey,
         challengeKey,
-    } = prepare(event);
+        usersTableName,
+        challengesTableName,
+    );
+    const userAttempts = await list({
+        TableName: attemptsTableName,
+        KeyConditionExpression: 'userId = :userId',
+        ExpressionAttributeValues: {
+            ':userId': user.userId,
+        },
+    });
+    const matching = userAttempts.filter(
+        item => item.projectId === challenge.projectId
+            && item.challengeId === challenge.challengeId,
+    );
+    const numAttempts = matching.length;
+    const passing = matching.filter(item => item.score >= challenge.passingThreshold);
+    const passed = passing.length > 0;
+    return {
+        passed,
+        points: passed ? challenge.points : 0,
+        numAttempts,
+    };
+};
+
+const judgeChallengeForUser = async (event) => {
     try {
-        // Check if user and challenge exist
-        const [user, challenge] = await getUserAndChallenge(
-            userKey,
-            challengeKey,
-            usersTableName,
-            challengesTableName,
-        );
-        const userAttempts = await list({
-            TableName: attemptsTableName,
-            KeyConditionExpression: 'userId = :userId',
-            ExpressionAttributeValues: {
-                ':userId': user.userId,
-            },
-        });
-        const matching = userAttempts.filter(
-            item => item.projectId === challenge.projectId
-                && item.challengeId === challenge.challengeId,
-        );
-        const numAttempts = matching.length;
-        const passing = matching.filter(item => item.score >= challenge.passingThreshold);
-        const passed = passing.length > 0;
-        return success({
-            passed,
-            points: passed ? challenge.points : 0,
-            numAttempts,
-        });
+        const scoreObj = await scoreChallengeCore(prepare(event));
+        return success(scoreObj);
     } catch (err) {
         if (err instanceof NotFoundError) {
             return notFound(err.message);
