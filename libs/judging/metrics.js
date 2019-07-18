@@ -3,6 +3,7 @@ import {
 } from './judging-errors';
 import {
     isClose,
+    zip,
     verifyBinaryContent,
     computeTruePositives,
     computeFalsePositives,
@@ -14,6 +15,15 @@ const verifySameLength = (predicted, truth) => {
         throw IncorrectAnswerLengthError();
     }
 };
+
+export const regexAccuracy = (predicted, truth) => {
+    verifySameLength(predicted, truth);
+    const numCorrect = zip(predicted, truth).reduce((total, [predictedValue, trueRegex]) => (
+        (new RegExp(trueRegex).test(predictedValue))
+            ? total + 1 : total
+    ), 0);
+    return numCorrect / predicted.length;
+}
 
 export const calcAccuracy = (predicted, truth) => {
     verifySameLength(predicted, truth);

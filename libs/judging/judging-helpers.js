@@ -4,7 +4,7 @@ import {
 
 const EPSILON = 1e-4;
 
-const zip = (xs, ys) => xs.map((x, i) => [x, ys[i]]);
+export const zip = (xs, ys) => xs.map((x, i) => [x, ys[i]]);
 
 export const isClose = (n1, n2, epsilon = EPSILON) => {
     return Math.abs(n1 - n2) < epsilon;
