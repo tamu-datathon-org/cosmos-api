@@ -3,7 +3,7 @@ import list from '../crud/list';
 import { failure, success, notFound } from '../../libs/response-lib';
 
 const prepare = event => ({
-    projectsTable: process.env.projectsTableName,
+    projectsTableName: process.env.projectsTableName,
     challengesTable: process.env.challengesTableName,
     projectKey: {
         projectId: event.pathParameters.id,
@@ -11,10 +11,10 @@ const prepare = event => ({
 });
 
 const getProject = async (event) => {
-    const { projectsTable, challengesTable, projectKey } = prepare(event);
+    const { projectsTableName, challengesTable, projectKey } = prepare(event);
     try {
         const projectPromise = get({
-            TableName: projectsTable,
+            TableName: projectsTableName,
             Key: projectKey,
         });
         const challengesPromise = list({

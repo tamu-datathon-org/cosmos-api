@@ -9,7 +9,7 @@ import { updateProjectLessons } from './lessons-helper';
 const prepare = (event) => {
     const data = JSON.parse(event.body);
     return {
-        projectsTable: process.env.projectsTableName,
+        projectsTableName: process.env.projectsTableName,
         adminTable: process.env.projectAdminTableName,
         lesson: {
             lessonId: uuid.v4(),
@@ -32,7 +32,7 @@ const prepare = (event) => {
 
 const createLesson = async (event) => {
     const {
-        projectsTable, adminTable, lesson, adminKey, projectKey,
+        projectsTableName, adminTable, lesson, adminKey, projectKey,
     } = prepare(event);
     try {
         const userAdmin = await get({
@@ -44,7 +44,7 @@ const createLesson = async (event) => {
             return unauthorized('Not authorized to access this project.');
         }
         const projectResponse = await get({
-            TableName: projectsTable,
+            TableName: projectsTableName,
             Key: projectKey,
         });
         const project = projectResponse.Item;
