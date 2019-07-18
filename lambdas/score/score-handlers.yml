@@ -6,7 +6,7 @@ scoreChallenge:
               method: get
               cors: true
               authorizer: aws_iam
-scoredproject:
+scoreproject:
     handler: lambdas/score/scoreproject.main
     events:
         - http:
