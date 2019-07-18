@@ -1,6 +1,7 @@
 import get from '../crud/get';
 import list from '../crud/list';
 import { failure, success, notFound } from '../../libs/response-lib';
+import { NotFoundError } from '../../libs/errors-lib';
 
 const prepare = event => ({
     projectsTableName: process.env.projectsTableName,
@@ -24,7 +25,7 @@ const getProjectCore = async ({ projectsTableName, challengesTableName, projectK
     });
     const [{ Item: project }, challenges] = await Promise.all([projectPromise, challengesPromise]);
     if (project === undefined) {
-        return notFound('A project with the specified ID could not be found');
+        throw NotFoundError('A project with the specified ID could not be found');
     }
     return {
         ...project,
@@ -38,6 +39,9 @@ const getProject = async (event) => {
         const project = await getProjectCore(eventData);
         return success(project);
     } catch (err) {
+        if (err instanceof NotFoundError) {
+            return notFound(err.message);
+        }
         return failure(err);
     }
 };
