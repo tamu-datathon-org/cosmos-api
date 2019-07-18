@@ -17,4 +17,4 @@ const prepare = (event) => {
     };
 };
 
-export const main = (event) => create(prepare(event));
+export const main = event => create(prepare(event));

@@ -1,15 +1,9 @@
 import create from '../crud/create';
 import get from '../crud/get';
 import {
-    failure,
-    conflict,
-    unauthorized,
-    resourceCreated,
-    badRequest,
+    failure, conflict, unauthorized, resourceCreated,
 } from '../../libs/response-lib';
-import {
-    verifyBodyParamsExist,
-} from '../../libs/api-helper-lib';
+import { verifyBodyParamsExist } from '../../libs/api-helper-lib';
 import { isMetricSupported } from '../../libs/judgement-engine-lib';
 
 const prepare = (event) => {
@@ -20,6 +14,7 @@ const prepare = (event) => {
         challenge: {
             challengeId: data.challengeId,
             projectId: data.projectId,
+            lessonId: data.lessonId,
             challengeName: data.challengeName,
             points: data.points,
             passingThreshold: data.passingThreshold,
@@ -36,10 +31,7 @@ const prepare = (event) => {
 
 const createChallenge = async (event) => {
     const {
-        challengesTable,
-        adminTable,
-        challenge,
-        adminKey,
+        challengesTable, adminTable, challenge, adminKey,
     } = prepare(event);
     try {
         if (!isMetricSupported(challenge.metric)) {
@@ -56,20 +48,32 @@ const createChallenge = async (event) => {
         const createdChallenge = await create({
             TableName: challengesTable,
             Item: challenge,
-            ConditionExpression: 'attribute_not_exists(challengeId) AND attribute_not_exists(projectId)',
+            ConditionExpression:
+                'attribute_not_exists(challengeId) AND attribute_not_exists(projectId)',
         });
         return resourceCreated(createdChallenge);
     } catch (err) {
         // The only condition on the create request is to check whether the challenge already
         // exists.
         if (err.code === 'ConditionalCheckFailedException') {
-            return conflict('A challenge for the specified project already exists for the given id.');
+            return conflict(
+                'A challenge for the specified project already exists for the given id.',
+            );
         }
         return failure(err);
     }
 };
 
 export const main = verifyBodyParamsExist(
-    ['challengeId', 'projectId', 'challengeName', 'points', 'passingThreshold', 'metric', 'solution'],
+    [
+        'challengeId',
+        'projectId',
+        'lessonId',
+        'challengeName',
+        'points',
+        'passingThreshold',
+        'metric',
+        'solution',
+    ],
     createChallenge,
 );

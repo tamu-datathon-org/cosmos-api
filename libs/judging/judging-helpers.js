@@ -1,14 +1,11 @@
-import {
-    NonBinaryAnswerError,
-} from './judging-errors';
+/* eslint-disable max-len */
+import { NonBinaryAnswerError } from './judging-errors';
 
 const EPSILON = 1e-4;
 
 export const zip = (xs, ys) => xs.map((x, i) => [x, ys[i]]);
 
-export const isClose = (n1, n2, epsilon = EPSILON) => {
-    return Math.abs(n1 - n2) < epsilon;
-};
+export const isClose = (n1, n2, epsilon = EPSILON) => Math.abs(n1 - n2) < epsilon;
 
 export const verifyBinaryContent = (contentToCheck) => {
     const binarySet = new Set([1, 0, 1.0, 0.0]);
@@ -20,30 +17,30 @@ export const verifyBinaryContent = (contentToCheck) => {
     });
 };
 
-export const computeTruePositives = (predicted, truth) => (
-    zip(predicted, truth).reduce((truePos, [predictedValue, trueValue]) => (
-        (parseFloat(predictedValue) === 1.0 && parseFloat(trueValue) === 1.0)
-            ? truePos + 1 : truePos
-    ), 0)
+export const computeTruePositives = (predicted, truth) => zip(predicted, truth).reduce(
+    (truePos, [predictedValue, trueValue]) => (parseFloat(predictedValue) === 1.0 && parseFloat(trueValue) === 1.0
+        ? truePos + 1
+        : truePos),
+    0,
 );
 
-export const computeFalsePositives = (predicted, truth) => (
-    zip(predicted, truth).reduce((truePos, [predictedValue, trueValue]) => (
-        (parseFloat(predictedValue) === 1.0 && parseFloat(trueValue) === 0.0)
-            ? truePos + 1 : truePos
-    ), 0)
+export const computeFalsePositives = (predicted, truth) => zip(predicted, truth).reduce(
+    (truePos, [predictedValue, trueValue]) => (parseFloat(predictedValue) === 1.0 && parseFloat(trueValue) === 0.0
+        ? truePos + 1
+        : truePos),
+    0,
 );
 
-export const computeTrueNegatives = (predicted, truth) => (
-    zip(predicted, truth).reduce((truePos, [predictedValue, trueValue]) => (
-        (parseFloat(predictedValue) === 0.0 && parseFloat(trueValue) === 0.0)
-            ? truePos + 1 : truePos
-    ), 0)
+export const computeTrueNegatives = (predicted, truth) => zip(predicted, truth).reduce(
+    (truePos, [predictedValue, trueValue]) => (parseFloat(predictedValue) === 0.0 && parseFloat(trueValue) === 0.0
+        ? truePos + 1
+        : truePos),
+    0,
 );
 
-export const computeFalseNegatives = (predicted, truth) => (
-    zip(predicted, truth).reduce((truePos, [predictedValue, trueValue]) => (
-        (parseFloat(predictedValue) === 0.0 && parseFloat(trueValue) === 1.0)
-            ? truePos + 1 : truePos
-    ), 0)
+export const computeFalseNegatives = (predicted, truth) => zip(predicted, truth).reduce(
+    (truePos, [predictedValue, trueValue]) => (parseFloat(predictedValue) === 0.0 && parseFloat(trueValue) === 1.0
+        ? truePos + 1
+        : truePos),
+    0,
 );

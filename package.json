@@ -6,6 +6,14 @@
   "scripts": {
     "test": "env projectAdminTableName=\"dev-cosmos-project-admin\" challengesTableName=\"dev-cosmos-challenges\" projectsTableName=\"dev-cosmos-projects2\" attemptsTableName=\"dev-cosmos-attempts\" usersTableName=\"dev-cosmos-users\" jest"
   },
+  "jest": {
+    "setupFiles": [
+      "./tests/setup/setup.test.js"
+    ],
+    "modulePathIgnorePatterns": [
+      "./tests/setup/"
+    ]
+  },
   "author": "",
   "license": "MIT",
   "repository": {
@@ -14,6 +22,7 @@
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
+    "babel-eslint": "^10.0.2",
     "babel-loader": "^7.1.4",
     "babel-plugin-source-map-support": "^1.0.0",
     "babel-plugin-transform-runtime": "^6.23.0",
@@ -23,11 +32,14 @@
     "eslint": "^5.16.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-config-prettier": "^5.0.0",
+    "eslint-import-resolver-webpack": "^0.11.1",
     "eslint-plugin-import": "^2.17.3",
+    "eslint-plugin-jest": "^22.7.2",
     "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-react": "^7.13.0",
     "jest": "^21.2.1",
+    "jest-extended": "^0.11.2",
     "prettier": "^1.18.2",
     "serverless-offline": "^3.25.6",
     "serverless-webpack": "^5.3.1",

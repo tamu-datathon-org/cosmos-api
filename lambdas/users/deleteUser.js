@@ -1,31 +1,21 @@
 import _delete from '../crud/delete';
 import get from '../crud/get';
 import list from '../crud/list';
-import {
-    HTTPCodes,
-    buildResponse,
-} from '../../libs/response-lib';
-import {
-    verifyQueryParamsExist,
-} from '../../libs/api-helper-lib';
+import { HTTPCodes, buildResponse } from '../../libs/response-lib';
+import { verifyQueryParamsExist } from '../../libs/api-helper-lib';
 
-const prepare = (event) => {
-    return {
-        attemptsTableName: process.env.attemptsTableName,
-        usersTableName: process.env.usersTableName,
-        userKey: {
-            email: event.queryStringParameters.email,
-        },
-        userId: event.requestContext.identity.cognitoIdentityId,
-    };
-};
+const prepare = event => ({
+    attemptsTableName: process.env.attemptsTableName,
+    usersTableName: process.env.usersTableName,
+    userKey: {
+        email: event.queryStringParameters.email,
+    },
+    userId: event.requestContext.identity.cognitoIdentityId,
+});
 
 const deleteUser = async (event) => {
     const {
-        attemptsTableName,
-        usersTableName,
-        userKey,
-        userId,
+        attemptsTableName, usersTableName, userKey, userId,
     } = prepare(event);
     try {
         // Seperate userId and user
@@ -62,15 +52,13 @@ const deleteUser = async (event) => {
             },
         });
         if (userAttempts !== undefined) {
-            const attemptsDeletePromises = userAttempts.map((attempt) => (
-                _delete({
-                    TableName: attemptsTableName,
-                    Key: {
-                        userId: existingUser.userId,
-                        attemptId: attempt.attemptId,
-                    },
-                })
-            ));
+            const attemptsDeletePromises = userAttempts.map(attempt => _delete({
+                TableName: attemptsTableName,
+                Key: {
+                    userId: existingUser.userId,
+                    attemptId: attempt.attemptId,
+                },
+            }));
             await Promise.all(attemptsDeletePromises);
         }
         return buildResponse(HTTPCodes.SUCCESS, {

@@ -1,4 +1,3 @@
-
 export class IncorrectAnswerLengthError extends Error {
     constructor() {
         super('The length of the truth and the submission do not match.');

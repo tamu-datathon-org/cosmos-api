@@ -1,14 +1,9 @@
 import get from '../crud/get';
 import update from '../crud/update';
 import {
-    success,
-    failure,
-    unauthorized,
-    notFound
+    success, failure, unauthorized, notFound,
 } from '../../libs/response-lib';
-import {
-    verifyBodyParamsExist,
-} from '../../libs/api-helper-lib';
+import { verifyBodyParamsExist } from '../../libs/api-helper-lib';
 
 const prepare = (event) => {
     const data = JSON.parse(event.body);
@@ -16,7 +11,7 @@ const prepare = (event) => {
         challengesTable: process.env.challengesTableName,
         adminTable: process.env.projectAdminTableName,
         challengeKey: {
-            challengeId: event.pathParameters.challengeId,
+            challengeId: event.pathParameters.id,
             projectId: data.projectId,
         },
         challengeData: {
@@ -34,11 +29,7 @@ const prepare = (event) => {
 
 const updateChallenge = async (event) => {
     const {
-        challengesTable,
-        adminTable,
-        challengeKey,
-        challengeData,
-        adminKey,
+        challengesTable, adminTable, challengeKey, challengeData, adminKey,
     } = prepare(event);
     try {
         // Check if user is admin, and if not, don't return the challenge answers.
@@ -62,26 +53,24 @@ const updateChallenge = async (event) => {
         const updateSuccess = await update({
             TableName: challengesTable,
             Key: challengeKey,
-            UpdateExpression: 'SET challengeName = :challengeName, points = :points, passingThreshold = :passingThreshold, solution = :solution',
+            UpdateExpression:
+                'SET challengeName = :challengeName, points = :points, passingThreshold = :passingThreshold, solution = :solution',
             ExpressionAttributeValues: {
                 ':challengeName': challengeData.challengeName || existingChallenge.challengeName,
                 ':points': challengeData.points || existingChallenge.points,
-                ':passingThreshold': challengeData.passingThreshold || existingChallenge.passingThreshold,
+                ':passingThreshold':
+                    challengeData.passingThreshold || existingChallenge.passingThreshold,
                 ':solution': challengeData.solution || existingChallenge.solution,
             },
             ReturnValues: 'ALL_NEW',
         });
         if (updateSuccess) {
             return success({ message: 'Challenge was successfully updated.' });
-        } else {
-            return failure('There was an error in updating the challenge.');
         }
+        return failure('There was an error in updating the challenge.');
     } catch (err) {
         return failure(err);
     }
 };
 
-export const main = verifyBodyParamsExist(
-    ['projectId'],
-    updateChallenge,
-);
+export const main = verifyBodyParamsExist(['projectId'], updateChallenge);

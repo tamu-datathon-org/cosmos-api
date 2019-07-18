@@ -1,13 +1,16 @@
 import get from '../../lambdas/crud/get';
-import {
-    NotFoundError,
-} from '../errors-lib';
+import { NotFoundError } from '../errors-lib';
 
 // Get user and challenge asynchronously to check existence of both and then resolve with
 // challenge object.
-// This function exists to just get a user & challenge asynchronously, without any checks. These should
+// This function exists to just get a user & challenge asynchronously, without any checks. Should
 // be used only when lambdas make unnecessary checks or have requirements that cannot be fulfilled.
-export const getUserAndChallenge = async (userKey, challengeKey, usersTableName, challengesTableName) => {
+export const getUserAndChallenge = async (
+    userKey,
+    challengeKey,
+    usersTableName,
+    challengesTableName,
+) => {
     const userPromise = get({
         TableName: usersTableName,
         Key: userKey,
@@ -23,7 +26,9 @@ export const getUserAndChallenge = async (userKey, challengeKey, usersTableName,
         Key: challengeKey,
     }).then((challenge) => {
         if (challenge.Item === undefined) {
-            throw new NotFoundError('A challenge with the given ID cannot be found in the given project.');
+            throw new NotFoundError(
+                'A challenge with the given ID cannot be found in the given project.',
+            );
         }
         return challenge.Item;
     });

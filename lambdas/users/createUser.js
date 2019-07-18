@@ -40,7 +40,4 @@ const createUser = async (event) => {
     }
 };
 
-export const main = verifyBodyParamsExist(
-    ['email', 'firstName', 'lastName'],
-    createUser,
-);
+export const main = verifyBodyParamsExist(['email', 'firstName', 'lastName'], createUser);

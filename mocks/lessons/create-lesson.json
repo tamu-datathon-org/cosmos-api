@@ -1,0 +1,8 @@
+{
+    "body": "{\"projectId\":\"tamu_datathon\",\"lessonId\":\"data_wrangling\",\"name\":\"Data Wrangling\",\"image\":\"https://drive.google.com/uc?export=download&id=10_FqwgamTQcvn6ACSHSA3uPaSyzPvsRv\",\"link\":\"https://drive.google.com/a/tamu.edu/file/d/16i6DAc9j6hGbl9vfJrAx0LNXguL2sEEm/view?usp=sharing\",\"linkText\":\"View in Google Colaboratory\",\"description\":\"Use Pandas to load, clean and explore raw data.\"}",
+    "requestContext": {
+        "identity": {
+            "cognitoIdentityId": "USER-SUB-1234"
+        }
+    }
+}

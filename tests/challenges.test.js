@@ -1,19 +1,9 @@
 import AWS from 'aws-sdk';
-import {
-    main as deleteChallenge,
-} from '../lambdas/challenges/deleteChallenge';
-import {
-    main as createChallenge,
-} from '../lambdas/challenges/createChallenge';
-import {
-    main as getChallenge,
-} from '../lambdas/challenges/getChallenge';
-import {
-    main as updateChallenge,
-} from '../lambdas/challenges/updateChallenge';
-import {
-    HTTPCodes,
-} from '../libs/response-lib';
+import { main as deleteChallenge } from '../lambdas/challenges/deleteChallenge';
+import { main as createChallenge } from '../lambdas/challenges/createChallenge';
+import { main as getChallenge } from '../lambdas/challenges/getChallenge';
+import { main as updateChallenge } from '../lambdas/challenges/updateChallenge';
+import { HTTPCodes } from '../libs/response-lib';
 
 AWS.config.update({
     region: 'us-east-1',
@@ -22,6 +12,7 @@ AWS.config.update({
 const baseChallengeObject = {
     challengeId: 'test_challenge_112358',
     projectId: 'test_project_1234',
+    lessonId: 'jest_lesson_1234',
     challengeName: 'Test Challenge Base',
     points: 1234,
     passingThreshold: 0.94,
@@ -33,6 +24,7 @@ const baseChallengeObject = {
 const safeBaseChallengeObject = {
     challengeId: 'test_challenge_112358',
     projectId: 'test_project_1234',
+    lessonId: 'jest_lesson_1234',
     challengeName: 'Test Challenge Base',
     metric: 'accuracy',
     passingThreshold: 0.94,
@@ -44,6 +36,7 @@ const safeBaseChallengeObject = {
 const challengeUpdateObject = {
     challengeId: 'test_challenge_112358',
     projectId: 'test_project_1234',
+    lessonId: 'jest_lesson_1234',
     challengeName: 'Test Challenge Updated',
     points: 5678,
     passingThreshold: 1.0,
@@ -56,7 +49,7 @@ const challengeUpdateObject = {
 
 const challengeRequest = {
     pathParameters: {
-        challengeId: 'test_challenge_112358',
+        id: 'test_challenge_112358',
     },
     queryStringParameters: {
         projectId: 'test_project_1234',
@@ -89,10 +82,7 @@ const incorrectAuthAddOn = {
 };
 
 const parseResponseBody = (response) => {
-    const {
-        body,
-        ...rest
-    } = response;
+    const { body, ...rest } = response;
     return {
         ...rest,
         body: JSON.parse(body),
@@ -122,7 +112,6 @@ beforeEach(async () => {
     });
     expect(authCreateChallenge.statusCode).toEqual(HTTPCodes.RESOURCE_CREATED);
 });
-
 
 // ------- TESTS ---------
 
