@@ -8,7 +8,7 @@ import { verifyBodyParamsExist } from '../../libs/api-helper-lib';
 const prepare = (event) => {
     const data = JSON.parse(event.body);
     return {
-        challengesTable: process.env.challengesTableName,
+        challengesTableName: process.env.challengesTableName,
         adminTable: process.env.projectAdminTableName,
         challenge: {
             challengeId: data.challengeId,
@@ -30,7 +30,7 @@ const prepare = (event) => {
 
 const createChallenge = async (event) => {
     const {
-        challengesTable, adminTable, challenge, adminKey,
+        challengesTableName, adminTable, challenge, adminKey,
     } = prepare(event);
     try {
         const userAdmin = await get({
@@ -42,7 +42,7 @@ const createChallenge = async (event) => {
             return unauthorized('Not authorized to access this project.');
         }
         const createdChallenge = await create({
-            TableName: challengesTable,
+            TableName: challengesTableName,
             Item: challenge,
             ConditionExpression:
                 'attribute_not_exists(challengeId) AND attribute_not_exists(projectId)',
