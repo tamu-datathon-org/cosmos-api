@@ -1,6 +1,8 @@
 import { IncorrectAnswerLengthError } from './judging-errors';
 import {
     isClose,
+    zip,
+    stringToRegex,
     verifyBinaryContent,
     computeTruePositives,
     computeFalsePositives,
@@ -12,6 +14,15 @@ const verifySameLength = (predicted, truth) => {
         throw IncorrectAnswerLengthError();
     }
 };
+
+export const regexAccuracy = (predicted, truth) => {
+    verifySameLength(predicted, truth);
+    const numCorrect = zip(predicted, truth).reduce((total, [predictedValue, trueRegex]) => (
+        (stringToRegex(trueRegex).test(predictedValue))
+            ? total + 1 : total
+    ), 0);
+    return numCorrect / predicted.length;
+}
 
 export const calcAccuracy = (predicted, truth) => {
     verifySameLength(predicted, truth);

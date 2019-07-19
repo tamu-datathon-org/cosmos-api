@@ -1,9 +1,10 @@
 import create from '../crud/create';
 import get from '../crud/get';
 import {
-    failure, conflict, unauthorized, resourceCreated,
+    failure, conflict, unauthorized, resourceCreated, badRequest,
 } from '../../libs/response-lib';
 import { verifyBodyParamsExist } from '../../libs/api-helper-lib';
+import { isMetricSupported } from '../../libs/judgement-engine-lib';
 
 const prepare = (event) => {
     const data = JSON.parse(event.body);
@@ -33,6 +34,9 @@ const createChallenge = async (event) => {
         challengesTable, adminTable, challenge, adminKey,
     } = prepare(event);
     try {
+        if (!isMetricSupported(challenge.metric)) {
+            return badRequest('The given metric is not supported');
+        }
         const userAdmin = await get({
             TableName: adminTable,
             Key: adminKey,
