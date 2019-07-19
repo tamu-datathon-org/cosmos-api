@@ -27,7 +27,7 @@ const judgeChallengeForUser = async (event) => {
     } = prepare(event);
     try {
         // Check if user and challenge exist
-        const [user, challenge] = await getUserAndChallenge(
+        const [user, { solution, ...challenge }] = await getUserAndChallenge(
             userKey,
             challengeKey,
             usersTableName,
@@ -51,12 +51,13 @@ const judgeChallengeForUser = async (event) => {
             passed,
             points: passed ? challenge.points : 0,
             numAttempts,
+            challenge,
         });
     } catch (err) {
         if (err instanceof NotFoundError) {
             return notFound(err.message);
         }
-        return failure({ error: err });
+        return failure(err);
     }
 };
 

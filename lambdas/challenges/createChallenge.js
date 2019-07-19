@@ -1,15 +1,16 @@
 import create from '../crud/create';
 import get from '../crud/get';
 import {
-    failure, conflict, unauthorized, resourceCreated,
+    failure, conflict, unauthorized, resourceCreated, notFound,
 } from '../../libs/response-lib';
 import { verifyBodyParamsExist } from '../../libs/api-helper-lib';
 
 const prepare = (event) => {
     const data = JSON.parse(event.body);
     return {
-        challengesTable: process.env.challengesTableName,
-        adminTable: process.env.projectAdminTableName,
+        challengesTableName: process.env.challengesTableName,
+        adminTableName: process.env.projectAdminTableName,
+        projectsTableName: process.env.projectTableName,
         challenge: {
             challengeId: data.challengeId,
             projectId: data.projectId,
@@ -25,24 +26,37 @@ const prepare = (event) => {
             userId: event.requestContext.identity.cognitoIdentityId,
             projectId: data.projectId,
         },
+        projectKey: {
+            projectId: data.projectId,
+        },
     };
 };
 
 const createChallenge = async (event) => {
     const {
-        challengesTable, adminTable, challenge, adminKey,
+        challengesTableName, adminTableName, projectsTableName, challenge, adminKey, projectKey,
     } = prepare(event);
     try {
-        const userAdmin = await get({
-            TableName: adminTable,
+        const { Item: userAdmin } = await get({
+            TableName: adminTableName,
             Key: adminKey,
         });
         // Check that user is admin.
-        if (userAdmin.Item === undefined) {
+        if (userAdmin === undefined) {
             return unauthorized('Not authorized to access this project.');
         }
+        const { Item: project } = await get({
+            TableName: projectsTableName,
+            Key: projectKey,
+        });
+        if (project === undefined) {
+            return unauthorized('This project does not exist');
+        }
+        if (project.lessons.filter(lesson => lesson.lessonId === challenge.lessonId) === 0) {
+            return notFound('This lesson does not exist');
+        }
         const createdChallenge = await create({
-            TableName: challengesTable,
+            TableName: challengesTableName,
             Item: challenge,
             ConditionExpression:
                 'attribute_not_exists(challengeId) AND attribute_not_exists(projectId)',
