@@ -27,33 +27,33 @@ test('Judgement Engine: Length Mismatch', async () => {
     expect(() => judge(shortPredicted, truthNonBinary, ACCURACY)).toThrow();
 });
 
-test('Judgement Enginer: Non Binary Accuracy', async () => {
+test('Judgement Engine: Non Binary Accuracy', async () => {
     const accuracy = judge(predictedNonBinary, truthNonBinary, ACCURACY);
     expect(accuracy).toEqual(0.75);
 });
 
-test('Judgement Enginer: Binary Accuracy', async () => {
+test('Judgement Engine: Binary Accuracy', async () => {
     const accuracy = judge(predictedBinary, truthBinary, ACCURACY);
     expect(accuracy).toEqual(9 / 14);
 });
 
-test('Judgement Enginer: Binary Precision', async () => {
+test('Judgement Engine: Binary Precision', async () => {
     const accuracy = judge(predictedBinary, truthBinary, PRECISION_BINARY);
     expect(accuracy).toEqual(5 / 7);
 });
 
-test('Judgement Enginer: Binary Recall', async () => {
+test('Judgement Engine: Binary Recall', async () => {
     const accuracy = judge(predictedBinary, truthBinary, RECALL_BINARY);
     expect(accuracy).toEqual(5 / 8);
 });
 
-test('Judgement Enginer: Binary F1', async () => {
+test('Judgement Engine: Binary F1', async () => {
     const accuracy = judge(predictedBinary, truthBinary, F1_BINARY);
     const expectedF1 = (2 * (((5 / 8) * 5) / 7)) / (5 / 8 + 5 / 7);
     expect(accuracy).toEqual(expectedF1);
 });
 
-test('Judgement Enginer: Regex Accuracy', async () => {
+test('Judgement Engine: Regex Accuracy', async () => {
     const accuracy = judge(predictedRegex, truthRegex, REGEX_ACCURACY);
     expect(accuracy).toEqual(4 / 5);
 });

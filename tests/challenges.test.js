@@ -25,11 +25,11 @@ const unsupportedMetricChallengeObject = {
     challengeId: 'unsupported_challenge_1234',
     projectId: 'test_project_1234',
     lessonId: 'jest_lesson_1234',
-    challengeName: 'Test Challenge Unsupported Metric',
-    points: 100,
-    passingThreshold: 1.0,
+    challengeName: '',
+    points: 0,
+    passingThreshold: 0,
     metric: 'unsupported_metric',
-    solution: [1, 10, 100, 100.0, 111.111],
+    solution: [],
     createdAt: expect.stringMatching(/\d{13}/),
 };
 

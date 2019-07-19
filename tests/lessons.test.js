@@ -46,7 +46,7 @@ const challenges = [
         challengeName: 'Jest Challenge Base 2',
         points: 1111,
         passingThreshold: 0.50,
-        metric: 'f1',
+        metric: 'f1_binary',
         solution: [1, 2, 3, 4.56, 7.89, 101112],
         createdAt: expect.stringMatching(/\d{13}/),
     },
@@ -70,7 +70,7 @@ const safeChallenges = [
         challengeName: 'Jest Challenge Base 2',
         points: 1111,
         passingThreshold: 0.50,
-        metric: 'f1',
+        metric: 'f1_binary',
         createdAt: expect.stringMatching(/\d{13}/),
     },
 ];
