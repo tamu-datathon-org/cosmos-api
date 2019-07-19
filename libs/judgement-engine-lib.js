@@ -6,6 +6,7 @@ const METRICS_MAP = {
     precision_binary: metrics.calcPrecisionBinary,
     recall_binary: metrics.calcRecallBinary,
     f1_binary: metrics.calcF1Binary,
+    regex_accuracy: metrics.regexAccuracy,
 };
 
 export const judge = (predicted, truth, metric) => {
@@ -14,4 +15,8 @@ export const judge = (predicted, truth, metric) => {
     }
     const metricFunc = METRICS_MAP[metric];
     return metricFunc(predicted, truth);
+};
+
+export const isMetricSupported = (metric) => {
+    return (metric in METRICS_MAP);
 };
