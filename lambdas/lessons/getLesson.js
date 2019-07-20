@@ -62,8 +62,6 @@ const getLesson = async (event) => {
 };
 
 export const main = verifyQueryParamsExist(
-    [
-        'projectId',
-    ],
+    ['projectId'],
     getLesson,
 );

@@ -20,6 +20,7 @@ const accuracyChallengeObject = {
     passingThreshold: 0.94,
     metric: 'accuracy',
     solution: [1, 10, 100, 100.0, 111.111],
+    createdAt: expect.stringMatching(/\d{13}/),
 };
 
 const accuracyScoreResponse = {
@@ -158,8 +159,11 @@ afterAll(async () => {
 
 // We added a passing & failing attempt, so the score request should pass.
 test('Score: Score Challenge', async () => {
-    const scoreAttemptResponse = await scoreChallenge(scoreChallengeRequest);
-    expect(scoreAttemptResponse.statusCode).toEqual(HTTPCodes.SUCCESS);
-    const { body: scoreBody } = parseResponseBody(scoreAttemptResponse);
-    expect(scoreBody.data).toEqual(accuracyScoreResponse);
+    await scoreChallenge(scoreChallengeRequest)
+        .then((response) => {
+            expect(response.statusCode).toEqual(HTTPCodes.SUCCESS);
+            const { body: scoreBody } = parseResponseBody(response);
+            const { solution, ...challenge } = accuracyChallengeObject;
+            expect(scoreBody.data).toEqual({ challenge, ...accuracyScoreResponse });
+        });
 });

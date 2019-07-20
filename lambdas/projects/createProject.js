@@ -8,7 +8,7 @@ const project = (event) => {
         TableName: process.env.projectsTableName,
         Item: {
             projectId,
-            lessons,
+            lessons: lessons || [],
             projectName,
             projectDescription,
             createdAt: Date.now(),
@@ -35,4 +35,4 @@ const createProject = event => create(projectAdmin(event))
         ? conflict()
         : failure({ message, ...rest })));
 
-export const main = verifyBodyParamsExist(['projectId', 'lessons'], createProject);
+export const main = verifyBodyParamsExist(['projectId', 'projectName', 'projectDescription'], createProject);
