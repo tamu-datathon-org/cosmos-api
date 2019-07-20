@@ -10,9 +10,9 @@ AWS.config.update({
 });
 
 const baseChallengeObject = {
-    challengeId: 'test_challenge_112358',
-    projectId: 'test_project_1234',
-    lessonId: 'jest_lesson_1234',
+    challengeId: 'jest_challenge_112358',
+    projectId: 'jest_project_1234',
+    lessonId: 'jest_default_lesson',
     challengeName: 'Test Challenge Base',
     points: 1234,
     passingThreshold: 0.94,
@@ -23,9 +23,9 @@ const baseChallengeObject = {
 
 const unsupportedMetricChallengeObject = {
     challengeId: 'unsupported_challenge_1234',
-    projectId: 'test_project_1234',
-    lessonId: 'jest_lesson_1234',
-    challengeName: '',
+    projectId: 'jest_project_1234',
+    lessonId: 'jest_default_lesson',
+    challengeName: 'Unsupported Metric',
     points: 0,
     passingThreshold: 0,
     metric: 'unsupported_metric',
@@ -33,10 +33,22 @@ const unsupportedMetricChallengeObject = {
     createdAt: expect.stringMatching(/\d{13}/),
 };
 
+const nonexistentLessonChallengeObject = {
+    challengeId: 'jest_challenge_98765',
+    projectId: 'jest_project_1234',
+    lessonId: 'nonexistent_lesson_1234',
+    challengeName: 'Nonexistent Lesson',
+    points: 0,
+    passingThreshold: 0,
+    metric: 'accuracy',
+    solution: [],
+    createdAt: expect.stringMatching(/\d{13}/),
+};
+
 const safeBaseChallengeObject = {
-    challengeId: 'test_challenge_112358',
-    projectId: 'test_project_1234',
-    lessonId: 'jest_lesson_1234',
+    challengeId: 'jest_challenge_112358',
+    projectId: 'jest_project_1234',
+    lessonId: 'jest_default_lesson',
     challengeName: 'Test Challenge Base',
     passingThreshold: 0.94,
     points: 1234,
@@ -45,9 +57,9 @@ const safeBaseChallengeObject = {
 };
 
 const challengeUpdateObject = {
-    challengeId: 'test_challenge_112358',
-    projectId: 'test_project_1234',
-    lessonId: 'jest_lesson_1234',
+    challengeId: 'jest_challenge_112358',
+    projectId: 'jest_project_1234',
+    lessonId: 'jest_default_lesson',
     challengeName: 'Test Challenge Updated',
     points: 5678,
     passingThreshold: 1.0,
@@ -60,10 +72,10 @@ const challengeUpdateObject = {
 
 const challengeRequest = {
     pathParameters: {
-        id: 'test_challenge_112358',
+        id: 'jest_challenge_112358',
     },
     queryStringParameters: {
-        projectId: 'test_project_1234',
+        projectId: 'jest_project_1234',
     },
 };
 
@@ -75,6 +87,10 @@ const unsupportedMetricCreateChallengeRequest = {
     body: JSON.stringify(unsupportedMetricChallengeObject),
 };
 
+const nonexistentLessonCreateChallengeRequest = {
+    body: JSON.stringify(nonexistentLessonChallengeObject),
+};
+
 const updateChallengeRequest = {
     body: JSON.stringify(challengeUpdateObject),
     ...challengeRequest,
@@ -83,7 +99,7 @@ const updateChallengeRequest = {
 const authAddOn = {
     requestContext: {
         identity: {
-            cognitoIdentityId: 'test_admin_12345',
+            cognitoIdentityId: 'jest-test-admin-1234',
         },
     },
 };
@@ -222,9 +238,17 @@ test('Challenges: Get Challenge - Auth & No Auth', async () => {
 });
 
 test('Challenges: Unsupported Metric Challenge', async () => {
-    // Try to create challenge with correct auth and expect it to succeed.
+    // Try to create challenge with unsupported metric and expect it to fail.
     await createChallenge({
         ...unsupportedMetricCreateChallengeRequest,
         ...authAddOn,
     }).then(response => expect(response.statusCode).toEqual(HTTPCodes.BAD_REQUEST));
+});
+
+test('Challenges: Non-existent Lesson Challenge', async () => {
+    // Try to create challenge with non-existent lesson and expect it to fail.
+    await createChallenge({
+        ...nonexistentLessonCreateChallengeRequest,
+        ...authAddOn,
+    }).then(response => expect(response.statusCode).toEqual(HTTPCodes.NOT_FOUND));
 });

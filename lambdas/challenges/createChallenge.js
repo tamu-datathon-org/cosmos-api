@@ -11,7 +11,7 @@ const prepare = (event) => {
     return {
         challengesTableName: process.env.challengesTableName,
         adminTableName: process.env.projectAdminTableName,
-        projectsTableName: process.env.projectTableName,
+        projectsTableName: process.env.projectsTableName,
         challenge: {
             challengeId: data.challengeId,
             projectId: data.projectId,
@@ -56,7 +56,7 @@ const createChallenge = async (event) => {
         if (project === undefined) {
             return unauthorized('This project does not exist');
         }
-        if (project.lessons.filter(lesson => lesson.lessonId === challenge.lessonId) === 0) {
+        if (project.lessons.filter(lesson => lesson.lessonId === challenge.lessonId).length === 0) {
             return notFound('This lesson does not exist');
         }
         const createdChallenge = await create({
