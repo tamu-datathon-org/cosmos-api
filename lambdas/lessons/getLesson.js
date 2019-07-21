@@ -7,7 +7,7 @@ import { projectChallenges } from './lessons-helper';
 import list from '../crud/list';
 
 const prepare = event => ({
-    projectsTable: process.env.projectsTableName,
+    projectsTableName: process.env.projectsTableName,
     adminTable: process.env.projectAdminTableName,
     projectKey: {
         projectId: event.queryStringParameters.projectId,
@@ -21,11 +21,11 @@ const prepare = event => ({
 
 const getLesson = async (event) => {
     const {
-        projectsTable, adminTable, projectKey, lessonId, adminKey,
+        projectsTableName, adminTable, projectKey, lessonId, adminKey,
     } = prepare(event);
     try {
         const projectResponse = await get({
-            TableName: projectsTable,
+            TableName: projectsTableName,
             Key: projectKey,
         });
         const project = projectResponse.Item;
@@ -62,8 +62,6 @@ const getLesson = async (event) => {
 };
 
 export const main = verifyQueryParamsExist(
-    [
-        'projectId',
-    ],
+    ['projectId'],
     getLesson,
 );

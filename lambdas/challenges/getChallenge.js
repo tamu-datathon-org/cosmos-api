@@ -3,7 +3,7 @@ import { failure, success, notFound } from '../../libs/response-lib';
 import { verifyQueryParamsExist } from '../../libs/api-helper-lib';
 
 const prepare = event => ({
-    challengesTable: process.env.challengesTableName,
+    challengesTableName: process.env.challengesTableName,
     adminTable: process.env.projectAdminTableName,
     challengeKey: {
         challengeId: event.pathParameters.id,
@@ -17,12 +17,12 @@ const prepare = event => ({
 
 const getChallenge = async (event) => {
     const {
-        challengesTable, adminTable, challengeKey, adminKey,
+        challengesTableName, adminTable, challengeKey, adminKey,
     } = prepare(event);
     try {
         // Get request will throw ConditionalCheckFailedException if challenge does not exist.
         const challenge = await get({
-            TableName: challengesTable,
+            TableName: challengesTableName,
             Key: challengeKey,
             ConditionExpression: 'attribute_exists(challengeId) AND attribute_exists(projectId)',
         });

@@ -10,13 +10,13 @@ const projectItem = {
     lessons: [
         {
             lessonId: 'jest_default_lesson',
-            name: 'Jest Default',
+            lessonName: 'Jest Default',
             image:
                 'https://drive.google.com/uc?export=download&id=10_FqwgamTQcvn6ACSHSA3uPaSyzPvsRv',
             link:
                 'https://research.google.com/seedbank/seed/lab__loading_and_understanding_your_data',
             linkText: 'View on Colab',
-            description: 'The default Jest Lesson.',
+            lessonDescription: 'The default Jest Lesson.',
         },
     ],
 };
