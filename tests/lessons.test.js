@@ -16,13 +16,13 @@ AWS.config.update({
 let createdLessonId;
 
 const lessonObject = {
-    name: 'Jest Test Lesson',
+    lessonName: 'Jest Test Lesson',
     image:
         'https://drive.google.com/uc?export=download&id=10_FqwgamTQcvn6ACSHSA3uPaSyzPvsRv',
     link:
         'https://research.google.com/seedbank/seed/lab__loading_and_understanding_your_data',
     linkText: 'View on Colab',
-    description:
+    lessonDescription:
         'Use Pandas to load and explore the raw data and put together '
         + 'all the pieces needed to train a linear regression model in TensorFlow.',
 };
