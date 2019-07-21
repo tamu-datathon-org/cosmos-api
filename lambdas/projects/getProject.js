@@ -25,7 +25,7 @@ const getProjectCore = async ({ projectsTableName, challengesTableName, projectK
     });
     const [{ Item: project }, challenges] = await Promise.all([projectPromise, challengesPromise]);
     if (project === undefined) {
-        throw NotFoundError('A project with the specified ID could not be found');
+        throw new NotFoundError('A project with the specified ID could not be found');
     }
     return {
         ...project,
@@ -39,7 +39,7 @@ const getProject = async (event) => {
         const project = await getProjectCore(eventData);
         return success(project);
     } catch (err) {
-        if (err instanceof NotFoundError) {
+        if (err.name === 'NotFoundError') {
             return notFound(err.message);
         }
         return failure(err);
