@@ -8,7 +8,7 @@ import { verifyBodyParamsExist } from '../../libs/api-helper-lib';
 const prepare = (event) => {
     const data = JSON.parse(event.body);
     return {
-        challengesTable: process.env.challengesTableName,
+        challengesTableName: process.env.challengesTableName,
         adminTable: process.env.projectAdminTableName,
         challengeKey: {
             challengeId: event.pathParameters.id,
@@ -29,7 +29,7 @@ const prepare = (event) => {
 
 const updateChallenge = async (event) => {
     const {
-        challengesTable, adminTable, challengeKey, challengeData, adminKey,
+        challengesTableName, adminTable, challengeKey, challengeData, adminKey,
     } = prepare(event);
     try {
         // Check if user is admin, and if not, don't return the challenge answers.
@@ -42,7 +42,7 @@ const updateChallenge = async (event) => {
         }
         // Get request will throw ConditionalCheckFailedException if challenge does not exist.
         const challengeGetResponse = await get({
-            TableName: challengesTable,
+            TableName: challengesTableName,
             Key: challengeKey,
             ConditionExpression: 'attribute_exists(challengeId) AND attribute_exists(projectId)',
         });
@@ -51,7 +51,7 @@ const updateChallenge = async (event) => {
         }
         const existingChallenge = challengeGetResponse.Item;
         const updateSuccess = await update({
-            TableName: challengesTable,
+            TableName: challengesTableName,
             Key: challengeKey,
             UpdateExpression:
                 'SET challengeName = :challengeName, points = :points, passingThreshold = :passingThreshold, solution = :solution',
