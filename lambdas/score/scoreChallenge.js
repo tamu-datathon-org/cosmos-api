@@ -24,7 +24,7 @@ export const scoreChallengeCore = async ({
     attemptsTableName,
 }) => {
     // Check if user and challenge exist
-    const [user, challenge] = await getUserAndChallenge(
+    const [user, { solution, ...challenge }] = await getUserAndChallenge(
         userKey,
         challengeKey,
         usersTableName,
@@ -45,6 +45,7 @@ export const scoreChallengeCore = async ({
     const passing = matching.filter(item => item.score >= challenge.passingThreshold);
     const passed = passing.length > 0;
     return {
+        challenge,
         passed,
         points: passed ? challenge.points : 0,
         numAttempts,
