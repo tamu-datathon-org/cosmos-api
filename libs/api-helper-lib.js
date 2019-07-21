@@ -3,7 +3,7 @@ import { badRequest } from './response-lib';
 // Verify that request coming to AWS lambda contains the needed keys in query parameters.
 export const verifyQueryParamsExist = (keysToCheck, lambdaFunc) => async (event, context) => {
     const queryParams = event.queryStringParameters;
-    if (event.queryStringParameters === undefined) {
+    if (queryParams === undefined || queryParams === null) {
         return badRequest({
             error: 'Request query parameters were not present.',
         });
@@ -19,7 +19,7 @@ export const verifyQueryParamsExist = (keysToCheck, lambdaFunc) => async (event,
 
 // Verify that request coming to AWS lambda contains the needed keys in the body.
 export const verifyBodyParamsExist = (keysToCheck, lambdaFunc) => async (event, context) => {
-    if (event.body === undefined) {
+    if (event.body === undefined || event.body === null) {
         return badRequest({
             error: 'Request body was not present.',
         });
