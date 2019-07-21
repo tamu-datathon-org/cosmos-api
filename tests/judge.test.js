@@ -85,7 +85,7 @@ const createChallengeRequest = {
     body: JSON.stringify(accuracyChallengeObject),
     requestContext: {
         identity: {
-            cognitoIdentityId: 'test_admin_12345',
+            cognitoIdentityId: 'jest-test-admin-1234',
         },
     },
 };
@@ -93,7 +93,7 @@ const createChallengeRequest = {
 const deleteChallengeRequest = {
     requestContext: {
         identity: {
-            cognitoIdentityId: 'test_admin_12345',
+            cognitoIdentityId: 'jest-test-admin-1234',
         },
     },
     pathParameters: {

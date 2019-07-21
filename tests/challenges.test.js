@@ -29,7 +29,6 @@ const safeBaseChallengeObject = {
     metric: 'accuracy',
     passingThreshold: 0.94,
     points: 1234,
-    metric: 'accuracy',
     createdAt: expect.stringMatching(/\d{13}/),
 };
 
@@ -68,7 +67,7 @@ const updateChallengeRequest = {
 const authAddOn = {
     requestContext: {
         identity: {
-            cognitoIdentityId: 'test_admin_12345',
+            cognitoIdentityId: 'jest-test-admin-1234',
         },
     },
 };
