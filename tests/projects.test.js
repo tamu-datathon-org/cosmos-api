@@ -46,7 +46,7 @@ const challenges = [
         projectId: 'tamu_datathon',
         lessonId: 'data_management',
         points: 10,
-        metric: 'f1',
+        metric: 'f1_binary',
         passingThreshold: 90,
         solution: [1, 0, 1, 0],
         createdAt: expect.stringMatching(/\d{13}/),

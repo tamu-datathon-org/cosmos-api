@@ -7,25 +7,32 @@ import { verifyBodyParamsExist } from '../../libs/api-helper-lib';
 import { updateProjectLessons } from './lessons-helper';
 
 const prepare = (event) => {
-    const data = JSON.parse(event.body);
+    const {
+        lessonName,
+        image,
+        link,
+        linkText,
+        lessonDescription,
+        projectId,
+    } = JSON.parse(event.body);
     return {
         projectsTableName: process.env.projectsTableName,
         adminTable: process.env.projectAdminTableName,
         lesson: {
             lessonId: uuid.v4(),
-            name: data.name,
-            image: data.image,
-            link: data.link,
-            linkText: data.linkText,
-            description: data.description,
+            lessonName,
+            image,
+            link,
+            linkText,
+            lessonDescription,
             createdAt: Date.now(),
         },
         adminKey: {
             userId: event.requestContext.identity.cognitoIdentityId,
-            projectId: data.projectId,
+            projectId,
         },
         projectKey: {
-            projectId: data.projectId,
+            projectId,
         },
     };
 };
@@ -72,11 +79,11 @@ const createLesson = async (event) => {
 export const main = verifyBodyParamsExist(
     [
         'projectId',
-        'name',
+        'lessonName',
         'image',
         'link',
         'linkText',
-        'description',
+        'lessonDescription',
     ],
     createLesson,
 );

@@ -1,7 +1,6 @@
 import list from '../crud/list';
 import { success, failure, notFound } from '../../libs/response-lib';
 import { verifyQueryParamsExist } from '../../libs/api-helper-lib';
-import { NotFoundError } from '../../libs/errors-lib';
 import { getUserAndChallenge } from '../../libs/helpers/scoring-helper-lib';
 
 const prepare = event => ({
@@ -57,10 +56,10 @@ const judgeChallengeForUser = async (event) => {
         const scoreObj = await scoreChallengeCore(prepare(event));
         return success(scoreObj);
     } catch (err) {
-        if (err instanceof NotFoundError) {
+        if (err.name === 'NotFoundError') {
             return notFound(err.message);
         }
-        return failure({ error: err });
+        return failure(err);
     }
 };
 
