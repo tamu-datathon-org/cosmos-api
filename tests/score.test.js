@@ -159,7 +159,7 @@ afterAll(async () => {
 
 // We added a passing & failing attempt, so the score request should pass.
 test('Score: Score Challenge', async () => {
-    await scoreChallenge(scoreChallengeRequest)
+    scoreChallenge(scoreChallengeRequest)
         .then((response) => {
             expect(response.statusCode).toEqual(HTTPCodes.SUCCESS);
             const { body: scoreBody } = parseResponseBody(response);
