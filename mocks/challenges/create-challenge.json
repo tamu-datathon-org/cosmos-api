@@ -1,5 +1,5 @@
 {
-    "body": "{ \"challengeId\": \"load_describe_data\", \"projectId\": \"tamu_datathon\", \"lessonId\": \"34cd7c83-4327-490b-9149-54ad23183fa2\",\"challengeName\": \"Loading & Describing Data\",\"metric\": \"accuracy\",\"points\": 10,\"passingThreshold\": 1.0,\"solution\": [205.0, 0.8341463414634146, 1.24530682810553, -2.0, 0.0, 1.0, 2.0, 3.0]}",
+    "body": "{ \"challengeId\": \"visualize_data\", \"projectId\": \"tamu_datathon\", \"lessonId\": \"data_management\",\"challengeName\": \"Loading & Describing Data\",\"metric\": \"regex_accuracy\",\"points\": 10,\"passingThreshold\": 1.0,\"solution\": [\"/positive/i\"]}",
     "requestContext": {
         "identity": {
             "cognitoIdentityId": "USER-SUB-1234"

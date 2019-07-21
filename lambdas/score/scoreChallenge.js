@@ -54,7 +54,7 @@ const judgeChallengeForUser = async (event) => {
             challenge,
         });
     } catch (err) {
-        if (err instanceof NotFoundError) {
+        if (err.name === 'NotFoundError') {
             return notFound(err.message);
         }
         return failure(err);
