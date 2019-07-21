@@ -1,7 +1,6 @@
 import list from '../crud/list';
 import { success, failure, notFound } from '../../libs/response-lib';
 import { verifyQueryParamsExist } from '../../libs/api-helper-lib';
-import { NotFoundError } from '../../libs/errors-lib';
 import { getUserAndChallenge } from '../../libs/helpers/scoring-helper-lib';
 
 const prepare = event => ({
@@ -25,7 +24,7 @@ export const scoreChallengeCore = async ({
     attemptsTableName,
 }) => {
     // Check if user and challenge exist
-    const [user, challenge] = await getUserAndChallenge(
+    const [user, { solution, ...challenge }] = await getUserAndChallenge(
         userKey,
         challengeKey,
         usersTableName,
@@ -46,6 +45,7 @@ export const scoreChallengeCore = async ({
     const passing = matching.filter(item => item.score >= challenge.passingThreshold);
     const passed = passing.length > 0;
     return {
+        challenge,
         passed,
         points: passed ? challenge.points : 0,
         numAttempts,
@@ -57,10 +57,10 @@ const judgeChallengeForUser = async (event) => {
         const scoreObj = await scoreChallengeCore(prepare(event));
         return success(scoreObj);
     } catch (err) {
-        if (err instanceof NotFoundError) {
+        if (err.name === 'NotFoundError') {
             return notFound(err.message);
         }
-        return failure({ error: err });
+        return failure(err);
     }
 };
 

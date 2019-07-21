@@ -21,12 +21,23 @@ const baseChallengeObject = {
     createdAt: expect.stringMatching(/\d{13}/),
 };
 
+const unsupportedMetricChallengeObject = {
+    challengeId: 'unsupported_challenge_1234',
+    projectId: 'test_project_1234',
+    lessonId: 'jest_lesson_1234',
+    challengeName: '',
+    points: 0,
+    passingThreshold: 0,
+    metric: 'unsupported_metric',
+    solution: [],
+    createdAt: expect.stringMatching(/\d{13}/),
+};
+
 const safeBaseChallengeObject = {
     challengeId: 'test_challenge_112358',
     projectId: 'jest_project_1234',
     lessonId: 'jest_lesson_1234',
     challengeName: 'Test Challenge Base',
-    metric: 'accuracy',
     passingThreshold: 0.94,
     points: 1234,
     createdAt: expect.stringMatching(/\d{13}/),
@@ -57,6 +68,10 @@ const challengeRequest = {
 
 const createChallengeRequest = {
     body: JSON.stringify(baseChallengeObject),
+};
+
+const unsupportedMetricCreateChallengeRequest = {
+    body: JSON.stringify(unsupportedMetricChallengeObject),
 };
 
 const updateChallengeRequest = {
@@ -203,4 +218,12 @@ test('Challenges: Get Challenge - Auth & No Auth', async () => {
     expect(authGetChallenge.statusCode).toEqual(HTTPCodes.SUCCESS);
     const authChallengeData = parseResponseBody(authGetChallenge).body.data;
     expect(authChallengeData).toEqual(baseChallengeObject);
+});
+
+test('Challenges: Unsupported Metric Challenge', async () => {
+    // Try to create challenge with correct auth and expect it to succeed.
+    await createChallenge({
+        ...unsupportedMetricCreateChallengeRequest,
+        ...authAddOn,
+    }).then(response => expect(response.statusCode).toEqual(HTTPCodes.BAD_REQUEST));
 });
