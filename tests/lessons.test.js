@@ -308,4 +308,4 @@ test('Lessons: Create Challenges & Delete Lesson', async () => {
         .then(response => expect(response.statusCode).toEqual(HTTPCodes.NOT_FOUND));
     await getChallenge(getChallengeRequest(1))
         .then(response => expect(response.statusCode).toEqual(HTTPCodes.NOT_FOUND));
-}, 10000); // Test takes longer than usual.
+}, 12000); // Test takes longer than usual.
