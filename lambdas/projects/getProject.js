@@ -11,7 +11,8 @@ const prepare = event => ({
     },
 });
 
-const getProjectCore = async ({ projectsTableName, challengesTableName, projectKey }) => {
+export const getProjectCore = async ({ projectsTableName, challengesTableName, projectKey }) => {
+    console.log(projectKey);
     const projectPromise = get({
         TableName: projectsTableName,
         Key: projectKey,

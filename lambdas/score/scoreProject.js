@@ -1,10 +1,10 @@
-import { success, failure } from '../../libs/response-lib';
-import scoreChallengeCore from './scoreChallenge';
+import { success, failure, notFound } from '../../libs/response-lib';
+import { scoreChallengeCore } from './scoreChallenge';
 import { verifyQueryParamsExist } from '../../libs/api-helper-lib';
-import getProjectCore from '../projects/getProject';
+import { getProjectCore } from '../projects/getProject';
 
 const prepare = event => ({
-    projectsTable: process.env.projectsTableName,
+    projectsTableName: process.env.projectsTableName,
     usersTableName: process.env.usersTableName,
     attemptsTableName: process.env.attemptsTableName,
     challengesTableName: process.env.challengesTableName,
@@ -22,19 +22,15 @@ const getScoredChallenge = (challengeId, eventData) => scoreChallengeCore({
 });
 
 const getScoredChallenges = (challenges, eventData) =>
-    Promise.all(challenges.map(x => getScoredChallenge(x, eventData)));
+    Promise.all(challenges.map(({ challengeId }) => getScoredChallenge(challengeId, eventData)));
 
-const joinLessonChallenges = ({ lessons, scoredChallenges }) => lessons.map(lesson => ({
+const joinLessonChallenges = (lessons, scoredChallenges) => lessons.map(lesson => ({
     challenges: scoredChallenges.filter(chal => chal.lessonId === lesson.lessonId),
     ...lesson,
 }));
 
 const getScoredProjectCore = async (eventData) => {
-    console.log('here');
     const { challenges, lessons, ...rest } = await getProjectCore(eventData);
-    console.log(challenges);
-    console.log(lessons);
-    console.log(rest);
     const scoredChallenges = await getScoredChallenges(challenges, eventData);
     const joinedLessons = await joinLessonChallenges(lessons, scoredChallenges);
     return { lessons: joinedLessons, ...rest };
@@ -46,6 +42,9 @@ const getScoredProject = async (event) => {
         const joinedProject = await getScoredProjectCore(eventData);
         return success(joinedProject);
     } catch (err) {
+        if (err.name === 'NotFoundError') {
+            return notFound(err.message);
+        }
         return failure(err);
     }
 };
