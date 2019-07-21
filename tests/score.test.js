@@ -13,7 +13,7 @@ AWS.config.update({
 
 const accuracyChallengeObject = {
     challengeId: 'score_test_challenge_112358',
-    projectId: 'test_project_1234',
+    projectId: 'jest_project_1234',
     lessonId: 'jest_score_lesson_1234',
     challengeName: 'Test Challenge Base',
     points: 1234,
@@ -31,7 +31,7 @@ const accuracyScoreResponse = {
 const passingAttemptObject = {
     email: 'score_test_user@gmail.com',
     challengeId: 'score_test_challenge_112358',
-    projectId: 'test_project_1234',
+    projectId: 'jest_project_1234',
     solution: [1, 10, 100, 100.0, 111.111],
 };
 
@@ -42,7 +42,7 @@ const passingAttemptRequest = {
 const failingAttemptObject = {
     email: 'score_test_user@gmail.com',
     challengeId: 'score_test_challenge_112358',
-    projectId: 'test_project_1234',
+    projectId: 'jest_project_1234',
     solution: [1, 2, 3, 100.0, 111.111],
 };
 
@@ -95,14 +95,14 @@ const deleteChallengeRequest = {
         id: 'score_test_challenge_112358',
     },
     queryStringParameters: {
-        projectId: 'test_project_1234',
+        projectId: 'jest_project_1234',
     },
 };
 
 // ---------- TEST REQUESTS ------------
 const scoreChallengeRequest = {
     queryStringParameters: {
-        projectId: 'test_project_1234',
+        projectId: 'jest_project_1234',
         email: 'score_test_user@gmail.com',
     },
     pathParameters: {

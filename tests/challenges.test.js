@@ -11,7 +11,7 @@ AWS.config.update({
 
 const baseChallengeObject = {
     challengeId: 'test_challenge_112358',
-    projectId: 'test_project_1234',
+    projectId: 'jest_project_1234',
     lessonId: 'jest_lesson_1234',
     challengeName: 'Test Challenge Base',
     points: 1234,
@@ -23,7 +23,7 @@ const baseChallengeObject = {
 
 const safeBaseChallengeObject = {
     challengeId: 'test_challenge_112358',
-    projectId: 'test_project_1234',
+    projectId: 'jest_project_1234',
     lessonId: 'jest_lesson_1234',
     challengeName: 'Test Challenge Base',
     metric: 'accuracy',
@@ -35,7 +35,7 @@ const safeBaseChallengeObject = {
 
 const challengeUpdateObject = {
     challengeId: 'test_challenge_112358',
-    projectId: 'test_project_1234',
+    projectId: 'jest_project_1234',
     lessonId: 'jest_lesson_1234',
     challengeName: 'Test Challenge Updated',
     points: 5678,
@@ -52,7 +52,7 @@ const challengeRequest = {
         id: 'test_challenge_112358',
     },
     queryStringParameters: {
-        projectId: 'test_project_1234',
+        projectId: 'jest_project_1234',
     },
 };
 
