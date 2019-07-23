@@ -11,7 +11,7 @@ import {
 
 const verifySameLength = (predicted, truth) => {
     if (predicted.length !== truth.length) {
-        throw IncorrectAnswerLengthError();
+        throw new IncorrectAnswerLengthError();
     }
 };
 

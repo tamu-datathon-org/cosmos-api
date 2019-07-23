@@ -2,7 +2,7 @@ import uuid from 'uuid';
 import create from '../crud/create';
 import { judge } from '../../libs/judgement-engine-lib';
 import {
-    resourceCreated, failure, notFound, preconditionFailed,
+    resourceCreated, failure, notFound, preconditionFailed, badRequest,
 } from '../../libs/response-lib';
 import { verifyBodyParamsExist } from '../../libs/api-helper-lib';
 import { getUserAndChallenge } from '../../libs/helpers/scoring-helper-lib';
@@ -64,9 +64,13 @@ const judgeAttempt = async (event) => {
         if (err.name === 'NotFoundError') {
             return notFound(err.message);
         } if (err.name === 'MetricNotFoundError') {
-            return preconditionFailed(
+            return badRequest(
                 'There was an error in judging your attempt. '
-                    + 'Please contact a project supervisor to resolve this problem.',
+                + 'Please contact a project supervisor to resolve this problem.',
+            );
+        } if (err.name === 'NonBinaryAnswerError' || err.name === 'IncorrectAnswerLengthError') {
+            return preconditionFailed(
+                'Your answer was incorrect. Please try again.',
             );
         }
         return failure({ error: err });
