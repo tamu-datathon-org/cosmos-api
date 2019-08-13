@@ -1,13 +1,13 @@
 /* eslint-disable max-len */
 // BODY BUILDERS //
-export const buildBody = (data, error) => ({
+export const buildBody = (data, errors) => ({
     data,
-    error,
+    errors,
 });
 
 export const emptyBody = buildBody({}, []);
 
-export const errorBody = err => buildBody({}, err);
+export const errorBody = err => buildBody({}, [err]);
 
 export const dataBody = data => buildBody(data, []);
 
