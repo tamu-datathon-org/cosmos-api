@@ -69,7 +69,8 @@ const updateChallenge = async (event) => {
         }
         return failure('There was an error in updating the challenge.');
     } catch (err) {
-        return failure(err);
+        console.log(err, err.stack);
+        return failure(err.message);
     }
 };
 

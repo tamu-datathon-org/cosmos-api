@@ -39,10 +39,11 @@ const getProject = async (event) => {
         const project = await getProjectCore(eventData);
         return success(project);
     } catch (err) {
+        console.log(err, err.stack);
         if (err.name === 'NotFoundError') {
             return notFound(err.message);
         }
-        return failure(err);
+        return failure(err.message);
     }
 };
 

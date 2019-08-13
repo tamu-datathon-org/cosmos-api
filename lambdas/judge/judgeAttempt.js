@@ -73,7 +73,7 @@ const judgeAttempt = async (event) => {
                 'Your answer was incorrect. Please try again.',
             );
         }
-        return failure({ error: err });
+        return failure(err);
     }
 };
 

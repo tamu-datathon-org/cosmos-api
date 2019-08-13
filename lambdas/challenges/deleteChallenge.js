@@ -35,7 +35,8 @@ const deleteChallenge = async (event) => {
         });
         return success({ message: 'Challenge is successfully deleted.' });
     } catch (err) {
-        return failure(err);
+        console.log(err, err.stack);
+        return failure(err.message);
     }
 };
 

@@ -62,13 +62,10 @@ const updateUser = async (event) => {
                 message: 'User was successfully updated.',
             });
         }
-        return failure({
-            error: 'There was an error is updating the user.',
-        });
+        return failure('There was an error is updating the user.');
     } catch (err) {
-        return failure({
-            error: err,
-        });
+        console.log(err, err.stack);
+        return failure(err.message);
     }
 };
 

@@ -28,15 +28,15 @@ const createUser = async (event) => {
             user: createdUser,
         });
     } catch (err) {
+        console.log(err, err.stack);
         // The only condition on the create request is to check whether a user already exists.
         if (err.code === 'ConditionalCheckFailedException') {
             return buildResponse(HTTPCodes.CONFLICT, {
                 error: 'An user for the specified project already exists for the given email.',
             });
         }
-        return failure({
-            error: err,
-        });
+        console.log(err, err.stack);
+        return failure(err.message);
     }
 };
 

@@ -55,12 +55,13 @@ const createChallenge = async (event) => {
     } catch (err) {
         // The only condition on the create request is to check whether the challenge already
         // exists.
+        console.log(err, err.stack);
         if (err.code === 'ConditionalCheckFailedException') {
             return conflict(
                 'A challenge for the specified project already exists for the given id.',
             );
         }
-        return failure(err);
+        return failure(err.message);
     }
 };
 
