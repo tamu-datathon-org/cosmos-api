@@ -60,7 +60,8 @@ const createChallenge = async (event) => {
                 'A challenge for the specified project already exists for the given id.',
             );
         }
-        return failure(err);
+        console.log(err, err.stack);
+        return failure(err.message);
     }
 };
 

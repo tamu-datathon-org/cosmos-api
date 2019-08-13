@@ -70,7 +70,8 @@ const deleteLesson = async (event) => {
         }
         return success();
     } catch (err) {
-        return failure(err);
+        console.log(err, err.stack);
+        return failure(err.message);
     }
 };
 

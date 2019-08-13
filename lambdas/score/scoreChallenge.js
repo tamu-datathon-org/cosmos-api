@@ -60,7 +60,8 @@ const judgeChallengeForUser = async (event) => {
         if (err.name === 'NotFoundError') {
             return notFound(err.message);
         }
-        return failure(err);
+        console.log(err, err.stack);
+        return failure(err.message);
     }
 };
 

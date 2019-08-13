@@ -72,7 +72,8 @@ const createLesson = async (event) => {
         }
         return resourceCreated(lesson);
     } catch (err) {
-        return failure(err);
+        console.log(err, err.stack);
+        return failure(err.message);
     }
 };
 

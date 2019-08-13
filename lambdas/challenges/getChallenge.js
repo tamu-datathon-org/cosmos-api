@@ -43,7 +43,8 @@ const getChallenge = async (event) => {
         if (err.code === 'ConditionalCheckFailedException') {
             return notFound('No challenge exists for the given project with the specified ID.');
         }
-        return failure(err);
+        console.log(err, err.stack);
+        return failure(err.message);
     }
 };
 
