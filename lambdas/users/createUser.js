@@ -28,7 +28,6 @@ const createUser = async (event) => {
             user: createdUser,
         });
     } catch (err) {
-        console.log(err, err.stack);
         // The only condition on the create request is to check whether a user already exists.
         if (err.code === 'ConditionalCheckFailedException') {
             return buildResponse(HTTPCodes.CONFLICT, {

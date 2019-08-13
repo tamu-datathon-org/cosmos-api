@@ -57,10 +57,10 @@ const judgeChallengeForUser = async (event) => {
         const scoreObj = await scoreChallengeCore(prepare(event));
         return success(scoreObj);
     } catch (err) {
-        console.log(err, err.stack);
         if (err.name === 'NotFoundError') {
             return notFound(err.message);
         }
+        console.log(err, err.stack);
         return failure(err.message);
     }
 };
