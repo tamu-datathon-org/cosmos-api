@@ -7,32 +7,39 @@ import { verifyBodyParamsExist } from '../../libs/api-helper-lib';
 import { updateProjectLessons } from './lessons-helper';
 
 const prepare = (event) => {
-    const data = JSON.parse(event.body);
+    const {
+        lessonName,
+        image,
+        link,
+        linkText,
+        lessonDescription,
+        projectId,
+    } = JSON.parse(event.body);
     return {
-        projectsTable: process.env.projectsTableName,
+        projectsTableName: process.env.projectsTableName,
         adminTable: process.env.projectAdminTableName,
         lesson: {
             lessonId: uuid.v4(),
-            name: data.name,
-            image: data.image,
-            link: data.link,
-            linkText: data.linkText,
-            description: data.description,
+            lessonName,
+            image,
+            link,
+            linkText,
+            lessonDescription,
             createdAt: Date.now(),
         },
         adminKey: {
             userId: event.requestContext.identity.cognitoIdentityId,
-            projectId: data.projectId,
+            projectId,
         },
         projectKey: {
-            projectId: data.projectId,
+            projectId,
         },
     };
 };
 
 const createLesson = async (event) => {
     const {
-        projectsTable, adminTable, lesson, adminKey, projectKey,
+        projectsTableName, adminTable, lesson, adminKey, projectKey,
     } = prepare(event);
     try {
         const userAdmin = await get({
@@ -44,7 +51,7 @@ const createLesson = async (event) => {
             return unauthorized('Not authorized to access this project.');
         }
         const projectResponse = await get({
-            TableName: projectsTable,
+            TableName: projectsTableName,
             Key: projectKey,
         });
         const project = projectResponse.Item;
@@ -65,18 +72,19 @@ const createLesson = async (event) => {
         }
         return resourceCreated(lesson);
     } catch (err) {
-        return failure(err);
+        console.log(err, err.stack);
+        return failure(err.message);
     }
 };
 
 export const main = verifyBodyParamsExist(
     [
         'projectId',
-        'name',
+        'lessonName',
         'image',
         'link',
         'linkText',
-        'description',
+        'lessonDescription',
     ],
     createLesson,
 );

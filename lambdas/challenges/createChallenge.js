@@ -1,14 +1,15 @@
 import create from '../crud/create';
 import get from '../crud/get';
 import {
-    failure, conflict, unauthorized, resourceCreated,
+    failure, conflict, unauthorized, resourceCreated, badRequest,
 } from '../../libs/response-lib';
 import { verifyBodyParamsExist } from '../../libs/api-helper-lib';
+import { isMetricSupported } from '../../libs/judgement-engine-lib';
 
 const prepare = (event) => {
     const data = JSON.parse(event.body);
     return {
-        challengesTable: process.env.challengesTableName,
+        challengesTableName: process.env.challengesTableName,
         adminTable: process.env.projectAdminTableName,
         challenge: {
             challengeId: data.challengeId,
@@ -30,9 +31,12 @@ const prepare = (event) => {
 
 const createChallenge = async (event) => {
     const {
-        challengesTable, adminTable, challenge, adminKey,
+        challengesTableName, adminTable, challenge, adminKey,
     } = prepare(event);
     try {
+        if (!isMetricSupported(challenge.metric)) {
+            return badRequest('The given metric is not supported');
+        }
         const userAdmin = await get({
             TableName: adminTable,
             Key: adminKey,
@@ -42,7 +46,7 @@ const createChallenge = async (event) => {
             return unauthorized('Not authorized to access this project.');
         }
         const createdChallenge = await create({
-            TableName: challengesTable,
+            TableName: challengesTableName,
             Item: challenge,
             ConditionExpression:
                 'attribute_not_exists(challengeId) AND attribute_not_exists(projectId)',
@@ -56,7 +60,8 @@ const createChallenge = async (event) => {
                 'A challenge for the specified project already exists for the given id.',
             );
         }
-        return failure(err);
+        console.log(err, err.stack);
+        return failure(err.message);
     }
 };
 

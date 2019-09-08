@@ -2,7 +2,11 @@ import uuid from 'uuid';
 import create from '../crud/create';
 import { judge } from '../../libs/judgement-engine-lib';
 import {
-    resourceCreated, failure, notFound, preconditionFailed,
+    resourceCreated,
+    failure,
+    notFound,
+    preconditionFailed,
+    badRequest,
 } from '../../libs/response-lib';
 import { verifyBodyParamsExist } from '../../libs/api-helper-lib';
 import { getUserAndChallenge } from '../../libs/helpers/scoring-helper-lib';
@@ -63,13 +67,22 @@ const judgeAttempt = async (event) => {
     } catch (err) {
         if (err.name === 'NotFoundError') {
             return notFound(err.message);
-        } if (err.name === 'MetricNotFoundError') {
-            return preconditionFailed(
-                'There was an error in judging your attempt. '
+        }
+        if (err.name === 'MetricNotFoundError') {
+            return badRequest(
+                'Metric you used was not found. '
                     + 'Please contact a project supervisor to resolve this problem.',
             );
         }
-        return failure({ error: err });
+        if (err.name === 'IncorrectAnswerLengthError') {
+            return preconditionFailed('Your answer was an incorrect length. '
+            + 'Please try again.');
+        }
+        if (err.name === 'NonBinaryAnswerError') {
+            return preconditionFailed('Your answer should contain only 0\'s and 1\'s. Please try again.');
+        }
+        console.log(err, err.stack);
+        return failure(err.message);
     }
 };
 

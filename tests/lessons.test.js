@@ -16,13 +16,13 @@ AWS.config.update({
 let createdLessonId;
 
 const lessonObject = {
-    name: 'Jest Test Lesson',
+    lessonName: 'Jest Test Lesson',
     image:
         'https://drive.google.com/uc?export=download&id=10_FqwgamTQcvn6ACSHSA3uPaSyzPvsRv',
     link:
         'https://research.google.com/seedbank/seed/lab__loading_and_understanding_your_data',
     linkText: 'View on Colab',
-    description:
+    lessonDescription:
         'Use Pandas to load and explore the raw data and put together '
         + 'all the pieces needed to train a linear regression model in TensorFlow.',
 };
@@ -46,7 +46,7 @@ const challenges = [
         challengeName: 'Jest Challenge Base 2',
         points: 1111,
         passingThreshold: 0.50,
-        metric: 'f1',
+        metric: 'f1_binary',
         solution: [1, 2, 3, 4.56, 7.89, 101112],
         createdAt: expect.stringMatching(/\d{13}/),
     },
@@ -70,7 +70,7 @@ const safeChallenges = [
         challengeName: 'Jest Challenge Base 2',
         points: 1111,
         passingThreshold: 0.50,
-        metric: 'f1',
+        metric: 'f1_binary',
         createdAt: expect.stringMatching(/\d{13}/),
     },
 ];

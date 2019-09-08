@@ -4,7 +4,7 @@ import { failure, success, unauthorized } from '../../libs/response-lib';
 import { verifyQueryParamsExist } from '../../libs/api-helper-lib';
 
 const prepare = event => ({
-    challengesTable: process.env.challengesTableName,
+    challengesTableName: process.env.challengesTableName,
     adminTable: process.env.projectAdminTableName,
     challengeKey: {
         challengeId: event.pathParameters.id,
@@ -18,7 +18,7 @@ const prepare = event => ({
 
 const deleteChallenge = async (event) => {
     const {
-        challengesTable, adminTable, challengeKey, adminKey,
+        challengesTableName, adminTable, challengeKey, adminKey,
     } = prepare(event);
     try {
         // User needs to be admin to delete challenge.
@@ -30,12 +30,13 @@ const deleteChallenge = async (event) => {
             return unauthorized('Not authorized to access this challenge');
         }
         await _delete({
-            TableName: challengesTable,
+            TableName: challengesTableName,
             Key: challengeKey,
         });
         return success({ message: 'Challenge is successfully deleted.' });
     } catch (err) {
-        return failure(err);
+        console.log(err, err.stack);
+        return failure(err.message);
     }
 };
 

@@ -65,6 +65,7 @@ export const unauthorized = (err = unauthorizedMsg) => buildResponse(HTTPCodes.U
 
 export const notFound = (err = notFoundMsg) => buildResponse(HTTPCodes.NOT_FOUND, errorBody(err));
 
+// err: string - the message you want to send in the response body
 export const failure = err => buildResponse(HTTPCodes.SERVER_ERROR, errorBody(err));
 
 export const badRequest = err => buildResponse(HTTPCodes.BAD_REQUEST, errorBody(err));

@@ -34,9 +34,8 @@ const createUser = async (event) => {
                 error: 'An user for the specified project already exists for the given email.',
             });
         }
-        return failure({
-            error: err,
-        });
+        console.log(err, err.stack);
+        return failure(err.message);
     }
 };
 

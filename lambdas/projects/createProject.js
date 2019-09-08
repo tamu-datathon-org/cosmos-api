@@ -8,7 +8,7 @@ const project = (event) => {
         TableName: process.env.projectsTableName,
         Item: {
             projectId,
-            lessons,
+            lessons: lessons || [],
             projectName,
             projectDescription,
             createdAt: Date.now(),
@@ -31,8 +31,8 @@ const projectAdmin = (event) => {
 const createProject = event => create(projectAdmin(event))
     .then(() => create(project(event)))
     .then(success)
-    .catch(({ message, ...rest }) => (message === 'The conditional request failed'
+    .catch(({ message }) => (message === 'The conditional request failed'
         ? conflict()
-        : failure({ message, ...rest })));
+        : failure(message)));
 
-export const main = verifyBodyParamsExist(['projectId', 'lessons', 'projectName', 'projectDescription'], createProject);
+export const main = verifyBodyParamsExist(['projectId', 'projectName', 'projectDescription'], createProject);

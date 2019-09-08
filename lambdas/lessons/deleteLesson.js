@@ -6,7 +6,7 @@ import { verifyQueryParamsExist } from '../../libs/api-helper-lib';
 import { updateProjectLessons, projectChallenges } from './lessons-helper';
 
 const prepare = event => ({
-    projectsTable: process.env.projectsTableName,
+    projectsTableName: process.env.projectsTableName,
     adminTable: process.env.projectAdminTableName,
     projectKey: {
         projectId: event.queryStringParameters.projectId,
@@ -33,7 +33,7 @@ const lessonChallengesDelete = challenges => ({
 
 const deleteLesson = async (event) => {
     const {
-        projectsTable, adminTable, projectKey, adminKey, lessonId,
+        projectsTableName, adminTable, projectKey, adminKey, lessonId,
     } = prepare(event);
     try {
         // User needs to be admin to delete challenge.
@@ -45,7 +45,7 @@ const deleteLesson = async (event) => {
             return unauthorized('Not authorized to access this challenge');
         }
         const projectResponse = await get({
-            TableName: projectsTable,
+            TableName: projectsTableName,
             Key: projectKey,
         });
         const project = projectResponse.Item;
@@ -70,7 +70,8 @@ const deleteLesson = async (event) => {
         }
         return success();
     } catch (err) {
-        return failure(err);
+        console.log(err, err.stack);
+        return failure(err.message);
     }
 };
 
