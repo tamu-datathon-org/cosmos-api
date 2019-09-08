@@ -16,22 +16,18 @@ const prepare = (event) => {
             firstName: data.firstName,
             lastName: data.lastName,
         },
-        userData: {
+        userKey: {
             email: event.queryStringParameters.email,
-            projectId: event.queryStringParameters.projectId,
         },
     };
 };
 
 const updateUser = async (event) => {
-    const { tableName, userUpdateData, userData } = prepare(event);
+    const { tableName, userUpdateData, userKey } = prepare(event);
     try {
         const existingUserRequest = await get({
             TableName: tableName,
-            Key: {
-                email: userData.email,
-                projectId: userData.projectId,
-            },
+            Key: userKey,
         });
         const existingUser = existingUserRequest.Item;
         if (existingUser === undefined) {
@@ -46,10 +42,7 @@ const updateUser = async (event) => {
         }
         const userUpdated = await update({
             TableName: tableName,
-            Key: {
-                email: userData.email, // Partition key
-                projectId: userData.projectId, // Sort key
-            },
+            Key: userKey,
             UpdateExpression: 'SET firstName = :firstName, lastName = :lastName',
             ExpressionAttributeValues: {
                 ':firstName': userUpdateData.firstName || existingUser.firstName,
@@ -69,4 +62,4 @@ const updateUser = async (event) => {
     }
 };
 
-export const main = verifyQueryParamsExist(['email', 'projectId'], updateUser);
+export const main = verifyQueryParamsExist(['email'], updateUser);
