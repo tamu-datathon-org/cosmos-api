@@ -1,7 +1,7 @@
 {
   "name": "cosmos-api",
   "version": "1.1.1",
-  "description": "A Node.js starter for the Serverless Framework with async/await and unit test support",
+  "description": "API for the learner-gamification application created for TAMU Datathon",
   "main": "handler.js",
   "scripts": {
     "test": "env projectAdminTableName=\"dev-cosmos-project-admin\" challengesTableName=\"dev-cosmos-challenges\" projectsTableName=\"dev-cosmos-projects2\" attemptsTableName=\"dev-cosmos-attempts\" usersTableName=\"dev-cosmos-users\" jest"
@@ -18,7 +18,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/AnomalyInnovations/serverless-nodejs-starter.git"
+    "url": "https://github.com/tamu-datathon-org/cosmos-api.git"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
